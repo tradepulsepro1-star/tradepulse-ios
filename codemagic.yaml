@@ -3,15 +3,17 @@ workflows:
     name: TradePulse iOS Build
     max_build_duration: 60
     environment:
-      ios_signing:
-        distribution_type: app_store
-        bundle_identifier: net.tradepulsepro
       groups:
         - ios
       vars:
         XCODE_WORKSPACE: "TradePulse.xcworkspace"
         XCODE_SCHEME: "TradePulse"
     scripts:
+      - name: Set up code signing
+        script: |
+          echo $PROVISIONING_PROFILE | base64 --decode > /tmp/profile.mobileprovision
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          cp /tmp/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
       - name: Install CocoaPods
         script: |
           find . -name "Podfile" -execdir pod install \;
