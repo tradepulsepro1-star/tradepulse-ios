@@ -9,6 +9,10 @@ workflows:
         XCODE_WORKSPACE: "TradePulse.xcworkspace"
         XCODE_SCHEME: "TradePulse"
     scripts:
+      - name: Extract source code
+        script: |
+          tar -xzf ios_source.tar.gz
+          ls -la
       - name: Set up code signing
         script: |
           echo $PROVISIONING_PROFILE | base64 --decode > /tmp/profile.mobileprovision
