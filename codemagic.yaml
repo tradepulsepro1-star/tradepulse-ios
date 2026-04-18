@@ -19,9 +19,16 @@ workflows:
           find . -name "Podfile" -execdir pod install \;
       - name: Build iOS
         script: |
-          xcode-build-and-archive \
-            -workspace "$XCODE_WORKSPACE" \
-            -scheme "$XCODE_SCHEME"
+          xcodebuild -workspace "$XCODE_WORKSPACE" \
+            -scheme "$XCODE_SCHEME" \
+            -sdk iphoneos \
+            -configuration Release \
+            -archivePath build/TradePulse.xcarchive \
+            archive
+          xcodebuild -exportArchive \
+            -archivePath build/TradePulse.xcarchive \
+            -exportOptionsPlist exportOptions.plist \
+            -exportPath build/ios/ipa
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:
@@ -30,4 +37,3 @@ workflows:
         key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
         issuer_id: $APP_STORE_CONNECT_ISSUER_ID
         submit_to_testflight: true
-        
