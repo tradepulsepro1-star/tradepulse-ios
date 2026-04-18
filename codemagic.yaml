@@ -1,3 +1,4 @@
+
 workflows:
   ios-workflow:
     name: TradePulse iOS Build
@@ -19,9 +20,6 @@ workflows:
           UUID=$(security cms -D -i /tmp/profile.mobileprovision | plutil -extract UUID raw -)
           cp /tmp/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/$UUID.mobileprovision
           echo "Installed profile with UUID: $UUID"
-      - name: Install CocoaPods
-        script: |
-          cd ios && pod install --no-repo-update
       - name: Build iOS
         script: |
           xcodebuild -workspace "$XCODE_WORKSPACE" \
@@ -45,3 +43,5 @@ workflows:
         key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
         issuer_id: $APP_STORE_CONNECT_ISSUER_ID
         submit_to_testflight: true
+
+
