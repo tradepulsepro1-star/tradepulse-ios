@@ -1,3 +1,4 @@
+
 workflows:
   ios-workflow:
     name: TradePulse iOS Build
@@ -6,18 +7,12 @@ workflows:
       groups:
         - ios
       vars:
-        XCODE_WORKSPACE: "TradePulse.xcworkspace"
+        XCODE_WORKSPACE: "ios/TradePulse.xcworkspace"
         XCODE_SCHEME: "TradePulse"
     scripts:
       - name: Extract source code
         script: |
           tar -xzf ios_source.tar.gz
-          echo "--- ROOT FILES ---"
-          ls -la
-          echo "--- ALL XCWORKSPACE ---"
-          find . -name "*.xcworkspace" -type d
-          echo "--- ALL XCODEPROJ ---"
-          find . -name "*.xcodeproj" -type d
       - name: Set up code signing
         script: |
           echo $PROVISIONING_PROFILE | base64 --decode > /tmp/profile.mobileprovision
@@ -25,6 +20,26 @@ workflows:
           cp /tmp/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/
       - name: Install CocoaPods
         script: |
-          find . -name "Podfile" -execdir pod install \;
+          cd ios && pod install
+      - name: Build iOS
+        script: |
+          xcodebuild -workspace "$XCODE_WORKSPACE" \
+            -scheme "$XCODE_SCHEME" \
+            -sdk iphoneos \
+            -configuration Release \
+            -archivePath build/TradePulse.xcarchive \
+            archive
+          xcodebuild -exportArchive \
+            -archivePath build/TradePulse.xcarchive \
+            -exportOptionsPlist exportOptions.plist \
+            -exportPath build/ios/ipa
     artifacts:
       - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_testflight: true
+
+
