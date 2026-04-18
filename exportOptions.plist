@@ -6,5 +6,12 @@
   <string>app-store</string>
   <key>teamID</key>
   <string>5L79BW988P</string>
+  <key>signingStyle</key>
+  <string>manual</string>
+  <key>provisioningProfiles</key>
+  <dict>
+    <key>net.tradepulsepro</key>
+    <string>TradePulse Distribution</string>
+  </dict>
 </dict>
 </plist>
