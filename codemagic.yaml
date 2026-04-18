@@ -1,3 +1,5 @@
+
+
 workflows:
   ios-workflow:
     name: TradePulse iOS Build
@@ -15,30 +17,72 @@ workflows:
         XCODE_SCHEME: "TradePulse"
     scripts:
       - name: Extract source
-        script: tar -xzf ios_source.tar.gz
+        script: |
+          tar -xzf ios_source.tar.gz
+          ls -la
       - name: Fix Bundle ID
         script: |
-          sed -i '' 's/co\.median\.ios\.rdjakwd/net.tradepulsepro/g' ios/TradePulse.xcodeproj/project.pbxproj
-      - name: Build iOS
+          find . -name "project.pbxproj" | xargs sed -i '' 's/co\.median\.ios\.rdjakwd/net.tradepulsepro/g'
+          echo "Bundle ID verification:"
+          find . -name "project.pbxproj" | xargs grep "net.tradepulsepro" | head -5
+      - name: Set up provisioning profile
+        script: |
+          echo $PROVISIONING_PROFILE | base64 --decode > /tmp/profile.mobileprovision
+          mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+          UUID=$(security cms -D -i /tmp/profile.mobileprovision | plutil -extract UUID raw -)
+          echo "Using profile UUID: $UUID"
+          cp /tmp/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/$UUID.mobileprovision
+      - name: Build and Archive
         script: |
           xcodebuild -workspace "$XCODE_WORKSPACE" \
             -scheme "$XCODE_SCHEME" \
             -sdk iphoneos \
             -configuration Release \
             -archivePath build/TradePulse.xcarchive \
-            CODE_SIGN_STYLE=Automatic \
+            CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM=5L79BW988P \
+            PROVISIONING_PROFILE_SPECIFIER="TradePulse App Store" \
             archive
+      - name: Export IPA
+        script: |
           xcodebuild -exportArchive \
             -archivePath build/TradePulse.xcarchive \
             -exportOptionsPlist exportOptions.plist \
             -exportPath build/ios/ipa
     artifacts:
       - build/ios/ipa/*.ipa
+      - /tmp/xcodebuild_logs/*.log
     publishing:
       app_store_connect:
         api_key: $APP_STORE_CONNECT_PRIVATE_KEY
         key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
         issuer_id: $APP_STORE_CONNECT_ISSUER_ID
         submit_to_testflight: true
-        
+```
+
+Also make sure your `exportOptions.plist` in GitHub looks exactly like this:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>method</key>
+    <string>app-store</string>
+    <key>teamID</key>
+    <string>5L79BW988P</string>
+    <key>uploadBitcode</key>
+    <false/>
+    <key>uploadSymbols</key>
+    <true/>
+    <key>signingStyle</key>
+    <string>manual</string>
+    <key>provisioningProfiles</key>
+    <dict>
+        <key>net.tradepulsepro</key>
+        <string>TradePulse App Store</string>
+    </dict>
+</dict>
+</plist>
+
+Update both files in GitHub and start a new build! 🚀
