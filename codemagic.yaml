@@ -7,6 +7,8 @@ workflows:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: net.tradepulsepro
+      groups:
+        - ios
       vars:
         XCODE_WORKSPACE: "TradePulse.xcworkspace"
         XCODE_SCHEME: "TradePulse"
@@ -16,15 +18,14 @@ workflows:
           find . -name "Podfile" -execdir pod install \;
       - name: Build iOS
         script: |
-          xcode-project use-profiles
-          xcode-project build-ipa \
-            --workspace "$XCODE_WORKSPACE" \
-            --scheme "$XCODE_SCHEME"
+          xcode-build-and-archive \
+            -workspace "$XCODE_WORKSPACE" \
+            -scheme "$XCODE_SCHEME"
     artifacts:
       - build/ios/ipa/*.ipa
     publishing:
       app_store_connect:
-        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-        submit_to_testflight: false
+        auth: api_key
+        submit_to_testflight: true
+
+After saving it to GitHub, come back to Codemagic and click **"Start new build"**! 🚀
