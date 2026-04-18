@@ -1,5 +1,4 @@
 
-```yaml
 workflows:
   ios-workflow:
     name: TradePulse iOS Build
