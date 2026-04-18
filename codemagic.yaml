@@ -1,6 +1,6 @@
-Here's the full `codemagic.yaml` — replace everything in GitHub:
 
-```yaml
+
+
 workflows:
   ios-workflow:
     name: TradePulse iOS Build
@@ -49,6 +49,4 @@ workflows:
         key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
         issuer_id: $APP_STORE_CONNECT_ISSUER_ID
         submit_to_testflight: true
-```
 
-Update GitHub, start new build, then click on the **"Extract source code"** step and screenshot the output so I can see the exact file names! 🚀
