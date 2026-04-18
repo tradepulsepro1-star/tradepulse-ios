@@ -12,16 +12,18 @@ workflows:
       - name: Extract source code
         script: |
           tar -xzf ios_source.tar.gz
+      - name: Fix Bundle ID
+        script: |
+          sed -i '' 's/co\.median\.ios\.rdjakwd/net.tradepulsepro/g' ios/TradePulse.xcodeproj/project.pbxproj
+          echo "Bundle ID fixed. Verifying:"
+          grep "net.tradepulsepro" ios/TradePulse.xcodeproj/project.pbxproj | head -5
       - name: Build iOS
         script: |
-          # Set up code signing
           echo $PROVISIONING_PROFILE | base64 --decode > /tmp/profile.mobileprovision
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           UUID=$(security cms -D -i /tmp/profile.mobileprovision | plutil -extract UUID raw -)
           echo "Profile UUID: $UUID"
           cp /tmp/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/$UUID.mobileprovision
-
-          # Build and archive
           xcodebuild -workspace "$XCODE_WORKSPACE" \
             -scheme "$XCODE_SCHEME" \
             -sdk iphoneos \
@@ -31,8 +33,6 @@ workflows:
             CODE_SIGN_STYLE=Manual \
             PROVISIONING_PROFILE=$UUID \
             archive
-
-          # Export IPA
           xcodebuild -exportArchive \
             -archivePath build/TradePulse.xcarchive \
             -exportOptionsPlist exportOptions.plist \
