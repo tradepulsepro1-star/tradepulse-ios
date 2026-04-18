@@ -28,4 +28,3 @@ workflows:
         auth: api_key
         submit_to_testflight: true
 
-After saving it to GitHub, come back to Codemagic and click **"Start new build"**! 🚀
