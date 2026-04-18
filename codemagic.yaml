@@ -12,16 +12,16 @@ workflows:
       - name: Extract source code
         script: |
           tar -xzf ios_source.tar.gz
-      - name: Set up code signing
+      - name: Build iOS
         script: |
+          # Set up code signing
           echo $PROVISIONING_PROFILE | base64 --decode > /tmp/profile.mobileprovision
           mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
           UUID=$(security cms -D -i /tmp/profile.mobileprovision | plutil -extract UUID raw -)
+          echo "Profile UUID: $UUID"
           cp /tmp/profile.mobileprovision ~/Library/MobileDevice/Provisioning\ Profiles/$UUID.mobileprovision
-          echo "Installed profile UUID: $UUID"
-          echo "PROFILE_UUID=$UUID" >> $CM_ENV
-      - name: Build iOS
-        script: |
+
+          # Build and archive
           xcodebuild -workspace "$XCODE_WORKSPACE" \
             -scheme "$XCODE_SCHEME" \
             -sdk iphoneos \
@@ -29,8 +29,10 @@ workflows:
             -archivePath build/TradePulse.xcarchive \
             DEVELOPMENT_TEAM=5L79BW988P \
             CODE_SIGN_STYLE=Manual \
-            PROVISIONING_PROFILE=$PROFILE_UUID \
+            PROVISIONING_PROFILE=$UUID \
             archive
+
+          # Export IPA
           xcodebuild -exportArchive \
             -archivePath build/TradePulse.xcarchive \
             -exportOptionsPlist exportOptions.plist \
