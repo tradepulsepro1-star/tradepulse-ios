@@ -1,8 +1,4 @@
-Same error — the `exportOptions.plist` still has the old `app-store` method. You need to update that file in GitHub too. Here's the exact content:
 
-Go to GitHub → `exportOptions.plist` → edit → replace everything with this:
-
-```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -26,6 +22,3 @@ Go to GitHub → `exportOptions.plist` → edit → replace everything with this
     <false/>
 </dict>
 </plist>
-```
-
-Commit it and start a new build! 🚀
