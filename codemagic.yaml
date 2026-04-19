@@ -1,4 +1,3 @@
-
 workflows:
   ios-workflow:
     name: TradePulse iOS Build
@@ -20,7 +19,11 @@ workflows:
       - name: Install CocoaPods
         script: |
           cd ios
-          pod install --repo-update
+          if [ ! -d "Pods" ]; then
+            pod install --skip-repo-update
+          else
+            echo "Pods already exist, skipping install"
+          fi
       - name: Build and Archive
         script: |
           xcodebuild \
