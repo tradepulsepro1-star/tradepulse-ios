@@ -13,9 +13,6 @@ workflows:
         script: |
           tar -xzf ios_source.tar.gz
           ls -la ios/
-      - name: Fix Bundle ID
-        script: |
-          find . -name "project.pbxproj" | xargs sed -i '' 's/co\.median\.ios\.rdjakwd/net.tradepulsepro/g'
       - name: Install CocoaPods
         script: |
           cd ios
