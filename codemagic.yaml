@@ -13,14 +13,6 @@ workflows:
         script: |
           tar -xzf ios_source.tar.gz
           ls -la ios/
-      - name: Install CocoaPods
-        script: |
-          cd ios
-          if [ ! -d "Pods" ]; then
-            pod install
-          else
-            echo "Pods already exist, skipping install"
-          fi
       - name: Build and Archive
         script: |
           xcodebuild \
