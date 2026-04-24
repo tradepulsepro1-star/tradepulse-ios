@@ -20,7 +20,7 @@ workflows:
         script: |
           cd ios
           if [ ! -d "Pods" ]; then
-            pod install --skip-repo-update
+            pod install
           else
             echo "Pods already exist, skipping install"
           fi
