@@ -13,6 +13,13 @@ workflows:
         script: |
           tar -xzf ios_source.tar.gz
           ls -la ios/
+      - name: Fix signing for Swift packages
+        script: |
+          cd ios
+          # Remove provisioning profile enforcement from Swift package targets
+          sed -i '' 's/PROVISIONING_PROFILE_SPECIFIER = "trade pulse";/PROVISIONING_PROFILE_SPECIFIER = "";/g' TradePulse.xcodeproj/project.pbxproj
+          # Set CODE_SIGN_STYLE to Automatic for package targets only
+          defaults write com.apple.dt.Xcode IDEProvisioningTeamForBundleIdentifierOverride_net.tradepulsepro 5L79BW988P || true
       - name: Build and Archive
         script: |
           xcodebuild \
@@ -22,13 +29,13 @@ workflows:
             -configuration Release \
             -archivePath $CM_BUILD_DIR/TradePulse.xcarchive \
             -allowProvisioningUpdates \
+            -allowProvisioningDeviceRegistration \
             clean archive \
             CODE_SIGN_STYLE=Manual \
             CODE_SIGN_IDENTITY="Apple Distribution" \
             DEVELOPMENT_TEAM=5L79BW988P \
             PROVISIONING_PROFILE_SPECIFIER="trade pulse" \
-            OTHER_CODE_SIGN_FLAGS="--keychain $(security default-keychain | xargs)" \
-            PACKAGE_CODE_SIGN_STYLE=Automatic
+            SWIFT_PACKAGE_CODE_SIGN_STYLE=Automatic
       - name: Export IPA
         script: |
           xcodebuild -exportArchive \
