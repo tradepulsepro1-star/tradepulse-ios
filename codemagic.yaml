@@ -15,14 +15,18 @@ workflows:
           ls -la ios/
       - name: Fix Bundle ID
         script: |
-          find . -name "project.pbxproj" | xargs sed -i '' 's/co\.median\.ios\.rdjakwd/net.tradepulsepro/g'
-      - name: Install CocoaPods
+          find . -name "project.pbxproj" | xargs sed -i '' 's/co\.median\.ios\.rdjakwd/net.tradepulsepro/g' 2>/dev/null || true
+          find . -name "Project.swift" | xargs sed -i '' 's/co\.median\.ios\.rdjakwd/net.tradepulsepro/g' 2>/dev/null || true
+      - name: Install Tuist and Generate project
         script: |
           cd ios
-          if [ ! -d "Pods" ]; then
-            pod install
+          if [ -f "Tuist.swift" ] || [ -f "Project.swift" ]; then
+            echo "Tuist project detected"
+            curl -Ls https://install.tuist.io | bash
+            tuist install
+            tuist generate
           else
-            echo "Pods already exist, skipping install"
+            echo "No Tuist files found"
           fi
       - name: Build and Archive
         script: |
