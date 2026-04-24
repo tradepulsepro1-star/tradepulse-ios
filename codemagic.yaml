@@ -20,14 +20,10 @@ workflows:
       - name: Install Tuist and Generate project
         script: |
           cd ios
-          if [ -f "Tuist.swift" ] || [ -f "Project.swift" ]; then
-            echo "Tuist project detected"
-            curl -Ls https://install.tuist.io | bash
-            tuist install
-            tuist generate
-          else
-            echo "No Tuist files found"
-          fi
+          # Install Tuist via Homebrew (available on Codemagic macOS)
+          brew install tuist
+          tuist install
+          tuist generate --no-open
       - name: Build and Archive
         script: |
           xcodebuild \
