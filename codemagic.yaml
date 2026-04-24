@@ -23,8 +23,12 @@ workflows:
             -archivePath $CM_BUILD_DIR/TradePulse.xcarchive \
             -allowProvisioningUpdates \
             clean archive \
-            CODE_SIGN_STYLE=Automatic \
-            DEVELOPMENT_TEAM=5L79BW988P
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="Apple Distribution" \
+            DEVELOPMENT_TEAM=5L79BW988P \
+            PROVISIONING_PROFILE_SPECIFIER="trade pulse" \
+            OTHER_CODE_SIGN_FLAGS="--keychain $(security default-keychain | xargs)" \
+            PACKAGE_CODE_SIGN_STYLE=Automatic
       - name: Export IPA
         script: |
           xcodebuild -exportArchive \
