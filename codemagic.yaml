@@ -8,22 +8,24 @@ workflows:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: net.tradepulsepro
+        provisioning_profiles:
+          - net.tradepulsepro
     scripts:
       - name: Extract source
         script: |
           tar -xzf ios_source.tar.gz
           ls -la ios/
-      - name: Fix Bundle ID
-        script: |
-          find . -name "project.pbxproj" | xargs sed -i '' 's/co\.median\.ios\.rdjakwd/net.tradepulsepro/g' 2>/dev/null || true
-          find . -name "Project.swift" | xargs sed -i '' 's/co\.median\.ios\.rdjakwd/net.tradepulsepro/g' 2>/dev/null || true
       - name: Install Tuist and Generate project
         script: |
           cd ios
-          # Install Tuist via Homebrew (available on Codemagic macOS)
-          brew install tuist
-          tuist install
-          tuist generate --no-open
+          if [ -f "Tuist.swift" ] || [ -f "Project.swift" ]; then
+            echo "Tuist project detected"
+            brew install tuist
+            tuist install
+            tuist generate --no-open
+          else
+            echo "No Tuist files found"
+          fi
       - name: Build and Archive
         script: |
           xcodebuild \
