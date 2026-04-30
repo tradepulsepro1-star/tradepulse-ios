@@ -18,21 +18,18 @@ workflows:
         script: |
           BUILD_NUMBER=17
           MEDIAN_PLIST="ios/LeanIOS/MedianIOS-Info.plist"
+          PBXPROJ="ios/TradePulse.xcodeproj/project.pbxproj"
 
-          # Use PlistBuddy to set CFBundleVersion
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$MEDIAN_PLIST" && echo "PlistBuddy OK" || echo "PlistBuddy failed"
+          echo "Patching $MEDIAN_PLIST..."
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$MEDIAN_PLIST"
+          echo "CFBundleVersion set to $BUILD_NUMBER"
 
-          # sed fallback — replace whatever is between the CFBundleVersion tags
-          sed -i '' 's|<key>CFBundleVersion<\/key>.*<\/string>|<key>CFBundleVersion<\/key><string>'"$BUILD_NUMBER"'<\/string>|g' "$MEDIAN_PLIST" 2>/dev/null || true
+          echo "Patching $PBXPROJ..."
+          sed -i "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = $BUILD_NUMBER/g" "$PBXPROJ"
+          echo "CURRENT_PROJECT_VERSION set to $BUILD_NUMBER"
 
-          # Patch pbxproj
-          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = $BUILD_NUMBER/g" ios/TradePulse.xcodeproj/project.pbxproj
-
-          # Verify
-          echo "CFBundleVersion check:"
-          grep -A1 "CFBundleVersion" "$MEDIAN_PLIST" || true
-          grep "CURRENT_PROJECT_VERSION" ios/TradePulse.xcodeproj/project.pbxproj | head -2
-          echo "Done. Build=$BUILD_NUMBER"
+          grep "CFBundleVersion" "$MEDIAN_PLIST"
+          grep "CURRENT_PROJECT_VERSION" "$PBXPROJ" | head -2
 
       - name: Add Round 1 + Round 2 native Swift plugins
         script: |
