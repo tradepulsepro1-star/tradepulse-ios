@@ -16,7 +16,7 @@ workflows:
 
       - name: Bump build number
         script: |
-          BUILD_NUMBER=15
+          BUILD_NUMBER=16
           for PLIST in $(find . -name "Info.plist" | grep -v Pods | grep -v xctest | grep -v DerivedData | grep -v ".framework"); do
             echo "Patching: $PLIST"
             /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$PLIST" 2>/dev/null && \
