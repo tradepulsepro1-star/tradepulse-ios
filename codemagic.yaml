@@ -17,30 +17,22 @@ workflows:
       - name: Bump build number
         script: |
           BUILD_NUMBER=17
-
-          # Patch the real app Info.plist (MedianIOS-Info.plist, NOT Info.plist)
           MEDIAN_PLIST="ios/LeanIOS/MedianIOS-Info.plist"
 
-          # Method 1: PlistBuddy
-          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$MEDIAN_PLIST" &&             echo "✅ PlistBuddy: CFBundleVersion=$BUILD_NUMBER" ||             echo "⚠️ PlistBuddy failed, trying python3..."
+          # Use PlistBuddy to set CFBundleVersion
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$MEDIAN_PLIST" && echo "PlistBuddy OK" || echo "PlistBuddy failed"
 
-          # Method 2: Python fallback (guaranteed to work)
-          python3 -c "
-import re
-with open('$MEDIAN_PLIST', 'r') as f: c = f.read()
-c = re.sub(r'(<key>CFBundleVersion</key>\s*<string>)[^<]*(</string>)', r'\g<1>$BUILD_NUMBER', c)
-with open('$MEDIAN_PLIST', 'w') as f: f.write(c)
-print('✅ Python: CFBundleVersion=$BUILD_NUMBER')
-"
+          # sed fallback — replace whatever is between the CFBundleVersion tags
+          sed -i '' 's|<key>CFBundleVersion<\/key>.*<\/string>|<key>CFBundleVersion<\/key><string>'"$BUILD_NUMBER"'<\/string>|g' "$MEDIAN_PLIST" 2>/dev/null || true
 
-          # Patch CURRENT_PROJECT_VERSION in pbxproj
-          sed -i "s/CURRENT_PROJECT_VERSION = [0-9]*;/CURRENT_PROJECT_VERSION = $BUILD_NUMBER;/g"             ios/TradePulse.xcodeproj/project.pbxproj
+          # Patch pbxproj
+          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = $BUILD_NUMBER/g" ios/TradePulse.xcodeproj/project.pbxproj
 
-          # Verify both
-          echo "--- VERIFY ---"
-          grep "CFBundleVersion" "$MEDIAN_PLIST"
+          # Verify
+          echo "CFBundleVersion check:"
+          grep -A1 "CFBundleVersion" "$MEDIAN_PLIST" || true
           grep "CURRENT_PROJECT_VERSION" ios/TradePulse.xcodeproj/project.pbxproj | head -2
-          echo "✅ Build number bumped to $BUILD_NUMBER"
+          echo "Done. Build=$BUILD_NUMBER"
 
       - name: Add Round 1 + Round 2 native Swift plugins
         script: |
