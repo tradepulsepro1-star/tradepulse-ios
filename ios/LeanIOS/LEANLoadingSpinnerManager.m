@@ -11,24 +11,17 @@
 #import "GNStubs.h"
 
 @interface LEANLoadingSpinnerManager()
-@property id<GNController> controller;
+// GNController removed (GoNative SDK) — using native UIActivityIndicatorView only
 @end
 
 @implementation LEANLoadingSpinnerManager
 
 - (instancetype)initWithVc:(UIViewController *)vc {
     self = [super init];
-    if (self) {
-        self.controller = [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge getControllerForKey:@"loadingSpinner" runner:(id)vc];
-    }
     return self;
 }
 
 - (void)startAnimationWithWvc:(LEANWebViewController *)wvc {
-    if (self.controller) {
-        [self.controller triggerEvent:@"showLoadingSpinner"];
-        return;
-    }
     
     if (!self.activityIndicator) {
         self.activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleLarge];
@@ -47,10 +40,6 @@
 }
 
 - (void)stopAnimation {
-    if (self.controller) {
-        [self.controller triggerEvent:@"hideLoadingSpinner"];
-        return;
-    }
     
     [UIView animateWithDuration:0.3 delay:0 options:UIViewAnimationOptionAllowUserInteraction animations:^(void) {
         self.activityIndicator.alpha = 0.0;

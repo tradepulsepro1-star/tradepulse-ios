@@ -229,6 +229,15 @@ static inline UIWindow* GNKeyWindow(void) {
 #define GNBridge_DEFINED
 @interface GNBridge : NSObject
 - (void)loadUserScriptsForContentController:(id)contentController;
+- (id<GNController>)getControllerForKey:(NSString *)key runner:(id)runner;
+@end
+#endif
+
+// GNController protocol stub — GoNative SDK removed
+#ifndef GNController_DEFINED
+#define GNController_DEFINED
+@protocol GNController <NSObject>
+- (void)triggerEvent:(NSString *)eventName;
 @end
 #endif
 
