@@ -25,6 +25,8 @@
 
 @end
 
+@class CustomMenu;  // forward declaration — full interface available via GonativeIO-Swift.h below
+
 @interface LEANActionManager ()
 @property NSMutableArray<UIBarButtonItem *> *items;
 @property (weak, nonatomic) LEANWebViewController *wvc;
