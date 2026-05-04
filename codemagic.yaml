@@ -30,7 +30,7 @@ workflows:
             -archivePath "$ARCHIVE_PATH" \
             -allowProvisioningUpdates \
             "OTHER_LDFLAGS=-ObjC" \
-            clean archive 2>&1 | tee "$LOG_FILE" | \
+            archive 2>&1 | tee "$LOG_FILE" | \
             grep -E "error:|warning: (implicit|undeclared|unknown|redefinition|previous)|note: previous|ARCHIVE FAILED|ARCHIVE SUCCEEDED|fatal error" || true
 
           echo "=== FULL ERROR SUMMARY ==="
