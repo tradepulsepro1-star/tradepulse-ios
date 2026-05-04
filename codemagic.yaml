@@ -16,7 +16,7 @@ workflows:
       - name: Bump build number
         script: |
           PBXPROJ="ios/TradePulse.xcodeproj/project.pbxproj"
-          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 65/g" "$PBXPROJ"
+          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 66/g" "$PBXPROJ"
           echo "Xcode: $(xcodebuild -version | head -1)"
 
       - name: Build and Archive
