@@ -5,6 +5,7 @@
 #ifdef __OBJC__
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
 
 #ifndef GoNativeAppConfig_DEFINED
 #define GoNativeAppConfig_DEFINED

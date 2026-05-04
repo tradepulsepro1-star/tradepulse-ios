@@ -4,6 +4,7 @@
 
 #import "GNStubs.h"
 #import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
 
 // Notification constants
 NSString * const kGoNativeAppConfigNotificationUserAgentReady = @"co.median.ios.AppConfig.userAgentReady";
