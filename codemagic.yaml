@@ -49,10 +49,16 @@ workflows:
             archive 2>&1 | tee "$LOG_FILE" || true
 
           echo ""
-          echo "========================================"
-          echo "=== LINKER / ERROR DETAIL (last 150) ==="
-          echo "========================================"
-          tail -150 "$LOG_FILE"
+          echo "=============================================="
+          echo "=== ALL ERRORS (grep for 'error:') ==="
+          echo "=============================================="
+          grep -n "error:" "$LOG_FILE" | grep -v "^Binary\|warning:\|note:" | head -40
+
+          echo ""
+          echo "=============================================="
+          echo "=== LAST 80 LINES ==="
+          echo "=============================================="
+          tail -80 "$LOG_FILE"
 
           [ -d "$ARCHIVE_PATH" ] && echo "ARCHIVE OK" || { echo "ARCHIVE MISSING"; exit 1; }
 
