@@ -247,6 +247,8 @@ typedef void (^CustomMenuTapHandler)(NSDictionary *data);
 @interface CustomMenu : NSObject
 - (instancetype)initWithContainer:(UIView *)container button:(UIButton *)button data:(NSArray *)data onTap:(CustomMenuTapHandler)onTap;
 - (void)dismiss;
+- (void)setMenuColor:(UIColor *)color;
+- (void)removeFromSuperview;
 @end
 #endif
 

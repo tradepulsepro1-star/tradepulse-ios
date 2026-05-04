@@ -91,6 +91,8 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
     return [super init];
 }
 - (void)dismiss {}
+- (void)setMenuColor:(UIColor *)color {}
+- (void)removeFromSuperview {}
 @end
 
 // GNBridge stub implementation
