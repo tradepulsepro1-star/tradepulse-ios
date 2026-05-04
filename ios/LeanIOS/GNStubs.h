@@ -206,4 +206,13 @@ typedef void (^CustomMenuTapBlock)(NSDictionary *data);
 @property (nonatomic, strong) NSString *identifier;
 @end
 
+
+// Median listener key constants
+#define MEDIAN_KEYBOARD_EVENT_LISTENER @"median_keyboard_event"
+
+// GoNativeAppConfig extra methods
+@interface GoNativeAppConfig (SidebarExtras)
+- (BOOL)shouldShowSidebarForUrl:(NSString *)url;
+@end
+
 #endif // __OBJC__

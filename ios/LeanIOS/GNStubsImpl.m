@@ -82,3 +82,10 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
 // ActionSelection stub
 @implementation ActionSelection
 @end
+
+// GoNativeAppConfig sidebar extras
+@implementation GoNativeAppConfig (SidebarExtras)
+- (BOOL)shouldShowSidebarForUrl:(NSString *)url {
+    return YES;
+}
+@end
