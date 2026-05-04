@@ -135,7 +135,6 @@ extern NSString * const kLEANAppConfigNotificationProcessedTabNavigation;
 extern NSString * const kLEANAppConfigNotificationProcessedNavigationTitles;
 extern NSString * const kLEANAppConfigNotificationProcessedNavigationLevels;
 extern NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged;
-extern NSString * const kLEANWebViewPoolDisownPolicyDefault;
 
 // RegexEnabled stub - used by LEANToolbarManager
 @interface RegexEnabled : NSObject
@@ -187,6 +186,12 @@ typedef void (^CustomMenuTapBlock)(NSDictionary *data);
 @interface CustomMenu : NSObject
 - (instancetype)initWithContainer:(UIView *)container button:(UIView *)button data:(NSArray *)data onTap:(CustomMenuTapBlock)onTap;
 - (void)dismiss;
+@end
+
+
+// WindowsController stub - used by LEANWebViewController
+@interface WindowsController : NSObject
++ (void)windowCountChanged;
 @end
 
 #endif // __OBJC__

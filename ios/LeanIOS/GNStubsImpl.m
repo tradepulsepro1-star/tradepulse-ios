@@ -15,7 +15,6 @@ NSString * const kLEANAppConfigNotificationProcessedTabNavigation = @"co.median.
 NSString * const kLEANAppConfigNotificationProcessedNavigationTitles = @"co.median.ios.AppConfig.processedNavigationTitles";
 NSString * const kLEANAppConfigNotificationProcessedNavigationLevels = @"co.median.ios.AppConfig.processedNavigationLevels";
 NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.median.ios.AppConfig.appTrackingStatusChanged";
-NSString * const kLEANWebViewPoolDisownPolicyDefault = @"default";
 
 // RegexEnabled implementation
 @implementation RegexEnabled
@@ -49,4 +48,9 @@ NSString * const kLEANWebViewPoolDisownPolicyDefault = @"default";
     return [super init];
 }
 - (void)dismiss {}
+@end
+
+// WindowsController stub
+@implementation WindowsController
++ (void)windowCountChanged {}
 @end
