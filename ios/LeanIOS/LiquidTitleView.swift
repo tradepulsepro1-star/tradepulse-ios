@@ -6,7 +6,7 @@
 import UIKit
 
 @objc(LEANLiquidTitleView)
-class LiquidTitleView: UIView {
+public class LiquidTitleView: UIView {
 
     private let label = UILabel()
     private let blurView: UIVisualEffectView = {
@@ -15,7 +15,7 @@ class LiquidTitleView: UIView {
     }()
 
     @objc
-    var text: String? {
+    public var text: String? {
         didSet {
             label.text = text
             self.invalidateIntrinsicContentSize()

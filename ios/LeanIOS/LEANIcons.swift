@@ -6,7 +6,7 @@
 import Foundation
 import UIKit
 
-@objc class LEANIcons: NSObject {
+@objc public class LEANIcons: NSObject {
     @objc public static let sharedIcons = LEANIcons()
     
     @objc public class func imageForIconIdentifier(_ name: String, size: CGFloat, color: UIColor) -> UIImage? {

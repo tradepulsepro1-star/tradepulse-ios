@@ -6,7 +6,7 @@
 import Foundation
 import WebKit
 
-@objc final class WebViewViewportManager: NSObject {
+@objc public final class WebViewViewportManager: NSObject {
     @objc static let shared = WebViewViewportManager()
 
     private var currentUserScript: WKUserScript?
