@@ -11,12 +11,14 @@ workflows:
     scripts:
       - name: Show project structure
         script: |
-          echo "=== Root ==="
-          ls -la
+          echo "=== Commit info ==="
+          git log --oneline -3
           echo "=== ios/ ==="
           ls -la ios/
           echo "=== Schemes ==="
           find ios -name "*.xcscheme" 2>/dev/null
+          echo "=== registries.json ==="
+          cat ios/TradePulse.xcworkspace/xcshareddata/swiftpm/configuration/registries.json 2>/dev/null || echo "not found"
 
       - name: Set manual signing + build number
         script: |
@@ -24,7 +26,16 @@ workflows:
           sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 19/g" "$PBXPROJ"
           sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' "$PBXPROJ"
           sed -i '' 's/DEVELOPMENT_TEAM = "";/DEVELOPMENT_TEAM = 5L79BW988P;/g' "$PBXPROJ"
-          echo "Done"
+          echo "=== Verify signing ==="
+          grep "CODE_SIGN_STYLE\|DEVELOPMENT_TEAM\|CURRENT_PROJECT_VERSION\|SDKROOT\|SUPPORTED_PLATFORMS" "$PBXPROJ" | sort -u
+
+      - name: Resolve SPM packages
+        script: |
+          xcodebuild -resolvePackageDependencies \
+            -project ios/TradePulse.xcodeproj \
+            -scheme TradePulse \
+            -clonedSourcePackagesDirPath $CM_BUILD_DIR/spm_cache \
+            2>&1 | tail -20 || true
 
       - name: Build archive
         script: |
@@ -34,10 +45,14 @@ workflows:
             -configuration Release \
             -destination "generic/platform=iOS" \
             -archivePath $CM_BUILD_DIR/TradePulse.xcarchive \
+            -clonedSourcePackagesDirPath $CM_BUILD_DIR/spm_cache \
+            -disableAutomaticPackageResolution \
             CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM=5L79BW988P \
             PROVISIONING_PROFILE_SPECIFIER="trade pulse" \
             CODE_SIGN_ENTITLEMENTS=ios/Project.entitlements \
+            SDKROOT=iphoneos \
+            SUPPORTED_PLATFORMS=iphoneos \
             ONLY_ACTIVE_ARCH=NO \
             | xcpretty && exit ${PIPESTATUS[0]}
 
