@@ -1,4 +1,1 @@
-#pragma once
-#import <Foundation/Foundation.h>
-@interface GNBridge : NSObject
-@end
+// Stub removed — definitions in GNStubs.h

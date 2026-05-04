@@ -1,4 +1,1 @@
-#pragma once
-#import <Foundation/Foundation.h>
-@interface GNUtilities : NSObject
-@end
+// Stub removed — definitions in GNStubs.h

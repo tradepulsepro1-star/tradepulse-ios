@@ -1,3 +1,1 @@
-#pragma once
-#import <Foundation/Foundation.h>
-static NSString * const kGoNativeAppConfigNotificationUserAgentReady = @"kGoNativeAppConfigNotificationUserAgentReady";
+// Stub removed — definitions in GNStubs.h
