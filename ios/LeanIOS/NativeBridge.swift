@@ -50,6 +50,7 @@ import AdSupport
             webView?.configuration.userContentController.add(self, name: h)
         }
         injectJSBridge()
+        setupRound2MessageHandlers()
     }
 
     // ─── Inject window.TradePulseNative shim ──────────────────────────────────
@@ -98,7 +99,7 @@ import AdSupport
         case "keychainGet":             handleKeychainGet(body)
         case "keychainDelete":          handleKeychainDelete(body)
         case "openURL":                 handleOpenURL(body)
-        default: break
+        default: handleRound2Message(message.name, body: body)
         }
     }
 
