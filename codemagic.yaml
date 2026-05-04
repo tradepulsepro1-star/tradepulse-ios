@@ -15,14 +15,13 @@ workflows:
           PBXPROJ="ios/TradePulse.xcodeproj/project.pbxproj"
           sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 19/g" "$PBXPROJ"
           echo "Xcode: $(xcodebuild -version | head -1)"
-          echo "PWD=$PWD"
 
       - name: Build and Archive
         script: |
           set -e
           ARCHIVE_PATH="/Users/builder/clone/TradePulse.xcarchive"
-          echo "Xcode: $(xcodebuild -version | head -1)"
-          
+          FRAMEWORKS_DIR="$PWD/ios/Frameworks"
+
           xcodebuild \
             -workspace ios/TradePulse.xcworkspace \
             -scheme TradePulse \
@@ -30,8 +29,9 @@ workflows:
             -configuration Release \
             -archivePath "$ARCHIVE_PATH" \
             -allowProvisioningUpdates \
+            FRAMEWORK_SEARCH_PATHS="$FRAMEWORKS_DIR" \
             clean archive
-          
+
           [ -d "$ARCHIVE_PATH" ] && echo "ARCHIVE OK" || { echo "ARCHIVE MISSING"; exit 1; }
 
       - name: Export IPA
@@ -40,12 +40,12 @@ workflows:
           ARCHIVE_PATH="/Users/builder/clone/TradePulse.xcarchive"
           IPA_PATH="/Users/builder/clone/ipa"
           mkdir -p "$IPA_PATH"
-          
+
           xcodebuild -exportArchive \
             -archivePath "$ARCHIVE_PATH" \
             -exportOptionsPlist exportOptions.plist \
             -exportPath "$IPA_PATH"
-          
+
           ls -la "$IPA_PATH/"
 
     artifacts:
