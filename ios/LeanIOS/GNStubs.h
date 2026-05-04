@@ -106,7 +106,7 @@
 @property (nonatomic) BOOL iOSRequestATTConsentOnLoad;
 @property (nonatomic) BOOL userAgentReady;
 @property (nonatomic, strong) NSArray *nativeBridgeUrls;
-@property (nonatomic, strong) NSArray *listeners;
+@property (nonatomic, strong) NSDictionary *listeners;
 // Actions / Menus
 @property (nonatomic, strong) NSDictionary *actions;
 @property (nonatomic, strong) NSArray *actionSelection;

@@ -10,6 +10,7 @@
 #import "LEANWebViewController.h"
 #import "LEANUtilities.h"
 #import "GonativeIO-Swift.h"
+@class LEANIcons;
 
 @interface LEANToolbarItem : NSObject
 @property BOOL enabled;

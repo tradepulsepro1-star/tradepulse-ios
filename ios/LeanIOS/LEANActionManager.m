@@ -9,6 +9,8 @@
 #import "LEANActionManager.h"
 #import "LEANUtilities.h"
 #import "GonativeIO-Swift.h"
+@class CustomMenu;
+@class LEANIcons;
 
 @implementation LEANActionButtons
 
