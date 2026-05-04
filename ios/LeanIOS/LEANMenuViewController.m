@@ -17,6 +17,7 @@
 #import "LEANUtilities.h"
 #import "GonativeIO-Swift.h"
 #import "GNStubs.h"
+@import MedianIcons;
 
 @interface LEANMenuViewController ()
 

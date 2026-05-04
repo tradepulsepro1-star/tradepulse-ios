@@ -47,6 +47,7 @@
 #import "GNJSBridgeInterface.h"
 #import "GNLogManager.h"
 #import "GNStubs.h"
+
 #define OFFLINE_URL @"http://offline/"
 #define LOCAL_FILE_URL @"http://localFile/"
 

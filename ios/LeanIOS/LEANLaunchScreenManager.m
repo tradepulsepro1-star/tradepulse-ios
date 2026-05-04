@@ -9,6 +9,7 @@
 #import "LEANLaunchScreenManager.h"
 #import "LEANAppDelegate.h"
 #import "GonativeIO-Swift.h"
+#import "GNStubs.h"
 
 @interface LEANLaunchScreenManager()
 @property id<GNController> controller;

@@ -11,6 +11,7 @@
 #import "LEANUtilities.h"
 #import "LEANAppDelegate.h"
 #import "GNStubs.h"
+
 @implementation LEANUtilities
 
 + (NSDictionary*) dictionaryFromQueryString: (NSString*) string
@@ -546,7 +547,7 @@
         if (appConfig.hasIosCustomJS) {
             [LEANUtilities injectJs:@"iosCustomJS" ToWebview:webview];
         }
-        [[WebViewViewportManager shared] setViewportWithScale:appConfig.initialWebviewZoom width:[appConfig.forceViewportWidth floatValue] webView:webview];
+        [[WebViewViewportManager shared] setViewportWithScale:appConfig.initialWebviewZoom width:appConfig.forceViewportWidth webView:webview];
         
         // Accessibility & Dynamic Type Support
         UIContentSizeCategory contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;

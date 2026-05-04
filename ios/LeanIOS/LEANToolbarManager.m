@@ -11,6 +11,7 @@
 #import "LEANUtilities.h"
 #import "GonativeIO-Swift.h"
 #import "GNStubs.h"
+
 @interface LEANToolbarItem : NSObject
 @property BOOL enabled;
 @property NSArray<RegexEnabled *> *regexes;
