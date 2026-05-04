@@ -222,7 +222,13 @@ static inline UIWindow* GNKeyWindow(void) {
 
 
 
-#endif // __OBJC__
+// GNController protocol stub — GoNative SDK removed (must be before GNBridge)
+#ifndef GNController_DEFINED
+#define GNController_DEFINED
+@protocol GNController <NSObject>
+- (void)triggerEvent:(NSString *)eventName;
+@end
+#endif
 
 // GNBridge stub — GoNative internal bridge removed
 #ifndef GNBridge_DEFINED
@@ -233,11 +239,5 @@ static inline UIWindow* GNKeyWindow(void) {
 @end
 #endif
 
-// GNController protocol stub — GoNative SDK removed
-#ifndef GNController_DEFINED
-#define GNController_DEFINED
-@protocol GNController <NSObject>
-- (void)triggerEvent:(NSString *)eventName;
-@end
-#endif
+#endif // __OBJC__
 
