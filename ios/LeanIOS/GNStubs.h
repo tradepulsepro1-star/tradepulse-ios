@@ -10,6 +10,12 @@
 #ifndef GoNativeAppConfig_DEFINED
 #define GoNativeAppConfig_DEFINED
 
+
+// LEANIcons stub — actual implementation in LEANIcons.swift (@objc class)
+@interface LEANIcons : NSObject
++ (UIImage * _Nullable)imageForIconIdentifier:(NSString * _Nonnull)name size:(CGFloat)size color:(UIColor * _Nonnull)color;
+@end
+
 @interface GoNativeAppConfig : NSObject
 + (instancetype)sharedAppConfig;
 + (instancetype)shared;
