@@ -14,21 +14,6 @@ workflows:
           PBXPROJ="ios/TradePulse.xcodeproj/project.pbxproj"
           sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 19/g" "$PBXPROJ"
           echo "Build number set to 19"
-          grep "CURRENT_PROJECT_VERSION" "$PBXPROJ" | head -1
-
-      - name: Show available signing assets
-        script: |
-          echo "=== Installed Certificates ==="
-          security find-identity -v -p codesigning
-          echo ""
-          echo "=== Installed Provisioning Profiles ==="
-          ls ~/Library/MobileDevice/Provisioning\ Profiles/ 2>/dev/null || echo "no profiles dir"
-          echo ""
-          echo "=== Profile details ==="
-          for f in ~/Library/MobileDevice/Provisioning\ Profiles/*.mobileprovision; do
-            echo "--- $f ---"
-            security cms -D -i "$f" 2>/dev/null | grep -A1 "Name\|UUID\|ProvisionalApplicationEntitlements\|Entitlements" | head -20
-          done
 
       - name: Build and Archive
         script: |
@@ -43,7 +28,6 @@ workflows:
             CODE_SIGN_IDENTITY="Apple Distribution" \
             DEVELOPMENT_TEAM=5L79BW988P \
             PROVISIONING_PROFILE_SPECIFIER="trade pulse" \
-            CODE_SIGN_ENTITLEMENTS=ios/Project.entitlements \
             clean archive 2>&1
 
       - name: Export IPA
