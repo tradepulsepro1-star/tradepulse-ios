@@ -11,3 +11,6 @@ Derived/
 .tuist-cache/
 graph.json
 Extensions/
+
+# macOS resource forks
+._*

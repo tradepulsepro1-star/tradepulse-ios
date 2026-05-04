@@ -16,30 +16,15 @@ workflows:
       - name: Bump build number
         script: |
           PBXPROJ="ios/TradePulse.xcodeproj/project.pbxproj"
-          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 59/g" "$PBXPROJ"
+          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 60/g" "$PBXPROJ"
           echo "Xcode: $(xcodebuild -version | head -1)"
 
       - name: Build and Archive
         script: |
           set -o pipefail
           ARCHIVE_PATH="/Users/builder/clone/TradePulse.xcarchive"
+          LOG_FILE="/Users/builder/clone/build_errors.log"
 
-          echo "BUILD_START"
-          xcodebuild -version
-          echo "WORKSPACE_LIST_START"
-          xcodebuild -workspace ios/TradePulse.xcworkspace -list 2>&1
-          echo "WORKSPACE_LIST_END"
-          echo "PROJECT_LIST_START"
-          xcodebuild -project ios/TradePulse.xcodeproj -list 2>&1
-          echo "PROJECT_LIST_END"
-          echo "GITIGNORE:"
-          cat ios/.gitignore 2>/dev/null || echo "no gitignore"
-          echo "XCUSERDATA_EXISTS:"
-          ls ios/TradePulse.xcworkspace/xcuserdata/ 2>/dev/null || echo "none"
-          echo "SCHEME_MGMT:"
-          find ios -name "xcschememanagement.plist" -exec echo {} \; -exec cat {} \; 2>/dev/null || echo "none found"
-
-          echo "NOW_BUILDING"
           xcodebuild \
             -workspace ios/TradePulse.xcworkspace \
             -scheme TradePulse \
@@ -52,7 +37,11 @@ workflows:
             CODE_SIGN_IDENTITY="iPhone Distribution" \
             PROVISIONING_PROFILE_SPECIFIER="trade pulse" \
             "OTHER_LDFLAGS=-ObjC" \
-            archive 2>&1 | head -50
+            archive 2>&1 | tee "$LOG_FILE" | \
+            grep -E "error:|ARCHIVE SUCCEEDED|ARCHIVE FAILED|fatal error|Build succeeded|warning: (implicit|undeclared|unknown)" || true
+
+          echo "=== ERRORS ==="
+          grep -E "error:|fatal error" "$LOG_FILE" | head -30 || echo "none"
 
           [ -d "$ARCHIVE_PATH" ] && echo "ARCHIVE OK" || { echo "ARCHIVE MISSING"; exit 1; }
 
