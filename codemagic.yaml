@@ -23,7 +23,7 @@ workflows:
           LOG_FILE="/Users/builder/clone/build_errors.log"
 
           xcodebuild \
-            -workspace ios/TradePulse.xcworkspace \
+            -project ios/TradePulse.xcodeproj \
             -scheme TradePulse \
             -sdk iphoneos \
             -configuration Release \
