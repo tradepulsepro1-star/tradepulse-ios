@@ -48,7 +48,8 @@ import WebKit
         updateScript(js, webView: webView)
     }
 
-    @objc func setViewport(scale: NSNumber?, width: NSNumber?, webView: WKWebView?) {
+    @objc(setViewportScale:width:webView:)
+    func setViewport(scale: NSNumber?, width: NSNumber?, webView: WKWebView?) {
         let s = scale != nil ? CGFloat(truncating: scale!) : 0
         setViewportWithScale(s, width: width, webView: webView)
     }
