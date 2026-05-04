@@ -50,15 +50,19 @@ workflows:
 
           echo ""
           echo "=============================================="
-          echo "=== ALL ERRORS (grep for 'error:') ==="
+          echo "=== ERRORS ONLY (all 'error:' lines) ==="
           echo "=============================================="
-          grep -n "error:" "$LOG_FILE" | grep -v "^Binary\|warning:\|note:" | head -40
+          grep "error:" "$LOG_FILE" | grep -v "^Binary\|#pragma\|// " | grep -v "^[[:space:]]*//" | head -60
 
           echo ""
           echo "=============================================="
-          echo "=== LAST 80 LINES ==="
+          echo "=== LEANActionManager CONTEXT (50 lines around its error) ==="
           echo "=============================================="
-          tail -80 "$LOG_FILE"
+          grep -n "LEANActionManager\|ActionManager" "$LOG_FILE" | head -20
+
+          echo ""
+          echo "=== LAST 50 LINES ==="
+          tail -50 "$LOG_FILE"
 
           [ -d "$ARCHIVE_PATH" ] && echo "ARCHIVE OK" || { echo "ARCHIVE MISSING"; exit 1; }
 
