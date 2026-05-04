@@ -5,7 +5,7 @@ workflows:
     integrations:
       app_store_connect: Anthony Rosa
     environment:
-      xcode: 16.3
+      xcode: latest-stable
       ios_signing:
         distribution_type: app_store
         bundle_identifier: net.tradepulsepro
@@ -14,14 +14,15 @@ workflows:
         script: |
           PBXPROJ="ios/TradePulse.xcodeproj/project.pbxproj"
           sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 19/g" "$PBXPROJ"
-          echo "Build number set to 19"
-          echo "Xcode version: $(xcodebuild -version)"
-          echo "PWD: $PWD"
+          echo "Xcode: $(xcodebuild -version | head -1)"
+          echo "PWD=$PWD"
 
       - name: Build and Archive
         script: |
-          ARCHIVE_PATH="$PWD/TradePulse.xcarchive"
-          echo "Archive path: $ARCHIVE_PATH"
+          set -e
+          ARCHIVE_PATH="/Users/builder/clone/TradePulse.xcarchive"
+          echo "Xcode: $(xcodebuild -version | head -1)"
+          echo "Saving archive to: $ARCHIVE_PATH"
           
           xcodebuild \
             -workspace ios/TradePulse.xcworkspace \
@@ -32,26 +33,33 @@ workflows:
             -allowProvisioningUpdates \
             clean archive
           
-          echo "Archive check:"
-          ls -la "$ARCHIVE_PATH" && echo "ARCHIVE OK" || echo "ARCHIVE MISSING"
+          if [ -d "$ARCHIVE_PATH" ]; then
+            echo "SUCCESS: Archive created at $ARCHIVE_PATH"
+          else
+            echo "FATAL: Archive not found after build"
+            exit 1
+          fi
 
       - name: Export IPA
         script: |
-          ARCHIVE_PATH="$PWD/TradePulse.xcarchive"
-          IPA_PATH="$PWD/ipa"
+          set -e
+          ARCHIVE_PATH="/Users/builder/clone/TradePulse.xcarchive"
+          IPA_PATH="/Users/builder/clone/ipa"
           mkdir -p "$IPA_PATH"
           
-          echo "Exporting from: $ARCHIVE_PATH"
-          ls -la "$ARCHIVE_PATH" || echo "ARCHIVE MISSING - cannot export"
+          echo "Archive exists: $(ls -d $ARCHIVE_PATH 2>/dev/null && echo YES || echo NO)"
           
           xcodebuild -exportArchive \
             -archivePath "$ARCHIVE_PATH" \
             -exportOptionsPlist exportOptions.plist \
             -exportPath "$IPA_PATH"
+          
+          echo "IPA:"
+          ls -la "$IPA_PATH/"
 
     artifacts:
-      - TradePulse.xcarchive
-      - ipa/*.ipa
+      - /Users/builder/clone/TradePulse.xcarchive
+      - /Users/builder/clone/ipa/*.ipa
 
     publishing:
       app_store_connect:
