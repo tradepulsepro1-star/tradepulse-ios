@@ -3,7 +3,6 @@
 //
 
 #import "GNStubs.h"
-#import "GonativeIO-Swift.h"
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 
@@ -22,21 +21,6 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
 @implementation RegexEnabled
 @end
 
-
-// WebViewViewportManager stub implementation
-@implementation WebViewViewportManager
-+ (instancetype)shared {
-    static WebViewViewportManager *instance = nil;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{ instance = [[self alloc] init]; });
-    return instance;
-}
-- (instancetype)initWithWebView:(id)webView config:(id)config {
-    return [super init];
-}
-- (void)setViewportWithScale:(CGFloat)scale width:(CGFloat)width webView:(WKWebView *)webView {}
-- (void)updateViewport {}
-@end
 
 
 // NSAttributedString+GNIcons stub
