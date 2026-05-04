@@ -13,102 +13,14 @@ workflows:
       - name: Bump build number
         script: |
           PBXPROJ="ios/TradePulse.xcodeproj/project.pbxproj"
-          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 72/g" "$PBXPROJ"
+          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 73/g" "$PBXPROJ"
           echo "Xcode: $(xcodebuild -version | head -1)"
 
       - name: Fix scheme ArchiveAction
         script: |
-          SCHEME_DIR="ios/TradePulse.xcworkspace/xcshareddata/xcschemes"
-          mkdir -p "$SCHEME_DIR"
-          cat > "$SCHEME_DIR/TradePulse.xcscheme" << 'SCHEME'
-<?xml version="1.0" encoding="UTF-8"?>
-<Scheme
-   LastUpgradeVersion = "1340"
-   version = "1.7">
-   <BuildAction
-      parallelizeBuildables = "YES"
-      buildImplicitDependencies = "YES">
-      <BuildActionEntries>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "50FC230C34588D4817162FED"
-               BuildableName = "TradePulse.app"
-               BlueprintName = "TradePulse"
-               ReferencedContainer = "container:TradePulse.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-      </BuildActionEntries>
-   </BuildAction>
-   <TestAction
-      buildConfiguration = "Debug"
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES">
-      <Testables>
-      </Testables>
-   </TestAction>
-   <LaunchAction
-      buildConfiguration = "Debug"
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      launchStyle = "0"
-      useCustomWorkingDirectory = "NO"
-      ignoresPersistentStateOnLaunch = "NO"
-      debugDocumentVersioning = "YES"
-      debugServiceExtension = "internal"
-      allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "50FC230C34588D4817162FED"
-            BuildableName = "TradePulse.app"
-            BlueprintName = "TradePulse"
-            ReferencedContainer = "container:TradePulse.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
-   </LaunchAction>
-   <ProfileAction
-      buildConfiguration = "Release"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      savedToolIdentifier = ""
-      useCustomWorkingDirectory = "NO"
-      debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "50FC230C34588D4817162FED"
-            BuildableName = "TradePulse.app"
-            BlueprintName = "TradePulse"
-            ReferencedContainer = "container:TradePulse.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
-   </ProfileAction>
-   <AnalyzeAction
-      buildConfiguration = "Release">
-   </AnalyzeAction>
-   <ArchiveAction
-      buildConfiguration = "Release"
-      revealArchiveInOrganizer = "YES">
-      <BuildableReference
-         BuildableIdentifier = "primary"
-         BlueprintIdentifier = "50FC230C34588D4817162FED"
-         BuildableName = "TradePulse.app"
-         BlueprintName = "TradePulse"
-         ReferencedContainer = "container:TradePulse.xcodeproj">
-      </BuildableReference>
-   </ArchiveAction>
-</Scheme>
-SCHEME
-          echo "Scheme written. Verifying ArchiveAction:"
-          grep -A5 "ArchiveAction" "$SCHEME_DIR/TradePulse.xcscheme"
+          echo "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPFNjaGVtZSBMYXN0VXBncmFkZVZlcnNpb249IjEzNDAiIHZlcnNpb249IjEuNyI+CiAgIDxCdWlsZEFjdGlvbiBwYXJhbGxlbGl6ZUJ1aWxkYWJsZXM9IllFUyIgYnVpbGRJbXBsaWNpdERlcGVuZGVuY2llcz0iWUVTIj4KICAgICAgPEJ1aWxkQWN0aW9uRW50cmllcz4KICAgICAgICAgPEJ1aWxkQWN0aW9uRW50cnkgYnVpbGRGb3JUZXN0aW5nPSJZRVMiIGJ1aWxkRm9yUnVubmluZz0iWUVTIiBidWlsZEZvclByb2ZpbGluZz0iWUVTIiBidWlsZEZvckFyY2hpdmluZz0iWUVTIiBidWlsZEZvckFuYWx5emluZz0iWUVTIj4KICAgICAgICAgICAgPEJ1aWxkYWJsZVJlZmVyZW5jZSBCdWlsZGFibGVJZGVudGlmaWVyPSJwcmltYXJ5IiBCbHVlcHJpbnRJZGVudGlmaWVyPSI1MEZDMjMwQzM0NTg4RDQ4MTcxNjJGRUQiIEJ1aWxkYWJsZU5hbWU9IlRyYWRlUHVsc2UuYXBwIiBCbHVlcHJpbnROYW1lPSJUcmFkZVB1bHNlIiBSZWZlcmVuY2VkQ29udGFpbmVyPSJjb250YWluZXI6VHJhZGVQdWxzZS54Y29kZXByb2oiLz4KICAgICAgICAgPC9CdWlsZEFjdGlvbkVudHJ5PgogICAgICA8L0J1aWxkQWN0aW9uRW50cmllcz4KICAgPC9CdWlsZEFjdGlvbj4KICAgPFRlc3RBY3Rpb24gYnVpbGRDb25maWd1cmF0aW9uPSJEZWJ1ZyIgc2VsZWN0ZWREZWJ1Z2dlcklkZW50aWZpZXI9Ilhjb2RlLkRlYnVnZ2VyRm91bmRhdGlvbi5EZWJ1Z2dlci5MTERCIiBzZWxlY3RlZExhdW5jaGVySWRlbnRpZmllcj0iWGNvZGUuRGVidWdnZXJGb3VuZGF0aW9uLkxhdW5jaGVyLkxMREIiIHNob3VsZFVzZUxhdW5jaFNjaGVtZUFyZ3NFbnY9IllFUyI+CiAgICAgIDxUZXN0YWJsZXMvPgogICA8L1Rlc3RBY3Rpb24+CiAgIDxMYXVuY2hBY3Rpb24gYnVpbGRDb25maWd1cmF0aW9uPSJEZWJ1ZyIgc2VsZWN0ZWREZWJ1Z2dlcklkZW50aWZpZXI9Ilhjb2RlLkRlYnVnZ2VyRm91bmRhdGlvbi5EZWJ1Z2dlci5MTERCIiBzZWxlY3RlZExhdW5jaGVySWRlbnRpZmllcj0iWGNvZGUuRGVidWdnZXJGb3VuZGF0aW9uLkxhdW5jaGVyLkxMREIiIGxhdW5jaFN0eWxlPSIwIiB1c2VDdXN0b21Xb3JraW5nRGlyZWN0b3J5PSJOTyIgaWdub3Jlc1BlcnNpc3RlbnRTdGF0ZU9uTGF1bmNoPSJOTyIgZGVidWdEb2N1bWVudFZlcnNpb25pbmc9IllFUyIgZGVidWdTZXJ2aWNlRXh0ZW5zaW9uPSJpbnRlcm5hbCIgYWxsb3dMb2NhdGlvblNpbXVsYXRpb249IllFUyI+CiAgICAgIDxCdWlsZGFibGVQcm9kdWN0UnVubmFibGUgcnVubmFibGVEZWJ1Z2dpbmdNb2RlPSIwIj4KICAgICAgICAgPEJ1aWxkYWJsZVJlZmVyZW5jZSBCdWlsZGFibGVJZGVudGlmaWVyPSJwcmltYXJ5IiBCbHVlcHJpbnRJZGVudGlmaWVyPSI1MEZDMjMwQzM0NTg4RDQ4MTcxNjJGRUQiIEJ1aWxkYWJsZU5hbWU9IlRyYWRlUHVsc2UuYXBwIiBCbHVlcHJpbnROYW1lPSJUcmFkZVB1bHNlIiBSZWZlcmVuY2VkQ29udGFpbmVyPSJjb250YWluZXI6VHJhZGVQdWxzZS54Y29kZXByb2oiLz4KICAgICAgPC9CdWlsZGFibGVQcm9kdWN0UnVubmFibGU+CiAgIDwvTGF1bmNoQWN0aW9uPgogICA8UHJvZmlsZUFjdGlvbiBidWlsZENvbmZpZ3VyYXRpb249IlJlbGVhc2UiIHNob3VsZFVzZUxhdW5jaFNjaGVtZUFyZ3NFbnY9IllFUyIgc2F2ZWRUb29sSWRlbnRpZmllcj0iIiB1c2VDdXN0b21Xb3JraW5nRGlyZWN0b3J5PSJOTyIgZGVidWdEb2N1bWVudFZlcnNpb25pbmc9IllFUyI+CiAgICAgIDxCdWlsZGFibGVQcm9kdWN0UnVubmFibGUgcnVubmFibGVEZWJ1Z2dpbmdNb2RlPSIwIj4KICAgICAgICAgPEJ1aWxkYWJsZVJlZmVyZW5jZSBCdWlsZGFibGVJZGVudGlmaWVyPSJwcmltYXJ5IiBCbHVlcHJpbnRJZGVudGlmaWVyPSI1MEZDMjMwQzM0NTg4RDQ4MTcxNjJGRUQiIEJ1aWxkYWJsZU5hbWU9IlRyYWRlUHVsc2UuYXBwIiBCbHVlcHJpbnROYW1lPSJUcmFkZVB1bHNlIiBSZWZlcmVuY2VkQ29udGFpbmVyPSJjb250YWluZXI6VHJhZGVQdWxzZS54Y29kZXByb2oiLz4KICAgICAgPC9CdWlsZGFibGVQcm9kdWN0UnVubmFibGU+CiAgIDwvUHJvZmlsZUFjdGlvbj4KICAgPEFuYWx5emVBY3Rpb24gYnVpbGRDb25maWd1cmF0aW9uPSJSZWxlYXNlIi8+CiAgIDxBcmNoaXZlQWN0aW9uIGJ1aWxkQ29uZmlndXJhdGlvbj0iUmVsZWFzZSIgcmV2ZWFsQXJjaGl2ZUluT3JnYW5pemVyPSJZRVMiPgogICAgICA8QnVpbGRhYmxlUmVmZXJlbmNlIEJ1aWxkYWJsZUlkZW50aWZpZXI9InByaW1hcnkiIEJsdWVwcmludElkZW50aWZpZXI9IjUwRkMyMzBDMzQ1ODhENDgxNzE2MkZFRCIgQnVpbGRhYmxlTmFtZT0iVHJhZGVQdWxzZS5hcHAiIEJsdWVwcmludE5hbWU9IlRyYWRlUHVsc2UiIFJlZmVyZW5jZWRDb250YWluZXI9ImNvbnRhaW5lcjpUcmFkZVB1bHNlLnhjb2RlcHJvaiIvPgogICA8L0FyY2hpdmVBY3Rpb24+CjwvU2NoZW1lPgo=" | base64 --decode > ios/TradePulse.xcworkspace/xcshareddata/xcschemes/TradePulse.xcscheme
+          echo "Scheme written. ArchiveAction:"
+          grep "ArchiveAction" ios/TradePulse.xcworkspace/xcshareddata/xcschemes/TradePulse.xcscheme
 
       - name: Build and Archive
         script: |
@@ -125,7 +37,7 @@ SCHEME
             -allowProvisioningUpdates \
             "OTHER_LDFLAGS=-ObjC" \
             archive 2>&1 | tee "$LOG_FILE" | \
-            grep -E "error:|warning: (implicit|undeclared|unknown|redefinition|previous)|note: previous|ARCHIVE FAILED|ARCHIVE SUCCEEDED|fatal error" || true
+            grep -E "error:|ARCHIVE FAILED|ARCHIVE SUCCEEDED|fatal error" || true
 
           echo "=== FULL ERROR SUMMARY ==="
           grep -E "^.*(error:|fatal error).*$" "$LOG_FILE" | head -40 || echo "No errors found in log"
