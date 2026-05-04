@@ -16,7 +16,7 @@ workflows:
       - name: Bump build number
         script: |
           PBXPROJ="ios/TradePulse.xcodeproj/project.pbxproj"
-          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 64/g" "$PBXPROJ"
+          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 65/g" "$PBXPROJ"
           echo "Xcode: $(xcodebuild -version | head -1)"
 
       - name: Build and Archive
@@ -33,7 +33,7 @@ workflows:
             -archivePath "$ARCHIVE_PATH" \
             -allowProvisioningUpdates \
             "OTHER_LDFLAGS=-ObjC" \
-            clean archive 2>&1 | tee "$LOG_FILE" | \
+            archive 2>&1 | tee "$LOG_FILE" | \
             grep -E "error:|warning: (implicit|undeclared|unknown|redefinition|previous)|note: previous|ARCHIVE FAILED|ARCHIVE SUCCEEDED|fatal error" || true
 
           echo "=== FULL ERROR SUMMARY ==="
