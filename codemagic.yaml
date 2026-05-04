@@ -22,7 +22,9 @@ workflows:
           sed -i '' 's/CODE_SIGN_IDENTITY = "Apple Development";/CODE_SIGN_IDENTITY = "Apple Distribution";/g' "$PBXPROJ"
           sed -i '' 's/DEVELOPMENT_TEAM = "";/DEVELOPMENT_TEAM = 5L79BW988P;/g' "$PBXPROJ"
           echo "=== Code signing settings ==="
-          grep "CODE_SIGN_STYLE\|CODE_SIGN_IDENTITY\|DEVELOPMENT_TEAM\|PROVISIONING_PROFILE\|CURRENT_PROJECT_VERSION" "$PBXPROJ" | sort -u
+          grep "CODE_SIGN_STYLE\|CODE_SIGN_IDENTITY\|DEVELOPMENT_TEAM\|CURRENT_PROJECT_VERSION" "$PBXPROJ" | sort -u
+          echo "=== Available schemes ==="
+          xcodebuild -workspace ios/TradePulse.xcworkspace -list 2>&1 || true
 
       - name: Build and Archive
         script: |
