@@ -265,4 +265,19 @@ typedef void (^CustomMenuTapBlock)(NSDictionary * _Nullable data);
 + (UIImage *)imageWithIconName:(NSString *)name size:(CGFloat)size color:(UIColor *)color;
 @end
 
+
+// GNBridge stub - GoNative core AppDelegate lifecycle bridge (no-op)
+@interface GNBridge : NSObject
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary *)options;
+- (void)applicationDidBecomeActive:(UIApplication *)application;
+- (void)applicationWillResignActive:(UIApplication *)application;
+- (void)applicationDidEnterBackground:(UIApplication *)application;
+- (void)applicationWillEnterForeground:(UIApplication *)application;
+- (void)applicationWillTerminate:(UIApplication *)application;
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity;
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo;
+@end
+
 #endif // __OBJC__
