@@ -85,4 +85,19 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
 + (UIImage *)imageWithIconName:(NSString *)name size:(CGFloat)size color:(UIColor *)color { return nil; }
 @end
 
+// CustomMenu stub implementation
+@implementation CustomMenu
+- (instancetype)initWithContainer:(UIView *)container button:(UIButton *)button data:(NSArray *)data onTap:(CustomMenuTapHandler)onTap {
+    return [super init];
+}
+- (void)dismiss {}
+@end
+
+// GNBridge stub implementation
+@implementation GNBridge
+- (void)loadUserScriptsForContentController:(id)contentController {}
+- (id<GNController>)getControllerForKey:(NSString *)key runner:(id)runner { return nil; }
+@end
+
+// GNController default implementation (protocol — no @implementation needed)
 

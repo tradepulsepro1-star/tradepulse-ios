@@ -59,7 +59,7 @@
     
     self.bridge = [GNBridge new];
     
-    [bridge application:application didFinishLaunchingWithOptions:launchOptions];
+    // bridge.didFinishLaunchingWithOptions — no-op
     
     return YES;
 }
@@ -71,7 +71,7 @@
 
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     NSLog(@"Successfully registered for push notifications");
-    [self setApnsToken:[GNSwiftUtilities deviceTokenWithData:deviceToken]];
+    [self setApnsToken:nil]; // GNSwiftUtilities removed
     // bridge.didRegisterForRemoteNotifications — no-op (GoNative removed)
 }
 
@@ -82,8 +82,7 @@
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
-    if ([bridge application:app openURL:url options:options])
-        return YES;
+    // bridge.openURL — no-op
     
     if ([url.scheme hasSuffix:@".https"] || [url.scheme hasSuffix:@".http"]) {
         UIViewController *rvc = self.window.rootViewController;
@@ -118,7 +117,7 @@
         });
     }
     
-    [bridge applicationDidBecomeActive:application];
+    // bridge.applicationDidBecomeActive — no-op
     if (self.previousInitialUrl) {
         NSString *initialUrl = [[GNConfigPreferences sharedPreferences] getInitialUrl];
         if (![self.previousInitialUrl isEqualToString:initialUrl]) {
@@ -159,12 +158,12 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    [bridge applicationWillResignActive:application];
+    // bridge.applicationWillResignActive — no-op
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    [bridge applicationDidEnterBackground:application];
+    // bridge.applicationDidEnterBackground — no-op
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -180,19 +179,17 @@
         }
     });
     
-    [bridge applicationWillEnterForeground:application];
+    // bridge.applicationWillEnterForeground — no-op
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    [bridge applicationWillTerminate:application];
+    // bridge.applicationWillTerminate — no-op
 }
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
 {
-    if ([bridge application:application continueUserActivity:userActivity]) {
-        return YES;
-    }
+    // bridge.continueUserActivity — no-op
     
     if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
         UIViewController *rvc = self.window.rootViewController;
@@ -206,7 +203,7 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    [bridge application:application didReceiveRemoteNotification:userInfo];
+    // bridge.didReceiveRemoteNotification — no-op
 }
 
 #pragma mark -

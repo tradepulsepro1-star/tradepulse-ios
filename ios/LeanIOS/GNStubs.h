@@ -239,5 +239,16 @@ static inline UIWindow* GNKeyWindow(void) {
 @end
 #endif
 
+
+// CustomMenu stub — GoNative dropdown menu (no-op)
+#ifndef CustomMenu_DEFINED
+#define CustomMenu_DEFINED
+typedef void (^CustomMenuTapHandler)(NSDictionary *data);
+@interface CustomMenu : NSObject
+- (instancetype)initWithContainer:(UIView *)container button:(UIButton *)button data:(NSArray *)data onTap:(CustomMenuTapHandler)onTap;
+- (void)dismiss;
+@end
+#endif
+
 #endif // __OBJC__
 
