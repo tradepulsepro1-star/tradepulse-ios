@@ -16,17 +16,25 @@ workflows:
       - name: Bump build number
         script: |
           PBXPROJ="ios/TradePulse.xcodeproj/project.pbxproj"
-          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 66/g" "$PBXPROJ"
+          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 67/g" "$PBXPROJ"
           echo "Xcode: $(xcodebuild -version | head -1)"
 
       - name: Build and Archive
         script: |
           set -o pipefail
+          cd ios
+
+          echo "=== WORKSPACE SCHEMES ==="
+          xcodebuild -workspace TradePulse.xcworkspace -list 2>&1 || true
+
+          echo "=== PROJECT SCHEMES ==="
+          xcodebuild -project TradePulse.xcodeproj -list 2>&1 || true
+
           ARCHIVE_PATH="/Users/builder/clone/TradePulse.xcarchive"
           LOG_FILE="/Users/builder/clone/build_errors.log"
 
           xcodebuild \
-            -workspace ios/TradePulse.xcworkspace \
+            -workspace TradePulse.xcworkspace \
             -scheme TradePulse \
             -sdk iphoneos \
             -configuration Release \
@@ -34,7 +42,7 @@ workflows:
             -allowProvisioningUpdates \
             "OTHER_LDFLAGS=-ObjC" \
             archive 2>&1 | tee "$LOG_FILE" | \
-            grep -E "error:|warning: (implicit|undeclared|unknown|redefinition|previous)|note: previous|ARCHIVE FAILED|ARCHIVE SUCCEEDED|fatal error" || true
+            grep -E "error:|ARCHIVE FAILED|ARCHIVE SUCCEEDED|fatal error" || true
 
           echo "=== FULL ERROR SUMMARY ==="
           grep -E "^.*(error:|fatal error).*$" "$LOG_FILE" | head -40 || echo "No errors found in log"
