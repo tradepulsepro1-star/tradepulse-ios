@@ -52,4 +52,10 @@
 
 @end
 
+// UIApplication extensions (from UIApplication+Extensions.swift)
+@interface UIApplication (SwiftExtensions)
+@property (nonatomic, readonly, nullable) UIWindow *currentKeyWindow;
+@property (nonatomic, readonly) CGRect currentStatusBarFrame;
+@property (nonatomic, readonly) BOOL isInterfaceOrientationPortrait;
+@end
 

@@ -170,7 +170,6 @@ static inline UIWindow* GNKeyWindow(void) {
     }
     return [UIApplication sharedApplication].windows.firstObject;
 }
-#define currentKeyWindow_REMOVED_USE_GNKeyWindow 1
 
 
 
