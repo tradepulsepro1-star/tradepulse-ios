@@ -1,6 +1,7 @@
 // GoNativeCoreStub.m - Stub implementations for GoNativeCore linker symbols
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <WebKit/WebKit.h>
 
 @interface GoNativeAppConfig : NSObject
 + (instancetype)sharedAppConfig;
