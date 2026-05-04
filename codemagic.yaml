@@ -42,7 +42,7 @@ workflows:
           
           xcodebuild -exportArchive \
             -archivePath "$ARCHIVE_PATH" \
-            -exportOptionsPlist ios/exportOptions.plist \
+            -exportOptionsPlist exportOptions.plist \
             -exportPath "$IPA_PATH"
 
     artifacts:
