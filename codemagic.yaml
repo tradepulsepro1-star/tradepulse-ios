@@ -5,7 +5,7 @@ workflows:
     integrations:
       app_store_connect: Anthony Rosa
     environment:
-      xcode: 16.3
+      xcode: latest
       ios_signing:
         distribution_type: app_store
         bundle_identifier: net.tradepulsepro
@@ -13,7 +13,7 @@ workflows:
       - name: Bump build number
         script: |
           PBXPROJ="ios/TradePulse.xcodeproj/project.pbxproj"
-          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 20/g" "$PBXPROJ"
+          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 54/g" "$PBXPROJ"
           echo "Xcode: $(xcodebuild -version | head -1)"
 
       - name: Build and Archive
