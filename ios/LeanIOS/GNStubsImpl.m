@@ -55,8 +55,9 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
 // CustomMenu stub implementation
 @implementation CustomMenu
 - (instancetype)initWithContainer:(UIView *)container button:(UIView *)button data:(NSArray *)data onTap:(CustomMenuTapBlock)onTap {
-    return [super init];
+    return [super initWithFrame:CGRectZero];
 }
+- (void)setMenuColor:(UIColor *)color {}
 - (void)dismiss {}
 @end
 

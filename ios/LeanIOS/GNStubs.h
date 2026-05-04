@@ -69,7 +69,7 @@
 @property (nonatomic) BOOL enableWindowOpen;
 @property (nonatomic) BOOL windowOpenHideNavbar;
 @property (nonatomic) BOOL useWebpageTitle;
-@property (nonatomic) BOOL hideWebviewAlpha;
+@property (nonatomic, strong) NSNumber *hideWebviewAlpha;
 @property (nonatomic) BOOL dynamicTypeEnabled;
 @property (nonatomic) BOOL swipeGestures;
 @property (nonatomic) NSUInteger maxWindows;
@@ -109,7 +109,7 @@
 @property (nonatomic, strong) NSArray *listeners;
 // Actions / Menus
 @property (nonatomic, strong) NSDictionary *actions;
-@property (nonatomic, strong) NSDictionary *actionSelection;
+@property (nonatomic, strong) NSArray *actionSelection;
 @property (nonatomic, strong) NSDictionary *menus;
 @property (nonatomic, strong) NSArray *segmentedControlItems;
 @property (nonatomic, strong) NSArray *contextMenuLinkActions;
@@ -187,8 +187,9 @@ static inline UIWindow* GNKeyWindow(void) {
 
 // CustomMenu stub - used by LEANActionManager
 typedef void (^CustomMenuTapBlock)(NSDictionary *data);
-@interface CustomMenu : NSObject
+@interface CustomMenu : UIView
 - (instancetype)initWithContainer:(UIView *)container button:(UIView *)button data:(NSArray *)data onTap:(CustomMenuTapBlock)onTap;
+- (void)setMenuColor:(UIColor *)color;
 - (void)dismiss;
 @end
 
