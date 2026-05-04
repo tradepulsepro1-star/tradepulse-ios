@@ -40,6 +40,8 @@ extension NativeBridge: AVCaptureMetadataOutputObjectsDelegate {
             webView?.configuration.userContentController.add(self, name: h)
         }
         injectRound2JSBridge()
+        setupRound3MessageHandlers()
+        setupLocationManager()
     }
 
     // ─── Inject Round 2 JS shim ───────────────────────────────────────────────
@@ -104,7 +106,7 @@ extension NativeBridge: AVCaptureMetadataOutputObjectsDelegate {
         case "vibrateChatNotification": UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         case "markMessagesRead":        handleMarkMessagesRead(body)
         case "setTypingIndicator":      handleSetTypingIndicator(body)
-        default: break
+        default: handleRound3Message(name, body: body)
         }
     }
 }

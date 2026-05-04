@@ -58,6 +58,8 @@
     </dict>
     <key>NSCalendarsUsageDescription</key>
     <string>${BUILD_SETTINGS_APP_NAME} needs access to your calendar to retrieve and add events.</string>
+    <key>NSCalendarsWriteOnlyAccessUsageDescription</key>
+    <string>TradePulse uses your calendar to add trade reminders and signal alerts.</string>
     <key>NSCameraUsageDescription</key>
     <string>TradePulse needs camera access to upload your profile photo and complete Guru identity verification.</string>
     <key>NSFaceIDUsageDescription</key>
