@@ -35,22 +35,18 @@ NSString * const kLEANWebViewPoolDisownPolicyDefault = @"default";
 }
 @end
 
-// GNBridgeController stub
-@implementation GNBridgeController
-- (void)triggerEvent:(NSString *)event {}
-- (void)triggerEvent:(NSString *)event data:(id)data {}
-@end
-
-// GNBridge implementation
-@implementation GNBridge
-- (GNBridgeController *)getControllerForKey:(NSString *)key runner:(id)runner {
-    return nil; // no-op stub
-}
-@end
 
 // NSAttributedString+GNIcons stub
 @implementation NSAttributedString (GNIcons)
 - (instancetype)initWithIconName:(NSString *)iconName color:(UIColor *)color size:(CGFloat)size {
     return [self initWithString:iconName];
 }
+@end
+
+// CustomMenu stub implementation
+@implementation CustomMenu
+- (instancetype)initWithContainer:(UIView *)container button:(UIView *)button data:(NSArray *)data onTap:(CustomMenuTapBlock)onTap {
+    return [super init];
+}
+- (void)dismiss {}
 @end

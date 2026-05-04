@@ -180,14 +180,13 @@ static inline UIWindow* GNKeyWindow(void) {
 #define currentKeyWindow_REMOVED_USE_GNKeyWindow 1
 
 
-// GNBridge stubs
-@interface GNBridgeController : NSObject
-- (void)triggerEvent:(NSString *)event;
-- (void)triggerEvent:(NSString *)event data:(id)data;
-@end
 
-@interface GNBridge : NSObject
-- (GNBridgeController *)getControllerForKey:(NSString *)key runner:(id)runner;
+
+// CustomMenu stub - used by LEANActionManager
+typedef void (^CustomMenuTapBlock)(NSDictionary *data);
+@interface CustomMenu : NSObject
+- (instancetype)initWithContainer:(UIView *)container button:(UIView *)button data:(NSArray *)data onTap:(CustomMenuTapBlock)onTap;
+- (void)dismiss;
 @end
 
 #endif // __OBJC__

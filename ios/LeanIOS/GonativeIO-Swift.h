@@ -12,6 +12,8 @@
 - (void)show;
 - (void)hide;
 - (void)hideAfterDelay:(double)delay;
+- (void)triggerEvent:(NSString *)event;
+- (void)triggerEvent:(NSString *)event data:(id)data;
 @end
 
 // GNBridge - the main Median bridge class referenced everywhere
