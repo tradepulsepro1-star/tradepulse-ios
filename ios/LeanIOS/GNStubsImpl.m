@@ -41,8 +41,8 @@ NSString * const kLEANWebViewPoolDisownPolicyDefault = @"default";
 - (void)triggerEvent:(NSString *)event data:(id)data {}
 @end
 
-// GNBridge extension
-@implementation GNBridge (LaunchScreen)
+// GNBridge implementation
+@implementation GNBridge
 - (GNBridgeController *)getControllerForKey:(NSString *)key runner:(id)runner {
     return nil; // no-op stub
 }

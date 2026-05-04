@@ -179,4 +179,15 @@ static inline UIWindow* GNKeyWindow(void) {
 }
 #define currentKeyWindow_REMOVED_USE_GNKeyWindow 1
 
+
+// GNBridge stubs
+@interface GNBridgeController : NSObject
+- (void)triggerEvent:(NSString *)event;
+- (void)triggerEvent:(NSString *)event data:(id)data;
+@end
+
+@interface GNBridge : NSObject
+- (GNBridgeController *)getControllerForKey:(NSString *)key runner:(id)runner;
+@end
+
 #endif // __OBJC__
