@@ -12,63 +12,111 @@
 @interface GoNativeAppConfig : NSObject
 + (instancetype)sharedAppConfig;
 + (instancetype)shared;
-
-// All properties used across LeanIOS source files
-@property (nonatomic) BOOL contextMenuEnabled;
-@property (nonatomic, strong) NSArray *contextMenuLinkActions;
-@property (nonatomic) NSUInteger maxWindows;
-@property (nonatomic) BOOL pinchToZoom;
-@property (nonatomic) BOOL pullToRefresh;
-@property (nonatomic) BOOL swipeGestures;
-@property (nonatomic) BOOL dynamicTypeEnabled;
-@property (nonatomic) BOOL disableAnimations;
-@property (nonatomic) BOOL disableEventRecorder;
-@property (nonatomic) BOOL enableWindowOpen;
-@property (nonatomic) BOOL injectMedianJS;
-@property (nonatomic) BOOL useWKWebView;
-@property (nonatomic) BOOL userAgentReady;
-@property (nonatomic) BOOL showShareButton;
-@property (nonatomic) BOOL showToolbar;
-@property (nonatomic) BOOL iosAutoHideHomeIndicator;
-@property (nonatomic) BOOL iosShowOfflinePage;
-@property (nonatomic, strong) NSString *initialHost;
-@property (nonatomic, strong) NSURL *initialURL;
+// Core
 @property (nonatomic, strong) NSString *publicKey;
-@property (nonatomic, strong) NSString *stringViewport;
-@property (nonatomic, strong) NSString *sidebarMenuIcon;
-@property (nonatomic, strong) NSString *sidebarIcon;
-@property (nonatomic, strong) NSString *appName;
+@property (nonatomic, strong) NSString *configError;
+@property (nonatomic, strong) NSURL *initialURL;
+@property (nonatomic, strong) NSString *initialHost;
+@property (nonatomic, strong) NSURL *loginURL;
+@property (nonatomic, strong) NSURL *signupURL;
 @property (nonatomic, strong) NSString *userAgent;
-@property (nonatomic, strong) NSString *userIdRegex;
-@property (nonatomic, strong) NSString *currentMenuID;
-@property (nonatomic, strong) NSString *signupURL;
-@property (nonatomic, strong) NSString *targetFrame;
-@property (nonatomic, strong) NSString *iosTheme;
-@property (nonatomic, strong) NSString *iosSidebarFont;
+@property (nonatomic, strong) NSString *appName;
+// Display
+@property (nonatomic, strong) NSString *stringViewport;
 @property (nonatomic, strong) NSNumber *forceViewportWidth;
-@property (nonatomic, strong) NSNumber *interactiveDelay;
-@property (nonatomic, strong) NSNumber *iosConnectionOfflineTime;
-@property (nonatomic, strong) NSNumber *forceSessionCookieExpiry;
-@property (nonatomic, strong) NSArray *navStructureLevels;
-@property (nonatomic, strong) NSArray *navTitles;
-@property (nonatomic, strong) NSArray *tabMenus;
-@property (nonatomic, strong) NSArray *tabMenuIDs;
-@property (nonatomic, strong) NSArray *tabMenuRegexes;
-@property (nonatomic, strong) NSArray *webviewPools;
-@property (nonatomic, strong) NSArray *loginDetectRegexes;
-@property (nonatomic, strong) NSArray *loginDetectLocations;
-@property (nonatomic, strong) NSArray *menuItems;
-@property (nonatomic, strong) NSArray *menus;
-@property (nonatomic, strong) NSArray *listeners;
-@property (nonatomic, strong) NSArray *toolbarItems;
-@property (nonatomic, strong) NSArray *segmentedControlItems;
-@property (nonatomic, strong) NSArray *replaceStrings;
-@property (nonatomic, strong) NSDictionary *actions;
-@property (nonatomic, strong) NSDictionary *customHeaders;
-@property (nonatomic, strong) NSDictionary *font;
-@property (nonatomic, strong) NSURL *loginDetectionURL;
 @property (nonatomic, strong) UIImage *navigationTitleIcon;
 @property (nonatomic, strong) UIImage *appIcon;
+@property (nonatomic) BOOL isNavigationTitleImage;
+@property (nonatomic, strong) NSString *iosStatusBarStyle;
+@property (nonatomic, strong) NSString *iosTheme;
+@property (nonatomic, strong) NSString *iosDarkMode;
+@property (nonatomic) BOOL iosEnableBlurInStatusBar;
+@property (nonatomic) BOOL iosEnableOverlayInStatusBar;
+@property (nonatomic) BOOL iosFullScreenWebview;
+@property (nonatomic) BOOL iosAutoHideHomeIndicator;
+// Navigation
+@property (nonatomic, strong) NSArray *navStructureLevels;
+@property (nonatomic, strong) NSArray *navTitles;
+@property (nonatomic) BOOL showNavigationBar;
+@property (nonatomic) BOOL showNavigationMenu;
+@property (nonatomic) BOOL hideNavBarOnScroll;
+@property (nonatomic) BOOL transparentNavBar;
+@property (nonatomic, strong) NSString *sidebarMenuIcon;
+@property (nonatomic, strong) NSString *sidebarIcon;
+@property (nonatomic, strong) NSDictionary *sidebar;
+@property (nonatomic, strong) NSString *iosSidebarFont;
+@property (nonatomic) CGFloat menuAnimationDuration;
+// Tabs
+@property (nonatomic, strong) NSArray *tabMenus;
+@property (nonatomic, strong) NSArray *tabMenuRegexes;
+@property (nonatomic, strong) NSArray *tabMenuIDs;
+@property (nonatomic) BOOL hideTabBarOnScroll;
+// Toolbar
+@property (nonatomic) BOOL toolbarEnabled;
+@property (nonatomic, strong) NSArray *toolbarItems;
+@property (nonatomic, strong) NSArray *toolbarRegexes;
+@property (nonatomic, strong) NSArray *toolbarVisibilityByPages;
+@property (nonatomic, strong) NSArray *toolbarVisibilityByBackButton;
+@property (nonatomic) BOOL showToolbar;
+@property (nonatomic) BOOL showShareButton;
+@property (nonatomic) BOOL showKeyboardAccessoryView;
+// Behavior
+@property (nonatomic) BOOL keepScreenOn;
+@property (nonatomic) BOOL pullToRefresh;
+@property (nonatomic) BOOL pinchToZoom;
+@property (nonatomic) BOOL disableAnimations;
+@property (nonatomic) BOOL enableWindowOpen;
+@property (nonatomic) BOOL windowOpenHideNavbar;
+@property (nonatomic) BOOL useWebpageTitle;
+@property (nonatomic) BOOL hideWebviewAlpha;
+@property (nonatomic) BOOL dynamicTypeEnabled;
+@property (nonatomic) BOOL swipeGestures;
+@property (nonatomic) NSUInteger maxWindows;
+@property (nonatomic) BOOL maxWindowsAutoClose;
+@property (nonatomic, strong) NSNumber *interactiveDelay;
+@property (nonatomic, strong) NSNumber *iosConnectionOfflineTime;
+@property (nonatomic) NSUInteger forceSessionCookieExpiry;
+@property (nonatomic) CGFloat initialWebviewZoom;
+// JavaScript / CSS
+@property (nonatomic) BOOL hasCustomJS;
+@property (nonatomic) BOOL hasCustomCSS;
+@property (nonatomic) BOOL hasIosCustomJS;
+@property (nonatomic) BOOL hasIosCustomCSS;
+@property (nonatomic, strong) NSString *postLoadJavascript;
+@property (nonatomic, strong) NSString *profilePickerJS;
+@property (nonatomic) BOOL injectMedianJS;
+@property (nonatomic) BOOL enableWebConsoleLogs;
+@property (nonatomic) BOOL disableEventRecorder;
+// Login / Auth
+@property (nonatomic, strong) NSURL *loginDetectionURL;
+@property (nonatomic, strong) NSArray *loginDetectRegexes;
+@property (nonatomic, strong) NSArray *loginDetectLocations;
+@property (nonatomic, strong) NSString *userIdRegex;
+// Network
+@property (nonatomic, strong) NSDictionary *customHeaders;
+@property (nonatomic, strong) NSArray *redirects;
+@property (nonatomic, strong) NSArray *replaceStrings;
+@property (nonatomic, strong) NSArray *webviewPools;
+@property (nonatomic) BOOL useWKWebView;
+@property (nonatomic) BOOL iosShowOfflinePage;
+// Registration / Analytics
+@property (nonatomic, strong) NSArray *registrationEndpoints;
+@property (nonatomic) BOOL facebookEnabled;
+@property (nonatomic) BOOL iOSRequestATTConsentOnLoad;
+@property (nonatomic) BOOL userAgentReady;
+@property (nonatomic, strong) NSArray *nativeBridgeUrls;
+@property (nonatomic, strong) NSArray *listeners;
+// Actions / Menus
+@property (nonatomic, strong) NSDictionary *actions;
+@property (nonatomic, strong) NSDictionary *actionSelection;
+@property (nonatomic, strong) NSArray *menus;
+@property (nonatomic, strong) NSArray *segmentedControlItems;
+@property (nonatomic, strong) NSArray *contextMenuLinkActions;
+@property (nonatomic) BOOL contextMenuEnabled;
+@property (nonatomic) BOOL disableDocumentOpenWith;
+// Misc
+@property (nonatomic, strong) NSDictionary *permissions;
+@property (nonatomic, strong) NSDictionary *styleConfig;
 - (NSString *)userAgentForUrl:(NSURL *)url;
 - (NSDictionary *)getRegexRuleForURL:(NSString *)url rules:(id)rules;
 - (void)initializeRegexRules:(id *)rules;
