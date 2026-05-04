@@ -15,15 +15,8 @@ workflows:
           ls -la
           echo "=== ios/ ==="
           ls -la ios/
-          echo "=== xcworkspace/xcodeproj check ==="
-          find ios -maxdepth 2 -name "*.xcworkspace" -o -name "*.xcodeproj" 2>/dev/null
-
-      - name: Force add xcworkspace to git tracking
-        script: |
-          git rm -r --cached ios/TradePulse.xcworkspace 2>/dev/null || true
-          git add -f ios/TradePulse.xcworkspace 2>/dev/null || true
-          echo "xcworkspace check done"
-          ls -la ios/TradePulse.xcworkspace/ 2>/dev/null || echo "xcworkspace not found - using xcodeproj"
+          echo "=== Schemes ==="
+          find ios -name "*.xcscheme" 2>/dev/null
 
       - name: Set manual signing + build number
         script: |
@@ -35,36 +28,18 @@ workflows:
 
       - name: Build archive
         script: |
-          # Try xcworkspace first, fall back to xcodeproj
-          if [ -d "ios/TradePulse.xcworkspace" ]; then
-            echo "Using xcworkspace"
-            xcodebuild archive \
-              -workspace ios/TradePulse.xcworkspace \
-              -scheme TradePulse-Workspace \
-              -configuration Release \
-              -destination "generic/platform=iOS" \
-              -archivePath $CM_BUILD_DIR/TradePulse.xcarchive \
-              CODE_SIGN_STYLE=Manual \
-              DEVELOPMENT_TEAM=5L79BW988P \
-              PROVISIONING_PROFILE_SPECIFIER="trade pulse" \
-              CODE_SIGN_ENTITLEMENTS=ios/Project.entitlements \
-              ONLY_ACTIVE_ARCH=NO \
-              | xcpretty && exit ${PIPESTATUS[0]}
-          else
-            echo "Using xcodeproj"
-            xcodebuild archive \
-              -project ios/TradePulse.xcodeproj \
-              -scheme TradePulse-Workspace \
-              -configuration Release \
-              -destination "generic/platform=iOS" \
-              -archivePath $CM_BUILD_DIR/TradePulse.xcarchive \
-              CODE_SIGN_STYLE=Manual \
-              DEVELOPMENT_TEAM=5L79BW988P \
-              PROVISIONING_PROFILE_SPECIFIER="trade pulse" \
-              CODE_SIGN_ENTITLEMENTS=ios/Project.entitlements \
-              ONLY_ACTIVE_ARCH=NO \
-              | xcpretty && exit ${PIPESTATUS[0]}
-          fi
+          xcodebuild archive \
+            -project ios/TradePulse.xcodeproj \
+            -scheme TradePulse \
+            -configuration Release \
+            -destination "generic/platform=iOS" \
+            -archivePath $CM_BUILD_DIR/TradePulse.xcarchive \
+            CODE_SIGN_STYLE=Manual \
+            DEVELOPMENT_TEAM=5L79BW988P \
+            PROVISIONING_PROFILE_SPECIFIER="trade pulse" \
+            CODE_SIGN_ENTITLEMENTS=ios/Project.entitlements \
+            ONLY_ACTIVE_ARCH=NO \
+            | xcpretty && exit ${PIPESTATUS[0]}
 
       - name: Export IPA
         script: |
