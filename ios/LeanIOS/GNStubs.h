@@ -46,7 +46,7 @@
 @property (nonatomic, strong) NSString *sidebarIcon;
 @property (nonatomic, strong) NSDictionary *sidebar;
 @property (nonatomic, strong) NSString *iosSidebarFont;
-@property (nonatomic) CGFloat menuAnimationDuration;
+@property (nonatomic, strong) NSNumber *menuAnimationDuration;
 // Tabs
 @property (nonatomic, strong) NSDictionary *tabMenus;
 @property (nonatomic, strong) NSArray *tabMenuRegexes;
@@ -251,6 +251,12 @@ typedef void (^CustomMenuTapBlock)(NSDictionary * _Nullable data);
 @interface CustomMenu : UIView
 - (instancetype _Nullable)initWithContainer:(UIView *)container button:(UIButton *)button data:(NSArray<NSDictionary *> *)data onTap:(CustomMenuTapBlock _Nullable)onTap;
 - (void)setMenuColor:(UIColor *)color;
+@end
+
+
+// GNSwiftUtilities (GNSwiftUtilities.swift)
+@interface GNSwiftUtilities : NSObject
++ (NSString *)deviceTokenWithData:(NSData *)data;
 @end
 
 #endif // __OBJC__

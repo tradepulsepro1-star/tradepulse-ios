@@ -9,6 +9,7 @@
 #import "LEANPDFManager.h"
 #import "LEANUtilities.h"
 #import "GonativeIO-Swift.h"
+#import "GNStubs.h"
 
 #define TAB_BAR_HEIGHT 49
 

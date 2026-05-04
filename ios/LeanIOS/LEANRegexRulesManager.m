@@ -9,6 +9,7 @@
 #import "LEANRegexRulesManager.h"
 #import "LEANWindowsManager.h"
 #import "GonativeIO-Swift.h"
+#import "GNStubs.h"
 
 @interface LEANRegexRulesManager()
 @property LEANWindowsManager *windowsManager;

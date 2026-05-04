@@ -7,6 +7,7 @@
 //
 
 #import "LEANUrlInspector.h"
+#import "GNStubs.h"
 
 @interface LEANUrlInspector ()
 @property NSRegularExpression *userIdRegex;

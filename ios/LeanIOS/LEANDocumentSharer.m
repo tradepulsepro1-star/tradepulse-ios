@@ -11,6 +11,7 @@
 #import "GonativeIO-Swift.h"
 #import "LEANUtilities.h"
 #import "LEANPDFManager.h"
+#import "GNStubs.h"
 
 @interface LEANDocumentSharer ()
 @property UIDocumentInteractionController *interactionController;

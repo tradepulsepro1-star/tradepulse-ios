@@ -10,6 +10,7 @@
 #import "LEANMenuViewController.h"
 #import "LEANWebViewController.h"
 #import "LEANUtilities.h"
+#import "GNStubs.h"
 
 @interface LEANRootViewController ()
 

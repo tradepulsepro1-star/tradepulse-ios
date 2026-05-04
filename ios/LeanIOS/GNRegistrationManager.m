@@ -9,6 +9,7 @@
 #import "GNRegistrationManager.h"
 #import "LEANUtilities.h"
 #import "LEANInstallation.h"
+#import "GNStubs.h"
 
 #pragma mark Registration Data
 

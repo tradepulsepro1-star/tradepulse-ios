@@ -11,6 +11,7 @@
 #import "NSURL+LEANUtilities.h"
 #import "LEANUrlInspector.h"
 #import <WebKit/WebKit.h>
+#import "GNStubs.h"
 
 @interface LEANLoginManager () <NSURLSessionDataDelegate, WKNavigationDelegate>
 @property BOOL isChecking;

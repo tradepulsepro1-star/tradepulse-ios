@@ -10,6 +10,7 @@
 #import "LEANWebViewController.h"
 #import "LEANUtilities.h"
 #import "LEANLoginManager.h"
+#import "GNStubs.h"
 
 @interface LEANWebViewPool () <WKNavigationDelegate>
 @property NSMutableDictionary *urlToWebview;

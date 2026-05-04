@@ -10,6 +10,7 @@
 #import "LEANWebViewController.h"
 #import "LEANRootViewController.h"
 #import "LEANUtilities.h"
+#import "GNStubs.h"
 
 @interface LEANNavigationController () <UINavigationControllerDelegate>
 @end
