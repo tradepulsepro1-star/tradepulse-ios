@@ -204,5 +204,23 @@ static inline UIWindow* GNKeyWindow(void) {
 
 
 
+
+// GNJSBridgeHandler stub — handles JS bridge URL navigation
+@interface GNJSBridgeHandler : NSObject
++ (instancetype)shared;
+- (void)handleUrl:(NSURL *)url query:(NSDictionary *)query wvc:(id)wvc;
+@end
+
+// GNUtilities stub — URL matching utilities
+@interface GNUtilities : NSObject
++ (BOOL)url:(NSString *)url matchesUrl:(NSString *)pattern;
+@end
+
+// GNEventEmitter stub — event broadcasting
+@interface GNEventEmitter : NSObject
++ (instancetype)shared;
+- (void)emitEvent:(NSString *)event data:(id)data;
+@end
+
 #endif // __OBJC__
 
