@@ -13,8 +13,9 @@ workflows:
       - name: Verify scheme
         script: |
           echo "=== Scheme ArchiveAction check ==="
-          grep "ArchiveAction\|BlueprintIdentifier" ios/TradePulse.xcodeproj/xcshareddata/xcschemes/TradePulse.xcscheme || echo "PROJECT SCHEME MISSING"
-          grep "ArchiveAction\|BlueprintIdentifier" ios/TradePulse.xcworkspace/xcshareddata/xcschemes/TradePulse.xcscheme || echo "WORKSPACE SCHEME MISSING"
+          grep -c "ArchiveAction" ios/TradePulse.xcodeproj/xcshareddata/xcschemes/TradePulse.xcscheme && echo "PROJECT SCHEME OK" || echo "PROJECT SCHEME MISSING"
+          echo "=== Signing settings ==="
+          grep "DEVELOPMENT_TEAM\|CODE_SIGN_STYLE\|PROVISIONING_PROFILE_SPECIFIER" ios/TradePulse.xcodeproj/project.pbxproj
           echo "=== xcodebuild -list ==="
           xcodebuild -workspace ios/TradePulse.xcworkspace -list 2>&1 || true
 
@@ -31,9 +32,14 @@ workflows:
             -configuration Release \
             -archivePath "$ARCHIVE_PATH" \
             -allowProvisioningUpdates \
+            DEVELOPMENT_TEAM=5L79BW988P \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="iPhone Distribution" \
+            PROVISIONING_PROFILE_SPECIFIER="trade pulse" \
+            CODE_SIGN_ENTITLEMENTS="LeanIOS/TradePulse.entitlements" \
             "OTHER_LDFLAGS=-ObjC" \
             archive 2>&1 | tee "$LOG_FILE" | \
-            grep -E "error:|ARCHIVE FAILED|ARCHIVE SUCCEEDED|fatal error" || true
+            grep -E "error:|warning:|ARCHIVE FAILED|ARCHIVE SUCCEEDED|fatal error|Signing" || true
 
           echo "=== FULL ERROR SUMMARY ==="
           grep -E "^.*(error:|fatal error).*$" "$LOG_FILE" | head -40 || echo "No errors found in log"
