@@ -30,6 +30,10 @@ workflows:
           set -o pipefail
           ARCHIVE_PATH="/Users/builder/clone/TradePulse.xcarchive"
           LOG_FILE="/Users/builder/clone/build_full.log"
+          DERIVED_DATA="/Users/builder/clone/DerivedData_fresh_$(date +%s)"
+
+          echo "=== Using fresh DerivedData: $DERIVED_DATA ==="
+          mkdir -p "$DERIVED_DATA"
 
           xcodebuild \
             -workspace ios/TradePulse.xcworkspace \
@@ -37,6 +41,7 @@ workflows:
             -sdk iphoneos \
             -configuration Release \
             -archivePath "$ARCHIVE_PATH" \
+            -derivedDataPath "$DERIVED_DATA" \
             -allowProvisioningUpdates \
             DEVELOPMENT_TEAM=5L79BW988P \
             CODE_SIGN_STYLE=Manual \
