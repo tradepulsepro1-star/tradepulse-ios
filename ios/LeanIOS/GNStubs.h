@@ -216,7 +216,7 @@ static inline UIWindow* GNKeyWindow(void) {
 // WebViewViewportManager stub
 @interface WebViewViewportManager : NSObject
 + (instancetype)shared;
-- (void)setViewportWithScale:(CGFloat)scale width:(CGFloat)width webView:(id)webView;
+- (void)setViewportWithScale:(CGFloat)scale width:(id)width webView:(id)webView;
 - (void)handleUrl:(NSURL *)url query:(NSDictionary *)query webView:(id)webView completion:(void(^)(NSDictionary *))completion;
 - (void)getViewportScale:(id)webView completion:(void(^)(NSDictionary *))completion;
 - (void)setViewport:(id)scale width:(id)width webView:(id)webView;

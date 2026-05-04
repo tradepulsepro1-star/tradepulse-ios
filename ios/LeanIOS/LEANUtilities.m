@@ -10,7 +10,6 @@
 #import "GonativeIO-Swift.h"
 #import "LEANUtilities.h"
 #import "LEANAppDelegate.h"
-#import "GNStubs.h"
 
 @implementation LEANUtilities
 
@@ -547,7 +546,7 @@
         if (appConfig.hasIosCustomJS) {
             [LEANUtilities injectJs:@"iosCustomJS" ToWebview:webview];
         }
-        [[WebViewViewportManager shared] setViewportWithScale:appConfig.initialWebviewZoom width:[appConfig.forceViewportWidth doubleValue] webView:webview];
+        [[WebViewViewportManager shared] setViewportWithScale:appConfig.initialWebviewZoom width:appConfig.forceViewportWidth webView:webview];
         
         // Accessibility & Dynamic Type Support
         UIContentSizeCategory contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
