@@ -600,8 +600,6 @@
 			mainGroup = 06C2B02FA1E66DBAF184B883;
 			packageReferences = (
 				BBE8B5DE88C7590D99030DC2 /* XCRemoteSwiftPackageReference "ZipArchive" */,
-				80AD530EC27B1D3A8C43DD5E /* XCRemoteSwiftPackageReference "median.go-native-core" */,
-				6D5B05FBBE2A73A27906448C /* XCRemoteSwiftPackageReference "median.median-icons" */,
 			);
 			productRefGroup = 02B5D4824E5C8CF0C1DE7DCE /* Products */;
 			projectDirPath = "";
@@ -851,7 +849,7 @@
 				CODE_SIGN_ENTITLEMENTS = Project.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_LANGUAGE = en;
 				DEVELOPMENT_TEAM = 5L79BW988P;
 				ENABLE_BITCODE = NO;
@@ -900,7 +898,7 @@
 				CODE_SIGN_ENTITLEMENTS = Project.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 18;
+				CURRENT_PROJECT_VERSION = 19;
 				DEVELOPMENT_LANGUAGE = en;
 				DEVELOPMENT_TEAM = 5L79BW988P;
 				ENABLE_BITCODE = NO;
@@ -1117,21 +1115,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		6D5B05FBBE2A73A27906448C /* XCRemoteSwiftPackageReference "median.median-icons" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "median.median-icons";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.4;
-			};
 		};
-		80AD530EC27B1D3A8C43DD5E /* XCRemoteSwiftPackageReference "median.go-native-core" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "median.go-native-core";
-			requirement = {
-				kind = exactVersion;
-				version = 3.0.6;
-			};
 		};
 		BBE8B5DE88C7590D99030DC2 /* XCRemoteSwiftPackageReference "ZipArchive" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1147,14 +1131,6 @@
 		4248ED8E78130DD2ED1439B1 /* ZipArchive */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ZipArchive;
-		};
-		75096A4D6F864C3F5B7ACA92 /* MedianIcons */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MedianIcons;
-		};
-		FA18443553361F33866B8858 /* GoNativeCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = GoNativeCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

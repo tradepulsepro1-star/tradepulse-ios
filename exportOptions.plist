@@ -10,14 +10,12 @@
     <false/>
     <key>uploadSymbols</key>
     <true/>
+    <key>signingStyle</key>
+    <string>manual</string>
     <key>provisioningProfiles</key>
     <dict>
         <key>net.tradepulsepro</key>
         <string>trade pulse</string>
     </dict>
-    <key>signingStyle</key>
-    <string>manual</string>
-    <key>stripSwiftSymbols</key>
-    <true/>
 </dict>
 </plist>

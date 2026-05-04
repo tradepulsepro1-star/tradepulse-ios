@@ -29,7 +29,7 @@
     "forceSessionCookieExpiry": 0,
     "iosCustomHeaders": {},
     "androidCustomHeaders": {},
-    "version": 10
+    "version": 11
   },
   "navigation": {
     "androidPullToRefresh": false,
@@ -355,12 +355,7 @@
   "developmentTools": {
     "enableWebConsoleLogs": false
   },
-  "services": {
-    "oneSignalV5": {
-      "active": false,
-      "applicationId": "026faf5d-30c1-4a22-b110-5e2888b101ac"
-    }
-  },
+  "services": {},
   "contextMenu": {
     "linkActions": [
       "copyLink",

@@ -77,12 +77,6 @@
     <key>UIBackgroundModes</key>
     <array>
       <string>remote-notification</string>
-      <string>fetch</string>
-      <string>processing</string>
-    </array>
-    <key>BGTaskSchedulerPermittedIdentifiers</key>
-    <array>
-      <string>net.tradepulsepro.refresh</string>
     </array>
     <key>UIDesignRequiresCompatibility</key>
     <true/>
@@ -111,9 +105,5 @@
       <string>UIInterfaceOrientationLandscapeLeft</string>
       <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
-    <key>NSUserTrackingUsageDescription</key>
-    <string>TradePulse uses tracking to personalize your experience and show relevant market content.</string>
-    <key>NSCalendarsWriteOnlyAccessUsageDescription</key>
-    <string>TradePulse uses your calendar to add trade reminders and signal alerts.</string>
   </dict>
 </plist>

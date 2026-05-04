@@ -15,27 +15,21 @@ workflows:
           ls -la
           echo "=== ios/ ==="
           ls -la ios/
-          echo "=== Looking for xcworkspace or xcodeproj ==="
-          find . -name "*.xcworkspace" -o -name "*.xcodeproj" 2>/dev/null
+          echo "=== xcworkspace ==="
+          find . -name "*.xcworkspace" -o -name "*.xcodeproj" 2>/dev/null | head -10
 
-      - name: Bump build number
-        script: |
-          BUILD_NUMBER=18
-          PBXPROJ="ios/TradePulse.xcodeproj/project.pbxproj"
-          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = $BUILD_NUMBER/g" "$PBXPROJ"
-          echo "Build number set to $BUILD_NUMBER"
-
-      - name: Set manual signing
+      - name: Set manual signing + build number
         script: |
           PBXPROJ="ios/TradePulse.xcodeproj/project.pbxproj"
+          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 19/g" "$PBXPROJ"
           sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' "$PBXPROJ"
           sed -i '' 's/DEVELOPMENT_TEAM = "";/DEVELOPMENT_TEAM = 5L79BW988P;/g' "$PBXPROJ"
-          echo "Signing configured"
+          echo "Signing + build number set"
 
       - name: Build archive
         script: |
           xcodebuild archive \
-            -project ios/TradePulse.xcodeproj \
+            -workspace ios/TradePulse.xcworkspace \
             -scheme TradePulse \
             -configuration Release \
             -destination "generic/platform=iOS" \
