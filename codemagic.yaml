@@ -18,13 +18,16 @@ workflows:
       - name: Patch project for App Store distribution
         script: |
           PBXPROJ="ios/TradePulse.xcodeproj/project.pbxproj"
+          # Ensure Manual signing + correct profile in both Release config blocks
           sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' "$PBXPROJ"
-          sed -i '' 's/CODE_SIGN_IDENTITY = "Apple Development";/CODE_SIGN_IDENTITY = "Apple Distribution";/g' "$PBXPROJ"
+          sed -i '' 's/CODE_SIGN_IDENTITY = "iPhone Developer";/CODE_SIGN_IDENTITY = "Apple Distribution";/g' "$PBXPROJ"
           sed -i '' 's/DEVELOPMENT_TEAM = "";/DEVELOPMENT_TEAM = 5L79BW988P;/g' "$PBXPROJ"
-          echo "=== Code signing settings ==="
-          grep "CODE_SIGN_STYLE\|CODE_SIGN_IDENTITY\|DEVELOPMENT_TEAM\|CURRENT_PROJECT_VERSION" "$PBXPROJ" | sort -u
-          echo "=== Available schemes ==="
-          xcodebuild -workspace ios/TradePulse.xcworkspace -list 2>&1 || true
+          # Add PROVISIONING_PROFILE_SPECIFIER if missing from any block
+          if ! grep -q 'PROVISIONING_PROFILE_SPECIFIER = "trade pulse"' "$PBXPROJ"; then
+            sed -i '' 's/CODE_SIGN_STYLE = Manual;/CODE_SIGN_STYLE = Manual;\n\t\t\t\tPROVISIONING_PROFILE_SPECIFIER = "trade pulse";/g' "$PBXPROJ"
+          fi
+          echo "=== Signing settings after patch ==="
+          grep "CODE_SIGN_STYLE\|PROVISIONING_PROFILE_SPECIFIER\|DEVELOPMENT_TEAM\|CODE_SIGN_ENTITLEMENTS\|CURRENT_PROJECT_VERSION" "$PBXPROJ" | sort -u
 
       - name: Build and Archive
         script: |
@@ -35,6 +38,11 @@ workflows:
             -configuration Release \
             -archivePath $CM_BUILD_DIR/TradePulse.xcarchive \
             -allowProvisioningUpdates \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="Apple Distribution" \
+            DEVELOPMENT_TEAM=5L79BW988P \
+            PROVISIONING_PROFILE_SPECIFIER="trade pulse" \
+            CODE_SIGN_ENTITLEMENTS=ios/Project.entitlements \
             clean archive \
             | xcpretty && exit ${PIPESTATUS[0]}
 
