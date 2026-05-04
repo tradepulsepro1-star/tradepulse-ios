@@ -8,8 +8,8 @@
 
 #import "LEANActionManager.h"
 #import "LEANUtilities.h"
-#import "GonativeIO-Swift.h"
 #import "GNStubs.h"
+#import "GonativeIO-Swift.h"
 
 @implementation LEANActionButtons
 
