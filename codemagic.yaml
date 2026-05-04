@@ -20,7 +20,6 @@ workflows:
         script: |
           set -e
           SDK=$(xcrun --sdk iphoneos --show-sdk-path)
-          STUBS_H="$PWD/ios/LeanIOS/GNStubs.h"
           clang \
             -x objective-c \
             -target arm64-apple-ios15.5 \
@@ -37,7 +36,6 @@ workflows:
           set -e
           ARCHIVE_PATH="/Users/builder/clone/TradePulse.xcarchive"
           STUB_OBJ="$PWD/ios/Frameworks/GoNativeCoreStub.o"
-          STUBS_H="$PWD/ios/LeanIOS/GNStubs.h"
 
           xcodebuild \
             -workspace ios/TradePulse.xcworkspace \
@@ -46,9 +44,6 @@ workflows:
             -configuration Release \
             -archivePath "$ARCHIVE_PATH" \
             -allowProvisioningUpdates \
-            GCC_PRECOMPILE_PREFIX_HEADER=NO \
-            GCC_PREFIX_HEADER="" \
-            "OTHER_CFLAGS=-include $STUBS_H" \
             "OTHER_LDFLAGS=-ObjC $STUB_OBJ" \
             clean archive
 
