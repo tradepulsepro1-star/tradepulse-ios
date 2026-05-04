@@ -223,3 +223,12 @@ static inline UIWindow* GNKeyWindow(void) {
 
 
 #endif // __OBJC__
+
+// GNBridge stub — GoNative internal bridge removed
+#ifndef GNBridge_DEFINED
+#define GNBridge_DEFINED
+@interface GNBridge : NSObject
+- (void)loadUserScriptsForContentController:(id)contentController;
+@end
+#endif
+
