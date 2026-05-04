@@ -79,43 +79,9 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
 - (void)emitEvent:(NSString *)event data:(id)data {}
 @end
 
-
-// UIImage MedianIcons stub
-@implementation UIImage (MedianIcons)
-+ (UIImage *)imageWithIconName:(NSString *)name size:(CGFloat)size color:(UIColor *)color { return nil; }
-@end
-
-// CustomMenu stub implementation
-@implementation CustomMenu
-- (instancetype)initWithContainer:(UIView *)container button:(UIButton *)button data:(NSArray *)data onTap:(CustomMenuTapHandler)onTap {
-    return [super init];
-}
-- (void)dismiss {}
-- (void)setMenuColor:(UIColor *)color {}
-- (void)removeFromSuperview {}
-@end
-
 // GNBridge stub implementation
 @implementation GNBridge
 - (void)loadUserScriptsForContentController:(id)contentController {}
 - (id<GNController>)getControllerForKey:(NSString *)key runner:(id)runner { return nil; }
-@end
-
-// GNController default implementation (protocol — no @implementation needed)
-
-// WindowsController stub implementation
-@implementation WindowsController
-+ (void)windowCountChanged {}
-@end
-
-// ContextMenuHandler stub implementation
-@implementation ContextMenuHandler
-+ (UIContextMenuConfiguration *)createConfigurationWithUrl:(NSURL *)url shareAction:(dispatch_block_t)shareAction {
-    return nil;
-}
-@end
-
-// LEANLiquidTitleView stub implementation
-@implementation LEANLiquidTitleView
 @end
 

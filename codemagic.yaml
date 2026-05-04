@@ -19,15 +19,9 @@ workflows:
           git clean -fdx --exclude=".git"
           echo "=== HEAD after reset ==="
           git log --oneline -1
-          echo "=== Verify LEANIcons removed ==="
-          grep -n "LEANIcons" ios/LeanIOS/LEANTabManager.m || echo "CLEAN - LEANIcons not present"
 
       - name: Verify scheme
         script: |
-          echo "=== Scheme ArchiveAction check ==="
-          grep -c "ArchiveAction" ios/TradePulse.xcodeproj/xcshareddata/xcschemes/TradePulse.xcscheme && echo "PROJECT SCHEME OK" || echo "PROJECT SCHEME MISSING"
-          echo "=== Signing settings in pbxproj ==="
-          grep "DEVELOPMENT_TEAM\|CODE_SIGN_STYLE\|PROVISIONING_PROFILE_SPECIFIER\|CODE_SIGN_ENTITLEMENTS" ios/TradePulse.xcodeproj/project.pbxproj
           echo "=== xcodebuild -list ==="
           xcodebuild -workspace ios/TradePulse.xcworkspace -list 2>&1 || true
 
@@ -48,10 +42,13 @@ workflows:
             CODE_SIGN_STYLE=Manual \
             "OTHER_LDFLAGS=-ObjC" \
             archive 2>&1 | tee "$LOG_FILE" | \
-            grep -E "error:|ARCHIVE FAILED|ARCHIVE SUCCEEDED|fatal error" || true
+            grep -E "error:|warning: duplicate|Undefined symbol|ld: |linker command|ARCHIVE FAILED|ARCHIVE SUCCEEDED|clang: error" || true
 
           echo "=== FULL ERROR SUMMARY ==="
-          grep -E "^.*(error:|fatal error).*$" "$LOG_FILE" | head -40 || echo "No errors found in log"
+          grep -E "error:|Undefined symbol|ld: |duplicate symbol|clang: error" "$LOG_FILE" | head -60 || echo "No errors found in log"
+
+          echo "=== LINKER DETAIL ==="
+          grep -A3 -B1 "Undefined symbol\|duplicate symbol\|ld: warning\|ld: error\|clang: error" "$LOG_FILE" | head -80 || echo "No linker detail"
 
           [ -d "$ARCHIVE_PATH" ] && echo "ARCHIVE OK" || { echo "ARCHIVE MISSING"; exit 1; }
 

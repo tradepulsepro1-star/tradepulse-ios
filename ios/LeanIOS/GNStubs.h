@@ -11,13 +11,6 @@
 #define GoNativeAppConfig_DEFINED
 
 
-// LEANIcons stub — only declare if Swift-generated header hasn't done so already
-#ifndef LEANIcons_DEFINED
-#define LEANIcons_DEFINED
-@interface LEANIcons : NSObject
-+ (UIImage * _Nullable)imageForIconIdentifier:(NSString * _Nonnull)name size:(CGFloat)size color:(UIColor * _Nonnull)color;
-@end
-#endif
 
 @interface GoNativeAppConfig : NSObject
 + (instancetype)sharedAppConfig;
@@ -181,54 +174,6 @@ static inline UIWindow* GNKeyWindow(void) {
 
 
 
-// CustomMenu stub - used by LEANActionManager
-
-
-
-
-// ActionSelection stub - used by LEANActionManager
-@interface ActionSelection : NSObject
-@property (nonatomic, strong) NSPredicate *regex;
-@property (nonatomic, strong) NSString *identifier;
-@end
-
-
-// Median listener key constants
-#define MEDIAN_KEYBOARD_EVENT_LISTENER @"median_keyboard_event"
-
-// GoNativeAppConfig extra methods
-@interface GoNativeAppConfig (SidebarExtras)
-- (BOOL)shouldShowSidebarForUrl:(NSString *)url;
-@end
-
-
-// GNJSBridgeHandler stub - handles JS bridge URL calls
-@interface GNJSBridgeHandler : NSObject
-+ (instancetype)shared;
-- (void)handleUrl:(NSURL *)url query:(NSDictionary *)query wvc:(id)wvc;
-@end
-
-// GNUtilities stub - URL matching utilities
-@interface GNUtilities : NSObject
-+ (BOOL)url:(NSString *)url matchesUrl:(NSString *)pattern;
-@end
-
-// GNEventEmitter stub - event emission (no-op)
-@interface GNEventEmitter : NSObject
-+ (instancetype)shared;
-- (void)emitEvent:(NSString *)event data:(id)data;
-@end
-
-
-
-
-// GNController protocol stub — GoNative SDK removed (must be before GNBridge)
-#ifndef GNController_DEFINED
-#define GNController_DEFINED
-@protocol GNController <NSObject>
-- (void)triggerEvent:(NSString *)eventName;
-@end
-#endif
 
 // GNBridge stub — GoNative internal bridge removed
 #ifndef GNBridge_DEFINED
@@ -240,42 +185,10 @@ static inline UIWindow* GNKeyWindow(void) {
 #endif
 
 
-// CustomMenu stub — GoNative dropdown menu (no-op)
-#ifndef CustomMenu_DEFINED
-#define CustomMenu_DEFINED
-typedef void (^CustomMenuTapHandler)(NSDictionary *data);
-@interface CustomMenu : NSObject
-- (instancetype)initWithContainer:(UIView *)container button:(UIButton *)button data:(NSArray *)data onTap:(CustomMenuTapHandler)onTap;
-- (void)dismiss;
-- (void)setMenuColor:(UIColor *)color;
-- (void)removeFromSuperview;
-@end
-#endif
 
 
-// WindowsController stub — GoNative multi-window manager (no-op)
-#ifndef WindowsController_DEFINED
-#define WindowsController_DEFINED
-@interface WindowsController : NSObject
-+ (void)windowCountChanged;
-@end
-#endif
 
-// ContextMenuHandler stub — GoNative context menu (no-op)
-#ifndef ContextMenuHandler_DEFINED
-#define ContextMenuHandler_DEFINED
-@interface ContextMenuHandler : NSObject
-+ (UIContextMenuConfiguration *)createConfigurationWithUrl:(NSURL *)url shareAction:(dispatch_block_t)shareAction;
-@end
-#endif
 
-// LEANLiquidTitleView stub — iOS 26 glass design (no-op)
-#ifndef LEANLiquidTitleView_DEFINED
-#define LEANLiquidTitleView_DEFINED
-@interface LEANLiquidTitleView : UIView
-@property (nonatomic, strong) NSString *text;
-@end
-#endif
 
 #endif // __OBJC__
 
