@@ -1,50 +1,42 @@
-// GoNativeCoreStub.m - Stub implementations so linker does not fail
+// GoNativeCoreStub.m - Stub implementations for GoNativeCore linker symbols
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
 @interface GoNativeAppConfig : NSObject
 + (instancetype)sharedAppConfig;
 + (instancetype)shared;
+@property (nonatomic) BOOL contextMenuEnabled, pinchToZoom, pullToRefresh, swipeGestures;
+@property (nonatomic) BOOL dynamicTypeEnabled, disableAnimations, disableEventRecorder;
+@property (nonatomic) BOOL enableWindowOpen, injectMedianJS, useWKWebView, userAgentReady;
+@property (nonatomic) BOOL showShareButton, showToolbar, iosAutoHideHomeIndicator, iosShowOfflinePage;
+@property (nonatomic, strong) NSArray *contextMenuLinkActions, *navStructureLevels, *navTitles;
+@property (nonatomic, strong) NSArray *tabMenus, *tabMenuIDs, *tabMenuRegexes, *webviewPools;
+@property (nonatomic, strong) NSArray *loginDetectRegexes, *loginDetectLocations, *menuItems;
+@property (nonatomic, strong) NSArray *menus, *listeners, *toolbarItems, *segmentedControlItems, *replaceStrings;
+@property (nonatomic, strong) NSDictionary *actions, *customHeaders, *font;
+@property (nonatomic, strong) NSString *initialHost, *publicKey, *stringViewport, *sidebarMenuIcon;
+@property (nonatomic, strong) NSString *sidebarIcon, *appName, *userAgent, *userIdRegex;
+@property (nonatomic, strong) NSString *currentMenuID, *signupURL, *targetFrame, *iosTheme, *iosSidebarFont;
+@property (nonatomic, strong) NSNumber *forceViewportWidth, *interactiveDelay, *iosConnectionOfflineTime;
+@property (nonatomic) NSUInteger maxWindows, forceSessionCookieExpiry;
+@property (nonatomic, strong) NSURL *initialURL, *loginDetectionURL;
+@property (nonatomic, strong) UIImage *navigationTitleIcon, *appIcon;
 @end
+
 @implementation GoNativeAppConfig
 + (instancetype)sharedAppConfig {
     static GoNativeAppConfig *i; static dispatch_once_t t;
     dispatch_once(&t, ^{ i = [[GoNativeAppConfig alloc] init]; }); return i;
 }
 + (instancetype)shared { return [self sharedAppConfig]; }
-- (BOOL)contextMenuEnabled { return NO; }
-- (NSArray *)contextMenuLinkActions { return @[]; }
-- (NSUInteger)maxWindows { return 20; }
-- (BOOL)pinchToZoom { return YES; }
-- (NSString *)initialHost { return @""; }
-- (NSString *)publicKey { return @""; }
-- (NSString *)stringViewport { return @""; }
-- (NSString *)sidebarMenuIcon { return @"fas fa-bars"; }
-- (NSNumber *)forceViewportWidth { return nil; }
-- (NSNumber *)interactiveDelay { return @0; }
-- (NSNumber *)iosConnectionOfflineTime { return @10; }
-- (NSArray *)navStructureLevels { return @[]; }
-- (NSArray *)navTitles { return @[]; }
-- (NSArray *)tabMenus { return @[]; }
-- (NSArray *)tabMenuRegexes { return @[]; }
-- (NSArray *)webviewPools { return @[]; }
-- (NSArray *)loginDetectRegexes { return @[]; }
-- (NSDictionary *)actions { return @{}; }
-- (NSDictionary *)customHeaders { return @{}; }
-- (NSURL *)loginDetectionURL { return nil; }
-- (UIImage *)navigationTitleIcon { return nil; }
-- (UIImage *)appIcon { return nil; }
-- (NSUInteger)forceSessionCookieExpiry { return 0; }
 - (NSString *)userAgentForUrl:(NSURL *)url { return @""; }
 - (NSDictionary *)getRegexRuleForURL:(NSString *)url rules:(id)rules { return nil; }
 - (void)initializeRegexRules:(id *)rules {}
 - (void)setNewRegexRules:(id)rules regexRulesArray:(id *)array {}
 @end
 
-@interface GNBridge : NSObject
-@end
-@implementation GNBridge
-@end
+@interface GNBridge : NSObject @end
+@implementation GNBridge @end
 
 @interface GNJSBridgeHandler : NSObject
 + (instancetype)shared;
