@@ -27,12 +27,10 @@
 		2CAD3943F6D7FD0A63BB2942 /* LEANProfilePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D4F5049C756998AF0256D21 /* LEANProfilePicker.m */; };
 		2D8507C6646A78D0E3242FBD /* LEANRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DBE1511BD4E4CAD485B55F /* LEANRootViewController.m */; };
 		2F784B2026501369BEA85249 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 96C0C65E3785462D1FAEEFBB /* LaunchScreen.storyboard */; };
-		340408F669B3FEE9978FA6F0 /* MedianIcons in Frameworks */ = {isa = PBXBuildFile; productRef = 75096A4D6F864C3F5B7ACA92 /* MedianIcons */; };
 		35426E68080975B903BB21A2 /* LEANMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96317CD75935483D14CD6E2F /* LEANMenuViewController.m */; };
 		3644D1ECF7480F4FA00CAEDE /* LEANLaunchScreenManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ED423FFEFE39890B0621F75 /* LEANLaunchScreenManager.m */; };
 		36BA93CFDBC0055A6A7A9DB2 /* TuistAssets+TradePulse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD14A1F658516E7EACBECBC /* TuistAssets+TradePulse.swift */; };
 		39193F2208B6F35595582F26 /* LEANAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 847CA84B2CEEAAAB5380AF78 /* LEANAppDelegate.m */; };
-		3A863DFF0330A265E737361E /* GoNativeCore in Frameworks */ = {isa = PBXBuildFile; productRef = FA18443553361F33866B8858 /* GoNativeCore */; };
 		3BE6E25C804827CA5287F85B /* LEANNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 67DC7C9589BB9DB32144EC4C /* LEANNavigationController.m */; };
 		3D49A85280E5B73E567E2DDF /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DB13D856C16986F8A37B11E5 /* PrivacyInfo.xcprivacy */; };
 		3DA0F77295F4B59987B75119 /* LeanIOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E5ED01948E5274E0B2D92FAF /* LeanIOSTests.m */; };
@@ -306,8 +304,6 @@
 				A78B5B33987BD083751CD72A /* Social.framework in Frameworks */,
 				FB307D2FE0FFA4DAB8DAF1FF /* SystemConfiguration.framework in Frameworks */,
 				0ECDC46C313485A9201642A7 /* UIKit.framework in Frameworks */,
-				3A863DFF0330A265E737361E /* GoNativeCore in Frameworks */,
-				340408F669B3FEE9978FA6F0 /* MedianIcons in Frameworks */,
 				52F53935158642DCC04A38EE /* ZipArchive in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -538,8 +534,6 @@
 			);
 			name = TradePulse;
 			packageProductDependencies = (
-				FA18443553361F33866B8858 /* GoNativeCore */,
-				75096A4D6F864C3F5B7ACA92 /* MedianIcons */,
 				4248ED8E78130DD2ED1439B1 /* ZipArchive */,
 			);
 			productName = TradePulse;
@@ -600,8 +594,6 @@
 			mainGroup = 06C2B02FA1E66DBAF184B883;
 			packageReferences = (
 				BBE8B5DE88C7590D99030DC2 /* XCRemoteSwiftPackageReference "ZipArchive" */,
-				80AD530EC27B1D3A8C43DD5E /* XCRemoteSwiftPackageReference "median.go-native-core" */,
-				6D5B05FBBE2A73A27906448C /* XCRemoteSwiftPackageReference "median.median-icons" */,
 			);
 			productRefGroup = 02B5D4824E5C8CF0C1DE7DCE /* Products */;
 			projectDirPath = "";
@@ -1117,21 +1109,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		6D5B05FBBE2A73A27906448C /* XCRemoteSwiftPackageReference "median.median-icons" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "median.median-icons";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 1.1.4;
-			};
 		};
-		80AD530EC27B1D3A8C43DD5E /* XCRemoteSwiftPackageReference "median.go-native-core" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "median.go-native-core";
-			requirement = {
-				kind = exactVersion;
-				version = 3.0.6;
-			};
 		};
 		BBE8B5DE88C7590D99030DC2 /* XCRemoteSwiftPackageReference "ZipArchive" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -1147,14 +1125,6 @@
 		4248ED8E78130DD2ED1439B1 /* ZipArchive */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ZipArchive;
-		};
-		75096A4D6F864C3F5B7ACA92 /* MedianIcons */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MedianIcons;
-		};
-		FA18443553361F33866B8858 /* GoNativeCore */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = GoNativeCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
