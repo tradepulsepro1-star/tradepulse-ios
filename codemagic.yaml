@@ -16,11 +16,27 @@ workflows:
           sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 19/g" "$PBXPROJ"
           echo "Xcode: $(xcodebuild -version | head -1)"
 
+      - name: Compile GoNativeCore stub
+        script: |
+          set -e
+          SDK=$(xcrun --sdk iphoneos --show-sdk-path)
+          FRAMEWORKS="$PWD/ios/Frameworks"
+          clang \
+            -x objective-c \
+            -target arm64-apple-ios15.5 \
+            -isysroot "$SDK" \
+            -F "$FRAMEWORKS" \
+            -fobjc-arc \
+            -c ios/Frameworks/GoNativeCoreStub.m \
+            -o ios/Frameworks/GoNativeCoreStub.o
+          echo "Stub compiled OK: $(ls -lh ios/Frameworks/GoNativeCoreStub.o)"
+
       - name: Build and Archive
         script: |
           set -e
           ARCHIVE_PATH="/Users/builder/clone/TradePulse.xcarchive"
-          FRAMEWORKS_DIR="$PWD/ios/Frameworks"
+          FRAMEWORKS="$PWD/ios/Frameworks"
+          STUB_OBJ="$PWD/ios/Frameworks/GoNativeCoreStub.o"
 
           xcodebuild \
             -workspace ios/TradePulse.xcworkspace \
@@ -29,7 +45,8 @@ workflows:
             -configuration Release \
             -archivePath "$ARCHIVE_PATH" \
             -allowProvisioningUpdates \
-            FRAMEWORK_SEARCH_PATHS="$FRAMEWORKS_DIR" \
+            "FRAMEWORK_SEARCH_PATHS=$FRAMEWORKS" \
+            "OTHER_LDFLAGS=-ObjC $STUB_OBJ" \
             clean archive
 
           [ -d "$ARCHIVE_PATH" ] && echo "ARCHIVE OK" || { echo "ARCHIVE MISSING"; exit 1; }
@@ -40,12 +57,10 @@ workflows:
           ARCHIVE_PATH="/Users/builder/clone/TradePulse.xcarchive"
           IPA_PATH="/Users/builder/clone/ipa"
           mkdir -p "$IPA_PATH"
-
           xcodebuild -exportArchive \
             -archivePath "$ARCHIVE_PATH" \
             -exportOptionsPlist exportOptions.plist \
             -exportPath "$IPA_PATH"
-
           ls -la "$IPA_PATH/"
 
     artifacts:
