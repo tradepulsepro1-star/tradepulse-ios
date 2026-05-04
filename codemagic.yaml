@@ -24,10 +24,6 @@ workflows:
             -configuration Release \
             -archivePath $CM_BUILD_DIR/TradePulse.xcarchive \
             -allowProvisioningUpdates \
-            CODE_SIGN_STYLE=Manual \
-            CODE_SIGN_IDENTITY="Apple Distribution" \
-            DEVELOPMENT_TEAM=5L79BW988P \
-            PROVISIONING_PROFILE_SPECIFIER="trade pulse" \
             clean archive 2>&1
 
       - name: Export IPA
