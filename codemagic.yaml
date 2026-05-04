@@ -25,6 +25,7 @@ workflows:
             -target arm64-apple-ios15.5 \
             -isysroot "$SDK" \
             -I "$PWD/ios/LeanIOS" \
+            -F "$SDK/System/Library/Frameworks" \
             -fobjc-arc \
             -w \
             -c ios/Frameworks/GoNativeCoreStub.m \

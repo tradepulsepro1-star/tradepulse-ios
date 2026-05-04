@@ -69,3 +69,56 @@ NSString * const kGoNativeCoreDeviceDidShake = @"kGoNativeCoreDeviceDidShake";
 + (UIImage *)imageWithIconName:(NSString *)name size:(CGFloat)size color:(UIColor *)color { return nil; }
 - (instancetype)initWithIconName:(NSString *)name size:(CGFloat)size color:(UIColor *)color { return nil; }
 @end
+
+// GNBridge full implementation - satisfies all linker references from LeanIOS files
+@interface GNBridge (BridgeMethods)
+- (void)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
+- (void)applicationDidBecomeActive:(UIApplication *)application;
+- (void)applicationWillResignActive:(UIApplication *)application;
+- (void)applicationDidEnterBackground:(UIApplication *)application;
+- (void)applicationWillEnterForeground:(UIApplication *)application;
+- (void)applicationWillTerminate:(UIApplication *)application;
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary *)options;
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity;
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo;
+- (void)runnerDidLoad:(id)runner;
+- (void)runnerWillAppear:(id)runner;
+- (void)runnerWillDisappear:(id)runner;
+- (void)runner:(id)runner willTransitionToSize:(CGSize)size withTransitionCoordinator:(id)coordinator;
+- (BOOL)runner:(id)runner shouldLoadRequestWithURL:(NSURL *)url withData:(NSDictionary *)data;
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation withRunner:(id)runner;
+- (void)webView:(WKWebView *)webView handleURL:(NSURL *)url;
+- (BOOL)webView:(WKWebView *)webView shouldDownloadUrl:(NSURL *)url;
+- (void)switchToWebView:(WKWebView *)webView withRunner:(id)runner;
+- (void)hideWebViewWithRunner:(id)runner;
+- (void)loadUserScriptsForContentController:(id)contentController;
+- (NSArray *)getInitialUrlQueryItems;
+- (id)getControllerForKey:(NSString *)key runner:(id)runner;
+@end
+
+@implementation GNBridge (BridgeMethods)
+- (void)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {}
+- (void)applicationDidBecomeActive:(UIApplication *)application {}
+- (void)applicationWillResignActive:(UIApplication *)application {}
+- (void)applicationDidEnterBackground:(UIApplication *)application {}
+- (void)applicationWillEnterForeground:(UIApplication *)application {}
+- (void)applicationWillTerminate:(UIApplication *)application {}
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary *)options { return NO; }
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity { return NO; }
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {}
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {}
+- (void)runnerDidLoad:(id)runner {}
+- (void)runnerWillAppear:(id)runner {}
+- (void)runnerWillDisappear:(id)runner {}
+- (void)runner:(id)runner willTransitionToSize:(CGSize)size withTransitionCoordinator:(id)coordinator {}
+- (BOOL)runner:(id)runner shouldLoadRequestWithURL:(NSURL *)url withData:(NSDictionary *)data { return YES; }
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation withRunner:(id)runner {}
+- (void)webView:(WKWebView *)webView handleURL:(NSURL *)url {}
+- (BOOL)webView:(WKWebView *)webView shouldDownloadUrl:(NSURL *)url { return NO; }
+- (void)switchToWebView:(WKWebView *)webView withRunner:(id)runner {}
+- (void)hideWebViewWithRunner:(id)runner {}
+- (void)loadUserScriptsForContentController:(id)contentController {}
+- (NSArray *)getInitialUrlQueryItems { return @[]; }
+- (id)getControllerForKey:(NSString *)key runner:(id)runner { return nil; }
+@end
