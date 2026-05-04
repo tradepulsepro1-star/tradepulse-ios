@@ -16,7 +16,7 @@ workflows:
       - name: Bump build number
         script: |
           PBXPROJ="ios/TradePulse.xcodeproj/project.pbxproj"
-          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 56/g" "$PBXPROJ"
+          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 57/g" "$PBXPROJ"
           echo "Xcode: $(xcodebuild -version | head -1)"
 
       - name: Build and Archive
@@ -25,6 +25,22 @@ workflows:
           ARCHIVE_PATH="/Users/builder/clone/TradePulse.xcarchive"
           LOG_FILE="/Users/builder/clone/build_errors.log"
 
+          echo "=== XCODE VERSION ==="
+          xcodebuild -version
+
+          echo "=== AVAILABLE SCHEMES (workspace) ==="
+          xcodebuild -workspace ios/TradePulse.xcworkspace -list 2>&1 || true
+
+          echo "=== AVAILABLE SCHEMES (project) ==="
+          xcodebuild -project ios/TradePulse.xcodeproj -list 2>&1 || true
+
+          echo "=== SCHEME FILES ON DISK ==="
+          find ios -name "*.xcscheme" -print 2>/dev/null || true
+
+          echo "=== TRADEPULSE SCHEME CONTENT (workspace) ==="
+          cat ios/TradePulse.xcworkspace/xcshareddata/xcschemes/TradePulse.xcscheme 2>/dev/null || echo "NOT FOUND"
+
+          echo "=== RUNNING ARCHIVE ==="
           xcodebuild \
             -workspace ios/TradePulse.xcworkspace \
             -scheme TradePulse \
