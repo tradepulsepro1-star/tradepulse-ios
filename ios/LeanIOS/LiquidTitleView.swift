@@ -27,12 +27,12 @@ public class LiquidTitleView: UIView {
         }
     }
 
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
     }
 
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
@@ -60,7 +60,7 @@ public class LiquidTitleView: UIView {
         ])
     }
 
-    override var intrinsicContentSize: CGSize {
+    public override var intrinsicContentSize: CGSize {
         let s = label.intrinsicContentSize
         return CGSize(width: s.width + 32, height: 44)
     }

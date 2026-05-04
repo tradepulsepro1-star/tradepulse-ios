@@ -12,7 +12,7 @@ import UIKit
     private var onTapObjC: ((NSDictionary?) -> Void)?
     private var menuView: UIView?
 
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 
@@ -111,7 +111,7 @@ class CustomMenuItem: UIView {
     private var label: UILabel?
     private var imageView: UIImageView?
 
-    required init?(coder aDecoder: NSCoder) {
+    public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         initialize()
     }
