@@ -53,6 +53,20 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
 @implementation ActionSelection
 @end
 
+
+// GoNativeAppConfig main implementation
+@implementation GoNativeAppConfig
++ (instancetype)sharedAppConfig {
+    static GoNativeAppConfig *i; static dispatch_once_t t;
+    dispatch_once(&t, ^{ i = [[self alloc] init]; }); return i;
+}
++ (instancetype)shared { return [self sharedAppConfig]; }
+- (NSString *)userAgentForUrl:(NSURL *)url { return @""; }
+- (NSDictionary *)getRegexRuleForURL:(NSString *)url rules:(id)rules { return nil; }
+- (void)initializeRegexRules:(id *)rules {}
+- (void)setNewRegexRules:(id)rules regexRulesArray:(id *)array {}
+@end
+
 // GoNativeAppConfig sidebar extras
 @implementation GoNativeAppConfig (SidebarExtras)
 - (BOOL)shouldShowSidebarForUrl:(NSString *)url {
@@ -79,5 +93,11 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
     static GNEventEmitter *s; static dispatch_once_t t; dispatch_once(&t, ^{ s = [self new]; }); return s;
 }
 - (void)emitEvent:(NSString *)event data:(id)data {}
+@end
+
+
+// UIImage MedianIcons stub
+@implementation UIImage (MedianIcons)
++ (UIImage *)imageWithIconName:(NSString *)name size:(CGFloat)size color:(UIColor *)color { return nil; }
 @end
 

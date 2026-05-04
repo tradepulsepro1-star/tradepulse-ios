@@ -16,27 +16,10 @@ workflows:
           sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 20/g" "$PBXPROJ"
           echo "Xcode: $(xcodebuild -version | head -1)"
 
-      - name: Compile GoNativeCore stub
-        script: |
-          set -e
-          SDK=$(xcrun --sdk iphoneos --show-sdk-path)
-          clang \
-            -x objective-c \
-            -target arm64-apple-ios15.5 \
-            -isysroot "$SDK" \
-            -I "$PWD/ios/LeanIOS" \
-            -F "$SDK/System/Library/Frameworks" \
-            -fobjc-arc \
-            -w \
-            -c ios/Frameworks/GoNativeCoreStub.m \
-            -o ios/Frameworks/GoNativeCoreStub.o
-          echo "Stub compiled OK"
-
       - name: Build and Archive
         script: |
           set -o pipefail
           ARCHIVE_PATH="/Users/builder/clone/TradePulse.xcarchive"
-          STUB_OBJ="$PWD/ios/Frameworks/GoNativeCoreStub.o"
           LOG_FILE="/Users/builder/clone/build_errors.log"
 
           xcodebuild \
@@ -46,7 +29,7 @@ workflows:
             -configuration Release \
             -archivePath "$ARCHIVE_PATH" \
             -allowProvisioningUpdates \
-            "OTHER_LDFLAGS=-ObjC $STUB_OBJ" \
+            "OTHER_LDFLAGS=-ObjC" \
             clean archive 2>&1 | tee "$LOG_FILE" | \
             grep -E "error:|warning: (implicit|undeclared|unknown|redefinition|previous)|note: previous|ARCHIVE FAILED|ARCHIVE SUCCEEDED|fatal error" || true
 

@@ -259,4 +259,10 @@ typedef void (^CustomMenuTapBlock)(NSDictionary * _Nullable data);
 + (NSString *)deviceTokenWithData:(NSData *)data;
 @end
 
+
+// UIImage MedianIcons category (from MedianIcons.framework)
+@interface UIImage (MedianIcons)
++ (UIImage *)imageWithIconName:(NSString *)name size:(CGFloat)size color:(UIColor *)color;
+@end
+
 #endif // __OBJC__
