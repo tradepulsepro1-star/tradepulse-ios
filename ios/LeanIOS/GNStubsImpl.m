@@ -3,6 +3,7 @@
 //
 
 #import "GNStubs.h"
+#import "GonativeIO-Swift.h"
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 
@@ -75,4 +76,8 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
     }
     return hex;
 }
+@end
+
+// ActionSelection stub
+@implementation ActionSelection
 @end

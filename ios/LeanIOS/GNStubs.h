@@ -198,4 +198,11 @@ typedef void (^CustomMenuTapBlock)(NSDictionary *data);
 + (void)windowCountChanged;
 @end
 
+
+// ActionSelection stub - used by LEANActionManager
+@interface ActionSelection : NSObject
+@property (nonatomic, strong) NSPredicate *regex;
+@property (nonatomic, strong) NSString *identifier;
+@end
+
 #endif // __OBJC__
