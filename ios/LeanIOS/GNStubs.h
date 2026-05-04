@@ -153,9 +153,12 @@ extern NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged;
 - (void)runJavascriptWithCallback:(id)callback data:(NSDictionary *)data;
 @end
 
-// WebViewViewportManager stub - used by LEANWebViewController
+// WebViewViewportManager stub - used by LEANWebViewController and LEANUtilities
 @interface WebViewViewportManager : NSObject
++ (instancetype)shared;
 - (instancetype)initWithWebView:(id)webView config:(id)config;
+- (void)setViewportWithScale:(CGFloat)scale width:(CGFloat)width webView:(WKWebView *)webView;
+- (void)updateViewport;
 @end
 
 
