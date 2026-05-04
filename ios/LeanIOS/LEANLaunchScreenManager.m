@@ -9,7 +9,7 @@
 #import "LEANLaunchScreenManager.h"
 #import "LEANAppDelegate.h"
 #import "GonativeIO-Swift.h"
-#import <GoNativeCore/GoNativeAppConfig.h>
+
 
 @interface LEANLaunchScreenManager()
 @property id<GNController> controller;
