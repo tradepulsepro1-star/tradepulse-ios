@@ -17,30 +17,37 @@ workflows:
 
       - name: Build and Archive
         script: |
+          ARCHIVE_PATH="$CM_BUILD_DIR/TradePulse.xcarchive"
+          echo "Archive will be saved to: $ARCHIVE_PATH"
+          
           xcodebuild \
             -workspace ios/TradePulse.xcworkspace \
             -scheme TradePulse \
             -sdk iphoneos \
             -configuration Release \
-            -archivePath $CM_BUILD_DIR/TradePulse.xcarchive \
+            -archivePath "$ARCHIVE_PATH" \
             -allowProvisioningUpdates \
-            clean archive 2>&1 | tee $CM_BUILD_DIR/full_build.log
+            clean archive
           
-          echo ""
-          echo "===== SWIFT/COMPILE ERRORS ====="
-          grep -E "^/.+\.swift:[0-9]+:[0-9]+: error:|^/.+\.[mh]:[0-9]+:[0-9]+: error:" $CM_BUILD_DIR/full_build.log || echo "No source errors found"
+          echo "Archive exists check:"
+          ls -la "$ARCHIVE_PATH" || echo "WARNING: Archive not found at $ARCHIVE_PATH"
 
       - name: Export IPA
         script: |
+          ARCHIVE_PATH="$CM_BUILD_DIR/TradePulse.xcarchive"
+          IPA_PATH="$CM_BUILD_DIR/ipa"
+          
+          echo "Exporting from: $ARCHIVE_PATH"
+          ls -la "$ARCHIVE_PATH" || echo "Archive missing!"
+          
           xcodebuild -exportArchive \
-            -archivePath $CM_BUILD_DIR/TradePulse.xcarchive \
-            -exportOptionsPlist exportOptions.plist \
-            -exportPath $CM_BUILD_DIR/ipa
+            -archivePath "$ARCHIVE_PATH" \
+            -exportOptionsPlist ios/exportOptions.plist \
+            -exportPath "$IPA_PATH"
 
     artifacts:
       - $CM_BUILD_DIR/TradePulse.xcarchive
       - $CM_BUILD_DIR/ipa/*.ipa
-      - $CM_BUILD_DIR/full_build.log
 
     publishing:
       app_store_connect:
