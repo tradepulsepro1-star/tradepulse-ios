@@ -17,8 +17,11 @@ workflows:
 
       - name: Build and Archive
         script: |
-          ARCHIVE_PATH="$CM_BUILD_DIR/TradePulse.xcarchive"
-          echo "Archive will be saved to: $ARCHIVE_PATH"
+          ARCHIVE_PATH="$HOME/TradePulse.xcarchive"
+          echo "Archive path: $ARCHIVE_PATH"
+          echo "CM_BUILD_DIR=$CM_BUILD_DIR"
+          echo "HOME=$HOME"
+          echo "PWD=$PWD"
           
           xcodebuild \
             -workspace ios/TradePulse.xcworkspace \
@@ -29,25 +32,29 @@ workflows:
             -allowProvisioningUpdates \
             clean archive
           
-          echo "Archive exists check:"
-          ls -la "$ARCHIVE_PATH" || echo "WARNING: Archive not found at $ARCHIVE_PATH"
+          echo "Post-archive check:"
+          ls -la "$ARCHIVE_PATH" && echo "ARCHIVE OK" || echo "ARCHIVE MISSING"
 
       - name: Export IPA
         script: |
-          ARCHIVE_PATH="$CM_BUILD_DIR/TradePulse.xcarchive"
-          IPA_PATH="$CM_BUILD_DIR/ipa"
+          ARCHIVE_PATH="$HOME/TradePulse.xcarchive"
+          IPA_PATH="$HOME/ipa"
+          mkdir -p "$IPA_PATH"
           
-          echo "Exporting from: $ARCHIVE_PATH"
-          ls -la "$ARCHIVE_PATH" || echo "Archive missing!"
+          echo "Exporting archive from: $ARCHIVE_PATH"
+          ls -la "$ARCHIVE_PATH" || echo "MISSING"
           
           xcodebuild -exportArchive \
             -archivePath "$ARCHIVE_PATH" \
             -exportOptionsPlist exportOptions.plist \
             -exportPath "$IPA_PATH"
+          
+          echo "IPA files:"
+          ls -la "$IPA_PATH/" || true
 
     artifacts:
-      - $CM_BUILD_DIR/TradePulse.xcarchive
-      - $CM_BUILD_DIR/ipa/*.ipa
+      - $HOME/TradePulse.xcarchive
+      - $HOME/ipa/*.ipa
 
     publishing:
       app_store_connect:
