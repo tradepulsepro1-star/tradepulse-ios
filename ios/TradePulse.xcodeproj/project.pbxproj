@@ -1109,8 +1109,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		};
-		};
 		BBE8B5DE88C7590D99030DC2 /* XCRemoteSwiftPackageReference "ZipArchive" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ZipArchive/ZipArchive";
