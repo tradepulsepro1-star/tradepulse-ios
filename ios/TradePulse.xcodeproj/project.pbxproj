@@ -17,6 +17,30 @@
 		17E257A28B88B8EE82701D57 /* GNSwiftUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48134ECEC524D50479D91820 /* GNSwiftUtilities.swift */; };
 		1B5492D69E29C9B96526B8E5 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AC172A0582B65909A74C1B4 /* MessageUI.framework */; };
 		1CA21D756DFBE22E4CEEF827 /* UIApplication+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8430752567550F4C405C6E5D /* UIApplication+Extensions.swift */; };
+				CCB8FA91A34EBA4B8ABDDBFB /* NativeBridge.swift in Sources */,
+				CCF1FD9DF7099D40F8A3996C /* ATTManager.swift in Sources */,
+				CCE34D27F3A25245BF958CCD /* AppReviewManager.swift in Sources */,
+				CC086C592DE7CA4B6DADB9B2 /* CameraManager.swift in Sources */,
+				CCDBF04CAF164448A2869758 /* FaceIDManager.swift in Sources */,
+				CC67AB242A511E4FB0AB42B4 /* HapticsManager.swift in Sources */,
+				CCDE4A552A472D4C1DB8BE3C /* KeychainManager.swift in Sources */,
+				CC680710177163469A9737C8 /* DeepLinkManager.swift in Sources */,
+				CCCC6D5CFACD9243E88E0911 /* LocalNotificationsManager.swift in Sources */,
+				CCFF788A180FAC4436A8BEFF /* PullToRefreshManager.swift in Sources */,
+				CC17A8374F60CC4F80BEA16B /* ShareManager.swift in Sources */,
+				CC62B9964E00D84DE2B51EC5 /* SignInWithAppleManager.swift in Sources */,
+		CCB8FA91A34EBA4B8ABDDBFB /* NativeBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB65E959EA23694DD6B32682 /* NativeBridge.swift */; };
+		CCF1FD9DF7099D40F8A3996C /* ATTManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB8ABF176912D433B95BFD9 /* ATTManager.swift */; };
+		CCE34D27F3A25245BF958CCD /* AppReviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5BA9438A9FF74583A81B01 /* AppReviewManager.swift */; };
+		CC086C592DE7CA4B6DADB9B2 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB41EBCC6F45AD49B4AD5733 /* CameraManager.swift */; };
+		CCDBF04CAF164448A2869758 /* FaceIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4DBE7AD1978A4027AF7679 /* FaceIDManager.swift */; };
+		CC67AB242A511E4FB0AB42B4 /* HapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB036B2772BAC24868AC3D22 /* HapticsManager.swift */; };
+		CCDE4A552A472D4C1DB8BE3C /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB22D2ACD9A1E54920A309DD /* KeychainManager.swift */; };
+		CC680710177163469A9737C8 /* DeepLinkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA5B4ACE7536741E0A0B3F5 /* DeepLinkManager.swift */; };
+		CCCC6D5CFACD9243E88E0911 /* LocalNotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9F48F7988063496CBEA6AD /* LocalNotificationsManager.swift */; };
+		CCFF788A180FAC4436A8BEFF /* PullToRefreshManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9C3714149D8745D6840ABD /* PullToRefreshManager.swift */; };
+		CC17A8374F60CC4F80BEA16B /* ShareManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB54849C0DD74E4DF6ACD3DC /* ShareManager.swift */; };
+		CC62B9964E00D84DE2B51EC5 /* SignInWithAppleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB02C8B25EEF9043D1BE39A0 /* SignInWithAppleManager.swift */; };
 		1CDD3C3FD70AF2F34B51B0DB /* UIViewController+REFrostedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB331122AA7AF23E705033C7 /* UIViewController+REFrostedViewController.m */; };
 		1F99CCB23B8E5C9980E90F24 /* LEANDocumentSharer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E07C12169F78E92EED60B75 /* LEANDocumentSharer.m */; };
 		2107485176727E809E39D72A /* GNLogManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5A338303E726E16AA835F2 /* GNLogManager.m */; };
@@ -212,6 +236,19 @@
 		7E07C12169F78E92EED60B75 /* LEANDocumentSharer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LEANDocumentSharer.m; sourceTree = "<group>"; };
 		82D64E298C33DAD06B81E123 /* custom-icons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "custom-icons.ttf"; sourceTree = "<group>"; };
 		8430752567550F4C405C6E5D /* UIApplication+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extensions.swift"; sourceTree = "<group>"; };
+		BB65E959EA23694DD6B32682 /* NativeBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeBridge.swift; sourceTree = "<group>"; };
+		BBB8ABF176912D433B95BFD9 /* ATTManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ATTManager.swift; sourceTree = "<group>"; };
+		BB5BA9438A9FF74583A81B01 /* AppReviewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppReviewManager.swift; sourceTree = "<group>"; };
+		BB41EBCC6F45AD49B4AD5733 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
+		BB4DBE7AD1978A4027AF7679 /* FaceIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceIDManager.swift; sourceTree = "<group>"; };
+		BB036B2772BAC24868AC3D22 /* HapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsManager.swift; sourceTree = "<group>"; };
+		BB22D2ACD9A1E54920A309DD /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		BBA5B4ACE7536741E0A0B3F5 /* DeepLinkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkManager.swift; sourceTree = "<group>"; };
+		BB9F48F7988063496CBEA6AD /* LocalNotificationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationsManager.swift; sourceTree = "<group>"; };
+		BB9C3714149D8745D6840ABD /* PullToRefreshManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullToRefreshManager.swift; sourceTree = "<group>"; };
+		BB54849C0DD74E4DF6ACD3DC /* ShareManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareManager.swift; sourceTree = "<group>"; };
+		BB02C8B25EEF9043D1BE39A0 /* SignInWithAppleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleManager.swift; sourceTree = "<group>"; };
+
 		847CA84B2CEEAAAB5380AF78 /* LEANAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LEANAppDelegate.m; sourceTree = "<group>"; };
 		86E10272766AE648917AF16B /* Project.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Project.entitlements; sourceTree = "<group>"; };
 		880707F0700C262E2BEFD0BF /* REFrostedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = REFrostedViewController.m; sourceTree = "<group>"; };
@@ -461,6 +498,18 @@
 				208D9B2C8F56314271FBE1A5 /* Settings.bundle */,
 				FC246C3FC3A3DD1608FFCDA6 /* SidebarHeaderView.xib */,
 				8430752567550F4C405C6E5D /* UIApplication+Extensions.swift */,
+				BB65E959EA23694DD6B32682 /* NativeBridge.swift */,
+				BBB8ABF176912D433B95BFD9 /* ATTManager.swift */,
+				BB5BA9438A9FF74583A81B01 /* AppReviewManager.swift */,
+				BB41EBCC6F45AD49B4AD5733 /* CameraManager.swift */,
+				BB4DBE7AD1978A4027AF7679 /* FaceIDManager.swift */,
+				BB036B2772BAC24868AC3D22 /* HapticsManager.swift */,
+				BB22D2ACD9A1E54920A309DD /* KeychainManager.swift */,
+				BBA5B4ACE7536741E0A0B3F5 /* DeepLinkManager.swift */,
+				BB9F48F7988063496CBEA6AD /* LocalNotificationsManager.swift */,
+				BB9C3714149D8745D6840ABD /* PullToRefreshManager.swift */,
+				BB54849C0DD74E4DF6ACD3DC /* ShareManager.swift */,
+				BB02C8B25EEF9043D1BE39A0 /* SignInWithAppleManager.swift */,
 				43C1A1E9E157B649D4E3F877 /* WebViewViewportManager.swift */,
 				23BE19900D40E6DE1FDF4F5A /* WindowsController.swift */,
 			);
