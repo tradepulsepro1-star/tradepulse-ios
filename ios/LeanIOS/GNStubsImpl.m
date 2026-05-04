@@ -63,3 +63,16 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
 @implementation WindowsController
 + (void)windowCountChanged {}
 @end
+
+// GNSwiftUtilities stub
+@implementation GNSwiftUtilities
++ (NSString *)deviceTokenWithData:(NSData *)data {
+    if (!data) return @"";
+    const unsigned char *bytes = (const unsigned char *)[data bytes];
+    NSMutableString *hex = [NSMutableString stringWithCapacity:data.length * 2];
+    for (NSUInteger i = 0; i < data.length; i++) {
+        [hex appendFormat:@"%02x", bytes[i]];
+    }
+    return hex;
+}
+@end
