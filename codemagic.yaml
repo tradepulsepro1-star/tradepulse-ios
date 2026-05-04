@@ -5,6 +5,7 @@ workflows:
     integrations:
       app_store_connect: Anthony Rosa
     environment:
+      xcode: 16.3
       ios_signing:
         distribution_type: app_store
         bundle_identifier: net.tradepulsepro
@@ -14,14 +15,13 @@ workflows:
           PBXPROJ="ios/TradePulse.xcodeproj/project.pbxproj"
           sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = 19/g" "$PBXPROJ"
           echo "Build number set to 19"
+          echo "Xcode version: $(xcodebuild -version)"
+          echo "PWD: $PWD"
 
       - name: Build and Archive
         script: |
-          ARCHIVE_PATH="$HOME/TradePulse.xcarchive"
+          ARCHIVE_PATH="$PWD/TradePulse.xcarchive"
           echo "Archive path: $ARCHIVE_PATH"
-          echo "CM_BUILD_DIR=$CM_BUILD_DIR"
-          echo "HOME=$HOME"
-          echo "PWD=$PWD"
           
           xcodebuild \
             -workspace ios/TradePulse.xcworkspace \
@@ -32,29 +32,26 @@ workflows:
             -allowProvisioningUpdates \
             clean archive
           
-          echo "Post-archive check:"
+          echo "Archive check:"
           ls -la "$ARCHIVE_PATH" && echo "ARCHIVE OK" || echo "ARCHIVE MISSING"
 
       - name: Export IPA
         script: |
-          ARCHIVE_PATH="$HOME/TradePulse.xcarchive"
-          IPA_PATH="$HOME/ipa"
+          ARCHIVE_PATH="$PWD/TradePulse.xcarchive"
+          IPA_PATH="$PWD/ipa"
           mkdir -p "$IPA_PATH"
           
-          echo "Exporting archive from: $ARCHIVE_PATH"
-          ls -la "$ARCHIVE_PATH" || echo "MISSING"
+          echo "Exporting from: $ARCHIVE_PATH"
+          ls -la "$ARCHIVE_PATH" || echo "ARCHIVE MISSING - cannot export"
           
           xcodebuild -exportArchive \
             -archivePath "$ARCHIVE_PATH" \
             -exportOptionsPlist exportOptions.plist \
             -exportPath "$IPA_PATH"
-          
-          echo "IPA files:"
-          ls -la "$IPA_PATH/" || true
 
     artifacts:
-      - $HOME/TradePulse.xcarchive
-      - $HOME/ipa/*.ipa
+      - TradePulse.xcarchive
+      - ipa/*.ipa
 
     publishing:
       app_store_connect:
