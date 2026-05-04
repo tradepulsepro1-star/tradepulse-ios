@@ -109,7 +109,7 @@
 // Actions / Menus
 @property (nonatomic, strong) NSDictionary *actions;
 @property (nonatomic, strong) NSDictionary *actionSelection;
-@property (nonatomic, strong) NSArray *menus;
+@property (nonatomic, strong) NSDictionary *menus;
 @property (nonatomic, strong) NSArray *segmentedControlItems;
 @property (nonatomic, strong) NSArray *contextMenuLinkActions;
 @property (nonatomic) BOOL contextMenuEnabled;
@@ -135,11 +135,6 @@ extern NSString * const kLEANAppConfigNotificationProcessedTabNavigation;
 extern NSString * const kLEANAppConfigNotificationProcessedNavigationTitles;
 extern NSString * const kLEANAppConfigNotificationProcessedNavigationLevels;
 extern NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged;
-extern NSString * const kLEANLoginManagerNotificationName;
-extern NSString * const kLEANLoginManagerStatusChangedNotification;
-extern NSString * const kLEANWebViewControllerClearPools;
-extern NSString * const kLEANWebViewControllerUserFinishedLoading;
-extern NSString * const kLEANWebViewControllerUserStartedLoading;
 extern NSString * const kLEANWebViewPoolDisownPolicyDefault;
 
 // RegexEnabled stub - used by LEANToolbarManager
@@ -163,5 +158,25 @@ extern NSString * const kLEANWebViewPoolDisownPolicyDefault;
 @interface WebViewViewportManager : NSObject
 - (instancetype)initWithWebView:(id)webView config:(id)config;
 @end
+
+
+// NSAttributedString icon category (was part of GoNativeCore)
+@interface NSAttributedString (GNIcons)
+- (instancetype)initWithIconName:(NSString *)iconName color:(UIColor *)color size:(CGFloat)size;
+@end
+
+
+// Helper macro for iOS 15+ key window access
+static inline UIWindow* GNKeyWindow(void) {
+    for (UIWindowScene *scene in [UIApplication sharedApplication].connectedScenes) {
+        if (scene.activationState == UISceneActivationStateForegroundActive) {
+            for (UIWindow *w in ((UIWindowScene *)scene).windows) {
+                if (w.isKeyWindow) return w;
+            }
+        }
+    }
+    return [UIApplication sharedApplication].windows.firstObject;
+}
+#define currentKeyWindow_REMOVED_USE_GNKeyWindow 1
 
 #endif // __OBJC__

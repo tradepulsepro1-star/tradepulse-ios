@@ -15,11 +15,6 @@ NSString * const kLEANAppConfigNotificationProcessedTabNavigation = @"co.median.
 NSString * const kLEANAppConfigNotificationProcessedNavigationTitles = @"co.median.ios.AppConfig.processedNavigationTitles";
 NSString * const kLEANAppConfigNotificationProcessedNavigationLevels = @"co.median.ios.AppConfig.processedNavigationLevels";
 NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.median.ios.AppConfig.appTrackingStatusChanged";
-NSString * const kLEANLoginManagerNotificationName = @"co.median.ios.LoginManager.notification";
-NSString * const kLEANLoginManagerStatusChangedNotification = @"co.median.ios.LoginManager.statusChanged";
-NSString * const kLEANWebViewControllerClearPools = @"co.median.ios.WebViewController.clearPools";
-NSString * const kLEANWebViewControllerUserFinishedLoading = @"co.median.ios.WebViewController.finished";
-NSString * const kLEANWebViewControllerUserStartedLoading = @"co.median.ios.WebViewController.started";
 NSString * const kLEANWebViewPoolDisownPolicyDefault = @"default";
 
 // RegexEnabled implementation
@@ -37,5 +32,25 @@ NSString * const kLEANWebViewPoolDisownPolicyDefault = @"default";
 @implementation WebViewViewportManager
 - (instancetype)initWithWebView:(id)webView config:(id)config {
     return [super init];
+}
+@end
+
+// GNBridgeController stub
+@implementation GNBridgeController
+- (void)triggerEvent:(NSString *)event {}
+- (void)triggerEvent:(NSString *)event data:(id)data {}
+@end
+
+// GNBridge extension
+@implementation GNBridge (LaunchScreen)
+- (GNBridgeController *)getControllerForKey:(NSString *)key runner:(id)runner {
+    return nil; // no-op stub
+}
+@end
+
+// NSAttributedString+GNIcons stub
+@implementation NSAttributedString (GNIcons)
+- (instancetype)initWithIconName:(NSString *)iconName color:(UIColor *)color size:(CGFloat)size {
+    return [self initWithString:iconName];
 }
 @end

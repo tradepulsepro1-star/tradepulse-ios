@@ -54,7 +54,15 @@
     centerImageView.translatesAutoresizingMaskIntoConstraints = NO;
     
     [self.launchScreen addSubview:centerImageView];
-    UIWindow *currentWindow = [UIApplication sharedApplication].currentKeyWindow;
+    UIWindow *currentWindow = nil;
+    for (UIWindowScene *scene in [UIApplication sharedApplication].connectedScenes) {
+        if (scene.activationState == UISceneActivationStateForegroundActive) {
+            for (UIWindow *w in scene.windows) {
+                if (w.isKeyWindow) { currentWindow = w; break; }
+            }
+        }
+    }
+    if (!currentWindow) currentWindow = [UIApplication sharedApplication].windows.firstObject;
     [currentWindow addSubview:self.launchScreen];
     
     [NSLayoutConstraint activateConstraints:@[
