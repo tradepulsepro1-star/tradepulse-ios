@@ -10,6 +10,18 @@ workflows:
         distribution_type: app_store
         bundle_identifier: net.tradepulsepro
     scripts:
+      - name: Force clean source
+        script: |
+          echo "=== Forcing clean source checkout ==="
+          cd /Users/builder/clone
+          git fetch origin main
+          git reset --hard origin/main
+          git clean -fdx --exclude=".git"
+          echo "=== HEAD after reset ==="
+          git log --oneline -1
+          echo "=== Verify LEANIcons removed ==="
+          grep -n "LEANIcons" ios/LeanIOS/LEANTabManager.m || echo "CLEAN - LEANIcons not present"
+
       - name: Verify scheme
         script: |
           echo "=== Scheme ArchiveAction check ==="
