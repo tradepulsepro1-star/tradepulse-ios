@@ -17,30 +17,6 @@
 		17E257A28B88B8EE82701D57 /* GNSwiftUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48134ECEC524D50479D91820 /* GNSwiftUtilities.swift */; };
 		1B5492D69E29C9B96526B8E5 /* MessageUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AC172A0582B65909A74C1B4 /* MessageUI.framework */; };
 		1CA21D756DFBE22E4CEEF827 /* UIApplication+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8430752567550F4C405C6E5D /* UIApplication+Extensions.swift */; };
-				CCB8FA91A34EBA4B8ABDDBFB /* NativeBridge.swift in Sources */,
-				CCF1FD9DF7099D40F8A3996C /* ATTManager.swift in Sources */,
-				CCE34D27F3A25245BF958CCD /* AppReviewManager.swift in Sources */,
-				CC086C592DE7CA4B6DADB9B2 /* CameraManager.swift in Sources */,
-				CCDBF04CAF164448A2869758 /* FaceIDManager.swift in Sources */,
-				CC67AB242A511E4FB0AB42B4 /* HapticsManager.swift in Sources */,
-				CCDE4A552A472D4C1DB8BE3C /* KeychainManager.swift in Sources */,
-				CC680710177163469A9737C8 /* DeepLinkManager.swift in Sources */,
-				CCCC6D5CFACD9243E88E0911 /* LocalNotificationsManager.swift in Sources */,
-				CCFF788A180FAC4436A8BEFF /* PullToRefreshManager.swift in Sources */,
-				CC17A8374F60CC4F80BEA16B /* ShareManager.swift in Sources */,
-				CC62B9964E00D84DE2B51EC5 /* SignInWithAppleManager.swift in Sources */,
-		CCB8FA91A34EBA4B8ABDDBFB /* NativeBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB65E959EA23694DD6B32682 /* NativeBridge.swift */; };
-		CCF1FD9DF7099D40F8A3996C /* ATTManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBB8ABF176912D433B95BFD9 /* ATTManager.swift */; };
-		CCE34D27F3A25245BF958CCD /* AppReviewManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB5BA9438A9FF74583A81B01 /* AppReviewManager.swift */; };
-		CC086C592DE7CA4B6DADB9B2 /* CameraManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB41EBCC6F45AD49B4AD5733 /* CameraManager.swift */; };
-		CCDBF04CAF164448A2869758 /* FaceIDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4DBE7AD1978A4027AF7679 /* FaceIDManager.swift */; };
-		CC67AB242A511E4FB0AB42B4 /* HapticsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB036B2772BAC24868AC3D22 /* HapticsManager.swift */; };
-		CCDE4A552A472D4C1DB8BE3C /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB22D2ACD9A1E54920A309DD /* KeychainManager.swift */; };
-		CC680710177163469A9737C8 /* DeepLinkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BBA5B4ACE7536741E0A0B3F5 /* DeepLinkManager.swift */; };
-		CCCC6D5CFACD9243E88E0911 /* LocalNotificationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9F48F7988063496CBEA6AD /* LocalNotificationsManager.swift */; };
-		CCFF788A180FAC4436A8BEFF /* PullToRefreshManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB9C3714149D8745D6840ABD /* PullToRefreshManager.swift */; };
-		CC17A8374F60CC4F80BEA16B /* ShareManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB54849C0DD74E4DF6ACD3DC /* ShareManager.swift */; };
-		CC62B9964E00D84DE2B51EC5 /* SignInWithAppleManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB02C8B25EEF9043D1BE39A0 /* SignInWithAppleManager.swift */; };
 		1CDD3C3FD70AF2F34B51B0DB /* UIViewController+REFrostedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = FB331122AA7AF23E705033C7 /* UIViewController+REFrostedViewController.m */; };
 		1F99CCB23B8E5C9980E90F24 /* LEANDocumentSharer.m in Sources */ = {isa = PBXBuildFile; fileRef = 7E07C12169F78E92EED60B75 /* LEANDocumentSharer.m */; };
 		2107485176727E809E39D72A /* GNLogManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4C5A338303E726E16AA835F2 /* GNLogManager.m */; };
@@ -51,10 +27,12 @@
 		2CAD3943F6D7FD0A63BB2942 /* LEANProfilePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D4F5049C756998AF0256D21 /* LEANProfilePicker.m */; };
 		2D8507C6646A78D0E3242FBD /* LEANRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DBE1511BD4E4CAD485B55F /* LEANRootViewController.m */; };
 		2F784B2026501369BEA85249 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 96C0C65E3785462D1FAEEFBB /* LaunchScreen.storyboard */; };
+		340408F669B3FEE9978FA6F0 /* MedianIcons in Frameworks */ = {isa = PBXBuildFile; productRef = 75096A4D6F864C3F5B7ACA92 /* MedianIcons */; };
 		35426E68080975B903BB21A2 /* LEANMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96317CD75935483D14CD6E2F /* LEANMenuViewController.m */; };
 		3644D1ECF7480F4FA00CAEDE /* LEANLaunchScreenManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ED423FFEFE39890B0621F75 /* LEANLaunchScreenManager.m */; };
 		36BA93CFDBC0055A6A7A9DB2 /* TuistAssets+TradePulse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD14A1F658516E7EACBECBC /* TuistAssets+TradePulse.swift */; };
 		39193F2208B6F35595582F26 /* LEANAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 847CA84B2CEEAAAB5380AF78 /* LEANAppDelegate.m */; };
+		3A863DFF0330A265E737361E /* GoNativeCore in Frameworks */ = {isa = PBXBuildFile; productRef = FA18443553361F33866B8858 /* GoNativeCore */; };
 		3BE6E25C804827CA5287F85B /* LEANNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 67DC7C9589BB9DB32144EC4C /* LEANNavigationController.m */; };
 		3D49A85280E5B73E567E2DDF /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DB13D856C16986F8A37B11E5 /* PrivacyInfo.xcprivacy */; };
 		3DA0F77295F4B59987B75119 /* LeanIOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E5ED01948E5274E0B2D92FAF /* LeanIOSTests.m */; };
@@ -62,7 +40,6 @@
 		459B34978CF1C96CCBB5BCEC /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = FB993578E91E68C53FC00A62 /* Reachability.m */; };
 		469FBB3C8BB897233F09FA6E /* UIView+REFrostedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB343AF12C0C978F28049F0B /* UIView+REFrostedViewController.m */; };
 		499A080F26C7116F928865DE /* GNConfigPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = BD5591F73537C2036BB2E911 /* GNConfigPreferences.m */; };
-		AA001122334455667788990B /* GNStubsImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA001122334455667788990A /* GNStubsImpl.m */; };
 		499B4D33FED8F994099D1F7B /* custom-icons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 82D64E298C33DAD06B81E123 /* custom-icons.ttf */; };
 		4B3B3BE8C736E0E459A144A1 /* appConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 2067319E672582AEF81857B2 /* appConfig.json */; };
 		4C0D54EF37661A6BB9A001FE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50616C00D775857902D575F2 /* Foundation.framework */; };
@@ -236,19 +213,6 @@
 		7E07C12169F78E92EED60B75 /* LEANDocumentSharer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LEANDocumentSharer.m; sourceTree = "<group>"; };
 		82D64E298C33DAD06B81E123 /* custom-icons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "custom-icons.ttf"; sourceTree = "<group>"; };
 		8430752567550F4C405C6E5D /* UIApplication+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extensions.swift"; sourceTree = "<group>"; };
-		BB65E959EA23694DD6B32682 /* NativeBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NativeBridge.swift; sourceTree = "<group>"; };
-		BBB8ABF176912D433B95BFD9 /* ATTManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ATTManager.swift; sourceTree = "<group>"; };
-		BB5BA9438A9FF74583A81B01 /* AppReviewManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppReviewManager.swift; sourceTree = "<group>"; };
-		BB41EBCC6F45AD49B4AD5733 /* CameraManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraManager.swift; sourceTree = "<group>"; };
-		BB4DBE7AD1978A4027AF7679 /* FaceIDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceIDManager.swift; sourceTree = "<group>"; };
-		BB036B2772BAC24868AC3D22 /* HapticsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HapticsManager.swift; sourceTree = "<group>"; };
-		BB22D2ACD9A1E54920A309DD /* KeychainManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
-		BBA5B4ACE7536741E0A0B3F5 /* DeepLinkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepLinkManager.swift; sourceTree = "<group>"; };
-		BB9F48F7988063496CBEA6AD /* LocalNotificationsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalNotificationsManager.swift; sourceTree = "<group>"; };
-		BB9C3714149D8745D6840ABD /* PullToRefreshManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullToRefreshManager.swift; sourceTree = "<group>"; };
-		BB54849C0DD74E4DF6ACD3DC /* ShareManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareManager.swift; sourceTree = "<group>"; };
-		BB02C8B25EEF9043D1BE39A0 /* SignInWithAppleManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInWithAppleManager.swift; sourceTree = "<group>"; };
-
 		847CA84B2CEEAAAB5380AF78 /* LEANAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LEANAppDelegate.m; sourceTree = "<group>"; };
 		86E10272766AE648917AF16B /* Project.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Project.entitlements; sourceTree = "<group>"; };
 		880707F0700C262E2BEFD0BF /* REFrostedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = REFrostedViewController.m; sourceTree = "<group>"; };
@@ -281,7 +245,6 @@
 		B9CCFB4DAF1E3FA43D99AA20 /* REFrostedContainerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = REFrostedContainerViewController.m; sourceTree = "<group>"; };
 		BB59CC1DB265991861DCEE22 /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BD5591F73537C2036BB2E911 /* GNConfigPreferences.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNConfigPreferences.m; sourceTree = "<group>"; };
-		AA001122334455667788990A /* GNStubsImpl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNStubsImpl.m; sourceTree = "<group>"; };
 		BDB4C6AB51E91CEAEC3E4AD5 /* LEANLoadingSpinnerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LEANLoadingSpinnerManager.m; sourceTree = "<group>"; };
 		BE454EEEFD73240F11F061DD /* LEANTabManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LEANTabManager.m; sourceTree = "<group>"; };
 		C1F0B6341A5F1F4E432DB402 /* TuistBundle+TradePulse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistBundle+TradePulse.swift"; sourceTree = "<group>"; };
@@ -343,6 +306,8 @@
 				A78B5B33987BD083751CD72A /* Social.framework in Frameworks */,
 				FB307D2FE0FFA4DAB8DAF1FF /* SystemConfiguration.framework in Frameworks */,
 				0ECDC46C313485A9201642A7 /* UIKit.framework in Frameworks */,
+				3A863DFF0330A265E737361E /* GoNativeCore in Frameworks */,
+				340408F669B3FEE9978FA6F0 /* MedianIcons in Frameworks */,
 				52F53935158642DCC04A38EE /* ZipArchive in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -440,7 +405,6 @@
 				9DF31436C8F062E903FE616C /* CustomMenu.swift */,
 				EB37DC30BBA202BDCD2A27D5 /* GNBackgroundAudio.m */,
 				BD5591F73537C2036BB2E911 /* GNConfigPreferences.m */,
-				AA001122334455667788990A /* GNStubsImpl.m */,
 				F3EBA5290195B9538DA4DAF6 /* GNCustomHeaders.m */,
 				2D16380A29937AE7B96DD03F /* GNFileWriterSharer.m */,
 				931D7458C1926A3DBFBD1D6F /* GNJSBridgeInterface.m */,
@@ -498,18 +462,6 @@
 				208D9B2C8F56314271FBE1A5 /* Settings.bundle */,
 				FC246C3FC3A3DD1608FFCDA6 /* SidebarHeaderView.xib */,
 				8430752567550F4C405C6E5D /* UIApplication+Extensions.swift */,
-				BB65E959EA23694DD6B32682 /* NativeBridge.swift */,
-				BBB8ABF176912D433B95BFD9 /* ATTManager.swift */,
-				BB5BA9438A9FF74583A81B01 /* AppReviewManager.swift */,
-				BB41EBCC6F45AD49B4AD5733 /* CameraManager.swift */,
-				BB4DBE7AD1978A4027AF7679 /* FaceIDManager.swift */,
-				BB036B2772BAC24868AC3D22 /* HapticsManager.swift */,
-				BB22D2ACD9A1E54920A309DD /* KeychainManager.swift */,
-				BBA5B4ACE7536741E0A0B3F5 /* DeepLinkManager.swift */,
-				BB9F48F7988063496CBEA6AD /* LocalNotificationsManager.swift */,
-				BB9C3714149D8745D6840ABD /* PullToRefreshManager.swift */,
-				BB54849C0DD74E4DF6ACD3DC /* ShareManager.swift */,
-				BB02C8B25EEF9043D1BE39A0 /* SignInWithAppleManager.swift */,
 				43C1A1E9E157B649D4E3F877 /* WebViewViewportManager.swift */,
 				23BE19900D40E6DE1FDF4F5A /* WindowsController.swift */,
 			);
@@ -586,6 +538,8 @@
 			);
 			name = TradePulse;
 			packageProductDependencies = (
+				FA18443553361F33866B8858 /* GoNativeCore */,
+				75096A4D6F864C3F5B7ACA92 /* MedianIcons */,
 				4248ED8E78130DD2ED1439B1 /* ZipArchive */,
 			);
 			productName = TradePulse;
@@ -646,6 +600,8 @@
 			mainGroup = 06C2B02FA1E66DBAF184B883;
 			packageReferences = (
 				BBE8B5DE88C7590D99030DC2 /* XCRemoteSwiftPackageReference "ZipArchive" */,
+				80AD530EC27B1D3A8C43DD5E /* XCRemoteSwiftPackageReference "median.go-native-core" */,
+				6D5B05FBBE2A73A27906448C /* XCRemoteSwiftPackageReference "median.median-icons" */,
 			);
 			productRefGroup = 02B5D4824E5C8CF0C1DE7DCE /* Products */;
 			projectDirPath = "";
@@ -726,7 +682,6 @@
 				85C6A2B5F65F443BDE292206 /* CustomMenu.swift in Sources */,
 				0FE0155346E5661200031625 /* GNBackgroundAudio.m in Sources */,
 				499A080F26C7116F928865DE /* GNConfigPreferences.m in Sources */,
-				AA001122334455667788990B /* GNStubsImpl.m in Sources */,
 				5E7B6802A1CE2395421B6F23 /* GNCustomHeaders.m in Sources */,
 				AC52F4CA06CB4D28DC87282A /* GNFileWriterSharer.m in Sources */,
 				70FD472DAB33DFC002F08EB8 /* GNJSBridgeInterface.m in Sources */,
@@ -850,8 +805,8 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LeanIOS/MedianIOS-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(inherited) $(SRCROOT)/LeanIOS $(SRCROOT)/LeanIOS/REFrostedViewController",
@@ -870,7 +825,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.tradepulseproTests;
 				PRODUCT_NAME = TradePulseTests;
 				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -895,18 +849,16 @@
 				BUILD_SETTINGS_APP_NAME = TradePulse;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Project.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Distribution";
-				CODE_SIGN_STYLE = Manual;
-				PROVISIONING_PROFILE_SPECIFIER = "trade pulse";
-				CURRENT_PROJECT_VERSION = 19;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 76;
 				DEVELOPMENT_LANGUAGE = en;
-				DEVELOPMENT_TEAM = 5L79BW988P;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "";
-				OTHER_CFLAGS = ("-include $(SRCROOT)/LeanIOS/GNStubs.h", "$(inherited)");
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LeanIOS/MedianIOS-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/LeanIOS $(SRCROOT)/LeanIOS/REFrostedViewController";
 				INFOPLIST_FILE = "LeanIOS/MedianIOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
@@ -922,7 +874,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.tradepulsepro;
 				PRODUCT_NAME = TradePulse;
 				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -947,18 +898,16 @@
 				BUILD_SETTINGS_APP_NAME = TradePulse;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Project.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Distribution";
-				CODE_SIGN_STYLE = Manual;
-				PROVISIONING_PROFILE_SPECIFIER = "trade pulse";
-				CURRENT_PROJECT_VERSION = 19;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 76;
 				DEVELOPMENT_LANGUAGE = en;
-				DEVELOPMENT_TEAM = 5L79BW988P;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "";
-				OTHER_CFLAGS = ("-include $(SRCROOT)/LeanIOS/GNStubs.h", "$(inherited)");
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LeanIOS/MedianIOS-Prefix.pch";
 				HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/LeanIOS $(SRCROOT)/LeanIOS/REFrostedViewController";
 				INFOPLIST_FILE = "LeanIOS/MedianIOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
@@ -974,7 +923,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.tradepulsepro;
 				PRODUCT_NAME = TradePulse;
 				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1037,9 +985,6 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				VALIDATE_PRODUCT = YES;
-				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = iphoneos;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 			};
 			name = Release;
 		};
@@ -1082,9 +1027,6 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = iphoneos;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -1110,8 +1052,8 @@
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				GCC_PRECOMPILE_PREFIX_HEADER = NO;
-				GCC_PREFIX_HEADER = "";
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "LeanIOS/MedianIOS-Prefix.pch";
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(inherited) $(SRCROOT)/LeanIOS $(SRCROOT)/LeanIOS/REFrostedViewController",
@@ -1130,7 +1072,6 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.tradepulseproTests;
 				PRODUCT_NAME = TradePulseTests;
 				SDKROOT = iphoneos;
-				SUPPORTED_PLATFORMS = iphoneos;
 				SUPPORTS_MACCATALYST = NO;
 				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
@@ -1176,6 +1117,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6D5B05FBBE2A73A27906448C /* XCRemoteSwiftPackageReference "median.median-icons" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "median.median-icons";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.4;
+			};
+		};
+		80AD530EC27B1D3A8C43DD5E /* XCRemoteSwiftPackageReference "median.go-native-core" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "median.go-native-core";
+			requirement = {
+				kind = exactVersion;
+				version = 3.0.6;
+			};
+		};
 		BBE8B5DE88C7590D99030DC2 /* XCRemoteSwiftPackageReference "ZipArchive" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ZipArchive/ZipArchive";
@@ -1190,6 +1147,14 @@
 		4248ED8E78130DD2ED1439B1 /* ZipArchive */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ZipArchive;
+		};
+		75096A4D6F864C3F5B7ACA92 /* MedianIcons */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MedianIcons;
+		};
+		FA18443553361F33866B8858 /* GoNativeCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GoNativeCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
