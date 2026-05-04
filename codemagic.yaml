@@ -24,7 +24,11 @@ workflows:
             -configuration Release \
             -archivePath $CM_BUILD_DIR/TradePulse.xcarchive \
             -allowProvisioningUpdates \
-            clean archive
+            clean archive 2>&1 | tee $CM_BUILD_DIR/full_build.log
+          
+          echo ""
+          echo "===== SWIFT/COMPILE ERRORS ====="
+          grep -E "^/.+\.swift:[0-9]+:[0-9]+: error:|^/.+\.[mh]:[0-9]+:[0-9]+: error:" $CM_BUILD_DIR/full_build.log || echo "No source errors found"
 
       - name: Export IPA
         script: |
@@ -36,6 +40,7 @@ workflows:
     artifacts:
       - $CM_BUILD_DIR/TradePulse.xcarchive
       - $CM_BUILD_DIR/ipa/*.ipa
+      - $CM_BUILD_DIR/full_build.log
 
     publishing:
       app_store_connect:
