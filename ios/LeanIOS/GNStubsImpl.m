@@ -102,16 +102,3 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
 @end
 
 
-// GNBridge stub - no-op lifecycle bridge
-@implementation GNBridge
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions { return YES; }
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {}
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary *)options { return NO; }
-- (void)applicationDidBecomeActive:(UIApplication *)application {}
-- (void)applicationWillResignActive:(UIApplication *)application {}
-- (void)applicationDidEnterBackground:(UIApplication *)application {}
-- (void)applicationWillEnterForeground:(UIApplication *)application {}
-- (void)applicationWillTerminate:(UIApplication *)application {}
-- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity { return NO; }
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {}
-@end
