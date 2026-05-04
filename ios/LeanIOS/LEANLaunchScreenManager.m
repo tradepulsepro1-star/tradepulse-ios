@@ -12,7 +12,7 @@
 #import "GNStubs.h"
 
 @interface LEANLaunchScreenManager()
-@property id<GNController> controller;
+// GNController removed (GoNative SDK)
 @property UIImageView *launchScreen;
 @property BOOL isShown;
 @end
@@ -36,12 +36,7 @@
     
     self.isShown = YES;
     
-    self.controller = [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge getControllerForKey:@"splashScreen" runner:(id)vc];
-    
-    if (self.controller) {
-        [self.controller triggerEvent:@"showSplashScreen"];
-        return;
-    }
+    // GNBridge splashScreen controller removed — using native UIImageView fallback
     
     self.launchScreen = [[UIImageView alloc] init];
     self.launchScreen.image = [UIImage imageNamed:@"LaunchBackground"];
@@ -54,7 +49,7 @@
     centerImageView.translatesAutoresizingMaskIntoConstraints = NO;
     
     [self.launchScreen addSubview:centerImageView];
-    UIWindow *currentWindow = [UIApplication sharedApplication].currentKeyWindow;
+    UIWindow *currentWindow = GNKeyWindow();
     [currentWindow addSubview:self.launchScreen];
     
     [NSLayoutConstraint activateConstraints:@[
@@ -73,10 +68,6 @@
 }
 
 - (void)hide {
-    if (self.controller) {
-        [self.controller triggerEvent:@"hideSplashScreen"];
-        return;
-    }
     
     if (self.launchScreen) {
         [self.launchScreen removeFromSuperview];

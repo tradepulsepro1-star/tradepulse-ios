@@ -95,7 +95,7 @@
 }
 
 - (void)setupBottomBar {
-    UIEdgeInsets safeAreaInsets = UIApplication.sharedApplication.currentKeyWindow.safeAreaInsets;
+    UIEdgeInsets safeAreaInsets = GNKeyWindow().safeAreaInsets;
     
     UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent];
     UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];

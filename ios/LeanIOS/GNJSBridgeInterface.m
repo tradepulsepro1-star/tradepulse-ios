@@ -15,7 +15,7 @@
 - (LEANWebViewController *)webViewController
 {
     // Get current webview controller
-    UIViewController *topController = [UIApplication sharedApplication].currentKeyWindow.rootViewController;
+    UIViewController *topController = GNKeyWindow().rootViewController;
 
     while (topController.presentedViewController && ![topController.presentedViewController isKindOfClass:[UIAlertController class]]) {
         topController = topController.presentedViewController;

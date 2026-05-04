@@ -133,7 +133,7 @@
 @property LEANWindowsManager *windowsManager;
 @property LEANPDFManager *pdfManager;
 @property LEANLoadingSpinnerManager *loadingSpinnerManager;
-@property WebViewViewportManager *viewportManager;
+// WebViewViewportManager removed (GoNative SDK)
 
 @property NSNumber* statusBarStyle; // set via native bridge, only works if no navigation bar
 @property IBOutlet NSLayoutConstraint *topGuideConstraint; // modify constant to place content under status bar
@@ -285,7 +285,7 @@ static NSInteger _currentWindows = 0;
     self.registrationManager = [GNRegistrationManager sharedManager];
     self.pdfManager = [LEANPDFManager shared];
     self.loadingSpinnerManager = [[LEANLoadingSpinnerManager alloc] initWithVc:self];
-    self.viewportManager = [WebViewViewportManager shared];
+    // viewportManager removed (GoNative SDK)
     
     // we will always be loading a page at launch, hide webview here to fix a white flash for dark themed apps
     [self hideWebview];
@@ -309,7 +309,7 @@ static NSInteger _currentWindows = 0;
     [self updateStatusBarStyle:appConfig.iosStatusBarStyle];
     [self updateStatusBarOverlay:appConfig.iosEnableOverlayInStatusBar];
     
-    [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge runnerDidLoad:self];
+    // bridge.runnerDidLoad — no-op
 }
 
 - (BOOL)canBecomeFirstResponder {
@@ -369,7 +369,7 @@ static NSInteger _currentWindows = 0;
             [newQueryItems addObjectsFromArray:components.queryItems];
         }
         
-        NSArray *addedQueryItems = [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge getInitialUrlQueryItems];
+        NSArray *addedQueryItems = @[]; // bridge.getInitialUrlQueryItems removed
         [newQueryItems addObjectsFromArray:addedQueryItems];
         
         components.queryItems = newQueryItems;
@@ -529,7 +529,7 @@ static NSInteger _currentWindows = 0;
     
     [self addScriptMessageHandlersInWebView:self.wkWebview];
     
-    [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge runnerWillAppear:self];
+    // bridge.runnerWillAppear — no-op
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -541,7 +541,7 @@ static NSInteger _currentWindows = 0;
     }
     [super viewWillDisappear:animated];
     
-    [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge runnerWillDisappear:self];
+    // bridge.runnerWillDisappear — no-op
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
@@ -1268,7 +1268,7 @@ static NSInteger _currentWindows = 0;
     BOOL openShareDialog = [navigationAction.request.URL.scheme isEqualToString:@"data"] && ![LEANUtilities isOnePixelImage:navigationAction.request.URL];
     if (@available(iOS 15.0, *)) {
         if (navigationAction.shouldPerformDownload) {
-            openShareDialog = [((LEANAppDelegate *)UIApplication.sharedApplication.delegate).bridge webView:webView shouldDownloadUrl:navigationAction.request.URL];
+            openShareDialog = NO; // bridge.shouldDownloadUrl removed
         }
     }
     
@@ -1311,7 +1311,7 @@ static NSInteger _currentWindows = 0;
         return;
     }
     
-    [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge webView:webView handleURL:navigationResponse.response.URL];
+    // bridge.handleURL — no-op
     
     if ([@"application/vnd.apple.pkpass" isEqualToString:navigationResponse.response.MIMEType]) {
         decisionHandler(WKNavigationResponsePolicyCancel);
@@ -1460,7 +1460,7 @@ static NSInteger _currentWindows = 0;
         if([data[@"data"] isKindOfClass:[NSDictionary class]]) query = data[@"data"];
     } else return;
     
-    if (![((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge runner:self shouldLoadRequestWithURL:url withData:query]) {
+    if (NO) // bridge.shouldLoadRequest removed — always allow {
         return;
     }
     
@@ -1517,7 +1517,7 @@ static NSInteger _currentWindows = 0;
                 [self.wkWebview.configuration.userContentController addUserScript:GNJSBridgeLibrary];
                 
                 // load plugins' js script
-                [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge loadUserScriptsForContentController:self.wkWebview.configuration.userContentController];
+                // bridge.loadUserScripts — no-op
             }
         } else {
             NSString *emptyJSBridgeScript = @"gonative = null";
@@ -1937,7 +1937,7 @@ static NSInteger _currentWindows = 0;
         [self addPullToRefresh];
     }
     
-    [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge switchToWebView:newView withRunner:self];
+    // bridge.switchToWebView — no-op
 }
 
 // To detect single-page app navigation in WKWebView
@@ -2008,7 +2008,7 @@ static NSInteger _currentWindows = 0;
 {
     [self didFinishLoad];
     
-    [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge webView:webView didFinishNavigation:navigation withRunner:self];
+    // bridge.didFinishNavigation — no-op
 }
 
 - (void)didFinishLoad
@@ -2416,7 +2416,7 @@ static NSInteger _currentWindows = 0;
 
 - (void)hideWebview
 {
-    [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge hideWebViewWithRunner:self];
+    // bridge.hideWebViewWithRunner — no-op
     
     if ([GoNativeAppConfig sharedAppConfig].disableAnimations) return;
     
@@ -2708,7 +2708,7 @@ static NSInteger _currentWindows = 0;
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
     }];
     
-    [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge runner:self willTransitionToSize:size withTransitionCoordinator:coordinator];
+    // bridge.willTransitionToSize — no-op
 }
 
 - (void)viewWillLayoutSubviews

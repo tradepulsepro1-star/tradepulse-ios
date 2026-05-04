@@ -72,7 +72,7 @@
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     NSLog(@"Successfully registered for push notifications");
     [self setApnsToken:[GNSwiftUtilities deviceTokenWithData:deviceToken]];
-    [self.bridge application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+    // bridge.didRegisterForRemoteNotifications — no-op (GoNative removed)
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
