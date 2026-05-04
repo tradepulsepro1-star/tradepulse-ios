@@ -58,8 +58,6 @@
     </dict>
     <key>NSCalendarsUsageDescription</key>
     <string>${BUILD_SETTINGS_APP_NAME} needs access to your calendar to retrieve and add events.</string>
-    <key>NSCalendarsWriteOnlyAccessUsageDescription</key>
-    <string>TradePulse uses your calendar to add trade reminders and signal alerts.</string>
     <key>NSCameraUsageDescription</key>
     <string>TradePulse needs camera access to upload your profile photo and complete Guru identity verification.</string>
     <key>NSFaceIDUsageDescription</key>
@@ -82,10 +80,10 @@
       <string>fetch</string>
       <string>processing</string>
     </array>
-     <key>BGTaskSchedulerPermittedIdentifiers</key>
-     <array>
-       <string>net.tradepulsepro.refresh</string>
-     </array>
+    <key>BGTaskSchedulerPermittedIdentifiers</key>
+    <array>
+      <string>net.tradepulsepro.refresh</string>
+    </array>
     <key>UIDesignRequiresCompatibility</key>
     <true/>
     <key>UILaunchStoryboardName</key>
@@ -113,5 +111,9 @@
       <string>UIInterfaceOrientationLandscapeLeft</string>
       <string>UIInterfaceOrientationLandscapeRight</string>
     </array>
+    <key>NSUserTrackingUsageDescription</key>
+    <string>TradePulse uses tracking to personalize your experience and show relevant market content.</string>
+    <key>NSCalendarsWriteOnlyAccessUsageDescription</key>
+    <string>TradePulse uses your calendar to add trade reminders and signal alerts.</string>
   </dict>
 </plist>

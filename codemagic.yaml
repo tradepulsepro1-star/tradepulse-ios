@@ -9,53 +9,55 @@ workflows:
         distribution_type: app_store
         bundle_identifier: net.tradepulsepro
     scripts:
+      - name: Extract source
+        script: |
+          tar -xzf ios_source.tar.gz
+          ls -la ios/
+
       - name: Bump build number
         script: |
           BUILD_NUMBER=18
-
-          # Patch pbxproj
-          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = $BUILD_NUMBER/g" TradePulse.xcodeproj/project.pbxproj
-
-          # Verify
-          grep "CURRENT_PROJECT_VERSION" TradePulse.xcodeproj/project.pbxproj | head -2
+          PLIST="ios/LeanIOS/MedianIOS-Info.plist"
+          PBXPROJ="ios/TradePulse.xcodeproj/project.pbxproj"
+          /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $BUILD_NUMBER" "$PLIST" || \
+          /usr/libexec/PlistBuddy -c "Add :CFBundleVersion string $BUILD_NUMBER" "$PLIST"
+          sed -i '' "s/CURRENT_PROJECT_VERSION = [0-9]*/CURRENT_PROJECT_VERSION = $BUILD_NUMBER/g" "$PBXPROJ"
           echo "Build number set to $BUILD_NUMBER"
 
-      - name: Set code signing
+      - name: Set signing
         script: |
-          xcode-project use-profiles
+          sed -i '' 's/CODE_SIGN_STYLE = Automatic;/CODE_SIGN_STYLE = Manual;/g' \
+            ios/TradePulse.xcodeproj/project.pbxproj
+          sed -i '' 's/DEVELOPMENT_TEAM = "";/DEVELOPMENT_TEAM = 5L79BW988P;/g' \
+            ios/TradePulse.xcodeproj/project.pbxproj
+          echo "Signing configured"
 
-      - name: Build and archive
+      - name: Install dependencies
         script: |
-          TARGET_ID="6CBA40D5ECC99885AB5BD16D"
+          cd ios
+          if [ -f "package.json" ]; then
+            npm install --legacy-peer-deps
+          fi
 
-          xcodebuild \
-            -project TradePulse.xcodeproj \
-            -target LeanIOS \
+      - name: Build archive
+        script: |
+          xcodebuild archive \
+            -workspace ios/TradePulse.xcworkspace \
+            -scheme TradePulse \
             -configuration Release \
+            -archivePath $CM_BUILD_DIR/TradePulse.xcarchive \
             CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM=5L79BW988P \
             PROVISIONING_PROFILE_SPECIFIER="trade pulse" \
-            CODE_SIGN_ENTITLEMENTS=LeanIOS/TradePulse.entitlements \
-            CURRENT_PROJECT_VERSION=18 \
-            MARKETING_VERSION=1.0.0 \
-            clean archive \
-            -archivePath /tmp/TradePulse.xcarchive \
-            -allowProvisioningUpdates
-
-      - name: Export IPA
-        script: |
-          xcodebuild -exportArchive \
-            -archivePath /tmp/TradePulse.xcarchive \
-            -exportOptionsPlist exportOptions.plist \
-            -exportPath /tmp/TradePulse_export \
-            -allowProvisioningUpdates
+            CODE_SIGN_ENTITLEMENTS=Project.entitlements \
+            | xcpretty
 
     artifacts:
-      - /tmp/TradePulse_export/*.ipa
-      - /tmp/TradePulse.xcarchive
+      - $CM_BUILD_DIR/TradePulse.xcarchive
+      - $CM_BUILD_DIR/**/*.ipa
 
     publishing:
       app_store_connect:
         auth: integration
         submit_to_testflight: false
-        submit_to_app_store: true
+        submit_to_app_store: false
