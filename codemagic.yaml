@@ -17,6 +17,7 @@ workflows:
 
       - name: Build and Archive
         script: |
+          set -o pipefail
           xcodebuild \
             -workspace ios/TradePulse.xcworkspace \
             -scheme TradePulse \
@@ -24,7 +25,13 @@ workflows:
             -configuration Release \
             -archivePath $CM_BUILD_DIR/TradePulse.xcarchive \
             -allowProvisioningUpdates \
-            clean archive 2>&1
+            clean archive 2>&1 | tee /tmp/full_build.log | grep -E "error:|ARCHIVE FAILED|SUCCEEDED|Signing" || true
+
+          echo ""
+          echo "====== ERRORS ONLY ======"
+          grep "error:" /tmp/full_build.log \
+            | grep -v "ScanDependencies\|clang -x\|\.resp\|builtin-\|\.dia\|-serialize" \
+            || echo "No filtered errors"
 
       - name: Export IPA
         script: |
@@ -36,6 +43,7 @@ workflows:
     artifacts:
       - $CM_BUILD_DIR/TradePulse.xcarchive
       - $CM_BUILD_DIR/ipa/*.ipa
+      - /tmp/full_build.log
 
     publishing:
       app_store_connect:
