@@ -154,13 +154,6 @@ extern NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged;
 - (void)runJavascriptWithCallback:(id)callback data:(NSDictionary *)data;
 @end
 
-// WebViewViewportManager stub - used by LEANWebViewController and LEANUtilities
-@interface WebViewViewportManager : NSObject
-+ (instancetype)shared;
-- (instancetype)initWithWebView:(id)webView config:(id)config;
-- (void)setViewportWithScale:(CGFloat)scale width:(CGFloat)width webView:(WKWebView *)webView;
-- (void)updateViewport;
-@end
 
 
 // NSAttributedString icon category (was part of GoNativeCore)
@@ -231,6 +224,17 @@ typedef void (^CustomMenuTapBlock)(NSDictionary *data);
 @interface GNEventEmitter : NSObject
 + (instancetype)shared;
 - (void)emitEvent:(NSString *)event data:(id)data;
+@end
+
+
+// WebViewViewportManager stub
+@interface WebViewViewportManager : NSObject
++ (instancetype)shared;
+- (void)setViewportWithScale:(CGFloat)scale width:(CGFloat)width webView:(id)webView;
+- (void)handleUrl:(NSURL *)url query:(NSDictionary *)query webView:(id)webView completion:(void(^)(NSDictionary *))completion;
+- (void)getViewportScale:(id)webView completion:(void(^)(NSDictionary *))completion;
+- (void)setViewport:(id)scale width:(id)width webView:(id)webView;
+- (void)updateViewport;
 @end
 
 #endif // __OBJC__

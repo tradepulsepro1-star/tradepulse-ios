@@ -110,3 +110,16 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
 }
 - (void)emitEvent:(NSString *)event data:(id)data {}
 @end
+
+// WebViewViewportManager - pure ObjC stub (replaces Swift version)
+@implementation WebViewViewportManager
++ (instancetype)shared {
+    static WebViewViewportManager *s; static dispatch_once_t t;
+    dispatch_once(&t, ^{ s = [self new]; }); return s;
+}
+- (void)setViewportWithScale:(CGFloat)scale width:(CGFloat)width webView:(id)webView {}
+- (void)handleUrl:(NSURL *)url query:(NSDictionary *)query webView:(id)webView completion:(void(^)(NSDictionary *))completion { if(completion) completion(@{}); }
+- (void)getViewportScale:(id)webView completion:(void(^)(NSDictionary *))completion { if(completion) completion(@{@"zoom": @1}); }
+- (void)setViewport:(id)scale width:(id)width webView:(id)webView {}
+- (void)updateViewport {}
+@end
