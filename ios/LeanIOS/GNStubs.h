@@ -175,7 +175,6 @@ static inline UIWindow* GNKeyWindow(void) {
 
 
 // CustomMenu stub - used by LEANActionManager
-typedef void (^CustomMenuTapBlock)(NSDictionary *data);
 
 
 
@@ -222,6 +221,36 @@ typedef void (^CustomMenuTapBlock)(NSDictionary *data);
 - (void)getViewportScale:(id)webView completion:(void(^)(NSDictionary *))completion;
 - (void)setViewport:(id)scale width:(id)width webView:(id)webView;
 - (void)updateViewport;
+@end
+
+// ---- Swift @objc class interfaces (required for ObjC callers) ----
+
+// WindowsController (WindowsController.swift)
+@interface WindowsController : NSObject
++ (void)windowCountChanged;
+@end
+
+// LEANLiquidTitleView (LiquidTitleView.swift - @objc(LEANLiquidTitleView))
+@interface LEANLiquidTitleView : UIView
+@property (nonatomic, copy, nullable) NSString *text;
+@end
+
+// ContextMenuHandler (ContextMenuHandler.swift)
+@interface ContextMenuHandler : NSObject
++ (UIContextMenuConfiguration * _Nullable)createConfigurationWithUrl:(NSURL *)url shareAction:(void (^)(void))shareAction;
+@end
+
+// LEANIcons (LEANIcons.swift)
+@interface LEANIcons : NSObject
+@property (class, nonatomic, readonly) LEANIcons *sharedIcons;
++ (UIImage * _Nullable)imageForIconIdentifier:(NSString *)name size:(CGFloat)size color:(UIColor *)color;
+@end
+
+// CustomMenu (CustomMenu.swift)
+typedef void (^CustomMenuTapBlock)(NSDictionary * _Nullable data);
+@interface CustomMenu : UIView
+- (instancetype _Nullable)initWithContainer:(UIView *)container button:(UIButton *)button data:(NSArray<NSDictionary *> *)data onTap:(CustomMenuTapBlock _Nullable)onTap;
+- (void)setMenuColor:(UIColor *)color;
 @end
 
 #endif // __OBJC__

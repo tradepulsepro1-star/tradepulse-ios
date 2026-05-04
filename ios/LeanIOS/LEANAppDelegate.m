@@ -15,8 +15,6 @@
 #import "GNConfigPreferences.h"
 #import "GonativeIO-Swift.h"
 #import <AppTrackingTransparency/ATTrackingManager.h>
-@class GNSwiftUtilities;
-
 @implementation LEANAppDelegate
 
 @synthesize bridge;

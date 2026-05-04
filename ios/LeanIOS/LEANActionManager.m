@@ -9,9 +9,7 @@
 #import "LEANActionManager.h"
 #import "LEANUtilities.h"
 #import "GonativeIO-Swift.h"
-@class CustomMenu;
-@class LEANIcons;
-
+#import "GNStubs.h"
 @implementation LEANActionButtons
 
 - (instancetype)initWithLeftItems:(NSArray *)leftItems rightItems:(NSArray *)rightItems {

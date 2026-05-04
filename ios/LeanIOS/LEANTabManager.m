@@ -9,8 +9,7 @@
 #import "LEANTabManager.h"
 #import "LEANUtilities.h"
 #import "GonativeIO-Swift.h"
-@class LEANIcons;
-
+#import "GNStubs.h"
 @interface LEANTabManager() <UITabBarDelegate>
 @property UITabBar *tabBar;
 @property NSArray *menu;

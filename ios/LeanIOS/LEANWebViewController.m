@@ -46,13 +46,7 @@
 #import <AppTrackingTransparency/ATTrackingManager.h>
 #import "GNJSBridgeInterface.h"
 #import "GNLogManager.h"
-@class ContextMenuHandler;
-@class LiquidTitleView;
-
-@class WindowsController;
-@class LEANLiquidTitleView;
-
-
+#import "GNStubs.h"
 #define OFFLINE_URL @"http://offline/"
 #define LOCAL_FILE_URL @"http://localFile/"
 

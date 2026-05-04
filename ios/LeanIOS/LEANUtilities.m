@@ -10,8 +10,7 @@
 #import "GonativeIO-Swift.h"
 #import "LEANUtilities.h"
 #import "LEANAppDelegate.h"
-@class ContextMenuHandler;
-
+#import "GNStubs.h"
 @implementation LEANUtilities
 
 + (NSDictionary*) dictionaryFromQueryString: (NSString*) string
