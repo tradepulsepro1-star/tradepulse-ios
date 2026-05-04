@@ -51,9 +51,5 @@
 - (id<GNController>)getControllerForKey:(NSString *)key runner:(id)runner;
 
 @end
-// GNSwiftUtilities - utility methods exposed from Swift to ObjC
-@interface GNSwiftUtilities : NSObject
-+ (NSString *)deviceTokenWithData:(NSData *)data;
-@end
 
 

@@ -144,9 +144,6 @@ extern NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged;
 @end
 
 // LEANIcons stub - used by toolbar/tab managers
-@interface LEANIcons : NSObject
-+ (UIImage *)imageForIconIdentifier:(NSString *)identifier size:(CGFloat)size color:(UIColor *)color;
-@end
 
 // GNJavascriptRunner protocol - used by LEANWebViewController
 @protocol GNJavascriptRunner <NSObject>
@@ -180,17 +177,8 @@ static inline UIWindow* GNKeyWindow(void) {
 
 // CustomMenu stub - used by LEANActionManager
 typedef void (^CustomMenuTapBlock)(NSDictionary *data);
-@interface CustomMenu : UIView
-- (instancetype)initWithContainer:(UIView *)container button:(UIView *)button data:(NSArray *)data onTap:(CustomMenuTapBlock)onTap;
-- (void)setMenuColor:(UIColor *)color;
-- (void)dismiss;
-@end
 
 
-// WindowsController stub - used by LEANWebViewController
-@interface WindowsController : NSObject
-+ (void)windowCountChanged;
-@end
 
 
 // ActionSelection stub - used by LEANActionManager
