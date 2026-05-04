@@ -121,8 +121,14 @@
             inactiveIcon = activeIcon;
         }
         
-        UIImage *activeImage = [LEANIcons imageForIconIdentifier:activeIcon size:[self sizeForIcon:activeIcon] color:[UIColor blackColor]];
-        UIImage *inactiveImage = [LEANIcons imageForIconIdentifier:inactiveIcon size:[self sizeForIcon:inactiveIcon] color:[UIColor blackColor]];
+        CGFloat iconSize = [self sizeForIcon:activeIcon];
+        UIImageSymbolConfiguration *symConfig = [UIImageSymbolConfiguration configurationWithPointSize:iconSize];
+        UIImage *activeImage = [UIImage systemImageNamed:activeIcon withConfiguration:symConfig];
+        if (!activeImage) activeImage = [UIImage systemImageNamed:@"circle.fill" withConfiguration:symConfig];
+        activeImage = [activeImage imageWithTintColor:[UIColor blackColor] renderingMode:UIImageRenderingModeAlwaysOriginal];
+        UIImage *inactiveImage = [UIImage systemImageNamed:inactiveIcon withConfiguration:symConfig];
+        if (!inactiveImage) inactiveImage = [UIImage systemImageNamed:@"circle" withConfiguration:symConfig];
+        inactiveImage = [inactiveImage imageWithTintColor:[UIColor blackColor] renderingMode:UIImageRenderingModeAlwaysOriginal];
         item = [[UITabBarItem alloc] initWithTitle:title image:inactiveImage selectedImage:activeImage];
         item.tag = tag;
     }

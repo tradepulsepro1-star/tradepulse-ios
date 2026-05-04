@@ -155,7 +155,11 @@
 }
 
 - (UIButton *)buttonWithIcon:(NSString *)icon {
-    UIImage *iconImage = [LEANIcons imageForIconIdentifier:icon size:[self sizeForIcon:icon] color:[UIColor blackColor]];
+    CGFloat iconSz = [self sizeForIcon:icon];
+    UIImageSymbolConfiguration *symCfg = [UIImageSymbolConfiguration configurationWithPointSize:iconSz];
+    UIImage *iconImage = [UIImage systemImageNamed:icon withConfiguration:symCfg];
+    if (!iconImage) iconImage = [UIImage systemImageNamed:@"circle" withConfiguration:symCfg];
+    iconImage = [iconImage imageWithTintColor:[UIColor blackColor] renderingMode:UIImageRenderingModeAlwaysOriginal];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     [button setImage:iconImage forState:UIControlStateNormal];
     [button setFrame:CGRectMake(0, 0, 30, 30)];
