@@ -1,5 +1,4 @@
 //  MedianIOS-Prefix.pch
-//  All stub declarations moved to GNStubs.h and GonativeIO-Swift.h
 
 #import <Availability.h>
 
@@ -7,5 +6,4 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
     #import "GNStubs.h"
-    #import "GonativeIO-Swift.h"
 #endif
