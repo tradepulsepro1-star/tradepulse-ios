@@ -11,6 +11,8 @@
 #import "GNRegistrationManager.h"
 #import "GNStubs.h"
 
+@class GNBridge;
+
 @interface LEANAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
