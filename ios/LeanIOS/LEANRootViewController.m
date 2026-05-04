@@ -43,7 +43,7 @@
         self.direction = REFrostedViewControllerDirectionRight;
     }
 
-    self.animationDuration = [appConfig.menuAnimationDuration floatValue];
+    self.animationDuration = appConfig.menuAnimationDuration;
     self.limitMenuViewSize = YES;
     self.menuViewSize = CGSizeMake(270, NAN);
     

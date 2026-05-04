@@ -372,7 +372,7 @@
         }
         else if ([self isDeviceiPhone6Plus])
         {
-            if ([UIApplication sharedApplication].isInterfaceOrientationPortrait) {
+            if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
                 return @"LaunchImage-800-Portrait-736h@3x.png";
             } else {
                 return @"LaunchImage-800-Landscape-736h@3x.png";
@@ -381,7 +381,7 @@
         else
             return images[0]; //Non-retina iPhone
     }
-    else if ([UIApplication sharedApplication].isInterfaceOrientationPortrait)//iPad Portrait
+    else if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]))//iPad Portrait
     {
         if ([self isDeviceRetina])
         {

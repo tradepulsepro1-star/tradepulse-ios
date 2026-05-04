@@ -38,6 +38,7 @@
 		459B34978CF1C96CCBB5BCEC /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = FB993578E91E68C53FC00A62 /* Reachability.m */; };
 		469FBB3C8BB897233F09FA6E /* UIView+REFrostedViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = EB343AF12C0C978F28049F0B /* UIView+REFrostedViewController.m */; };
 		499A080F26C7116F928865DE /* GNConfigPreferences.m in Sources */ = {isa = PBXBuildFile; fileRef = BD5591F73537C2036BB2E911 /* GNConfigPreferences.m */; };
+		AA001122334455667788990B /* GNStubsImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA001122334455667788990A /* GNStubsImpl.m */; };
 		499B4D33FED8F994099D1F7B /* custom-icons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 82D64E298C33DAD06B81E123 /* custom-icons.ttf */; };
 		4B3B3BE8C736E0E459A144A1 /* appConfig.json in Resources */ = {isa = PBXBuildFile; fileRef = 2067319E672582AEF81857B2 /* appConfig.json */; };
 		4C0D54EF37661A6BB9A001FE /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 50616C00D775857902D575F2 /* Foundation.framework */; };
@@ -243,6 +244,7 @@
 		B9CCFB4DAF1E3FA43D99AA20 /* REFrostedContainerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = REFrostedContainerViewController.m; sourceTree = "<group>"; };
 		BB59CC1DB265991861DCEE22 /* lt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = lt; path = lt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		BD5591F73537C2036BB2E911 /* GNConfigPreferences.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNConfigPreferences.m; sourceTree = "<group>"; };
+		AA001122334455667788990A /* GNStubsImpl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNStubsImpl.m; sourceTree = "<group>"; };
 		BDB4C6AB51E91CEAEC3E4AD5 /* LEANLoadingSpinnerManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LEANLoadingSpinnerManager.m; sourceTree = "<group>"; };
 		BE454EEEFD73240F11F061DD /* LEANTabManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LEANTabManager.m; sourceTree = "<group>"; };
 		C1F0B6341A5F1F4E432DB402 /* TuistBundle+TradePulse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TuistBundle+TradePulse.swift"; sourceTree = "<group>"; };
@@ -401,6 +403,7 @@
 				9DF31436C8F062E903FE616C /* CustomMenu.swift */,
 				EB37DC30BBA202BDCD2A27D5 /* GNBackgroundAudio.m */,
 				BD5591F73537C2036BB2E911 /* GNConfigPreferences.m */,
+				AA001122334455667788990A /* GNStubsImpl.m */,
 				F3EBA5290195B9538DA4DAF6 /* GNCustomHeaders.m */,
 				2D16380A29937AE7B96DD03F /* GNFileWriterSharer.m */,
 				931D7458C1926A3DBFBD1D6F /* GNJSBridgeInterface.m */,
@@ -674,6 +677,7 @@
 				85C6A2B5F65F443BDE292206 /* CustomMenu.swift in Sources */,
 				0FE0155346E5661200031625 /* GNBackgroundAudio.m in Sources */,
 				499A080F26C7116F928865DE /* GNConfigPreferences.m in Sources */,
+				AA001122334455667788990B /* GNStubsImpl.m in Sources */,
 				5E7B6802A1CE2395421B6F23 /* GNCustomHeaders.m in Sources */,
 				AC52F4CA06CB4D28DC87282A /* GNFileWriterSharer.m in Sources */,
 				70FD472DAB33DFC002F08EB8 /* GNJSBridgeInterface.m in Sources */,

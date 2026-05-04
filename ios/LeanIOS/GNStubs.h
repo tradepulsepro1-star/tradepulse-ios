@@ -47,7 +47,7 @@
 @property (nonatomic, strong) NSString *iosSidebarFont;
 @property (nonatomic) CGFloat menuAnimationDuration;
 // Tabs
-@property (nonatomic, strong) NSArray *tabMenus;
+@property (nonatomic, strong) NSDictionary *tabMenus;
 @property (nonatomic, strong) NSArray *tabMenuRegexes;
 @property (nonatomic, strong) NSArray *tabMenuIDs;
 @property (nonatomic) BOOL hideTabBarOnScroll;
@@ -125,4 +125,43 @@
 
 
 #endif // GoNativeAppConfig_DEFINED
+// Notification constants
+extern NSString * const kGoNativeAppConfigNotificationUserAgentReady;
+extern NSString * const kGoNativeCoreDeviceDidShake;
+extern NSString * const kLEANAppConfigNotificationProcessedWebViewPools;
+extern NSString * const kLEANAppConfigNotificationProcessedMenu;
+extern NSString * const kLEANAppConfigNotificationProcessedSegmented;
+extern NSString * const kLEANAppConfigNotificationProcessedTabNavigation;
+extern NSString * const kLEANAppConfigNotificationProcessedNavigationTitles;
+extern NSString * const kLEANAppConfigNotificationProcessedNavigationLevels;
+extern NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged;
+extern NSString * const kLEANLoginManagerNotificationName;
+extern NSString * const kLEANLoginManagerStatusChangedNotification;
+extern NSString * const kLEANWebViewControllerClearPools;
+extern NSString * const kLEANWebViewControllerUserFinishedLoading;
+extern NSString * const kLEANWebViewControllerUserStartedLoading;
+extern NSString * const kLEANWebViewPoolDisownPolicyDefault;
+
+// RegexEnabled stub - used by LEANToolbarManager
+@interface RegexEnabled : NSObject
+@property (nonatomic, strong) NSPredicate *regex;
+@property (nonatomic) BOOL enabled;
+@end
+
+// LEANIcons stub - used by toolbar/tab managers
+@interface LEANIcons : NSObject
++ (UIImage *)imageForIconIdentifier:(NSString *)identifier size:(CGFloat)size color:(UIColor *)color;
+@end
+
+// GNJavascriptRunner protocol - used by LEANWebViewController
+@protocol GNJavascriptRunner <NSObject>
+- (void)runJavascript:(NSString *)js;
+- (void)runJavascriptWithCallback:(id)callback data:(NSDictionary *)data;
+@end
+
+// WebViewViewportManager stub - used by LEANWebViewController
+@interface WebViewViewportManager : NSObject
+- (instancetype)initWithWebView:(id)webView config:(id)config;
+@end
+
 #endif // __OBJC__
