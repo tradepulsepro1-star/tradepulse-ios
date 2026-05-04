@@ -1,25 +1,17 @@
-//
-//  WindowsController.swift
-//  GonativeIO
-//
-//  Created by Hunaid Hassan on 14.06.21.
-//  Copyright © 2021 GoNative.io LLC. All rights reserved.
-//
-
+//  WindowsController.swift - Patched: GoNativeCore removed
 import Foundation
-import GoNativeCore
+import UIKit
 
 @objc class WindowsController: NSObject {
     @objc class public func windowCountChanged() {
-        let appConfig = GoNativeAppConfig.shared()!
-        guard LEANWebViewController.currentWindows > appConfig.maxWindows else {
+        let maxWindows = 20
+        guard LEANWebViewController.currentWindows > maxWindows else {
             return
         }
-        
         if let rootViewController = UIApplication.shared.windows.first?.rootViewController as? LEANRootViewController,
            let navigationController = rootViewController.contentViewController as? UINavigationController {
             var viewControllers = navigationController.viewControllers
-            let removeTillIndex = LEANWebViewController.currentWindows - appConfig.maxWindows
+            let removeTillIndex = LEANWebViewController.currentWindows - maxWindows
             viewControllers.removeSubrange(1...removeTillIndex)
             navigationController.viewControllers = viewControllers
         }
