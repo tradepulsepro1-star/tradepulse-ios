@@ -75,26 +75,6 @@
 - (void)setNewRegexRules:(id)rules regexRulesArray:(id *)array;
 @end
 
-@interface GNBridge : NSObject
-@end
 
-@interface GNJSBridgeHandler : NSObject
-+ (instancetype)shared;
-- (void)handleUrl:(NSURL *)url query:(NSDictionary *)query wvc:(id)wvc;
-@end
-
-@interface GNEventEmitter : NSObject
-+ (instancetype)shared;
-- (void)emitEvent:(NSString *)event data:(id)data;
-@end
-
-extern NSString * const kGoNativeAppConfigNotificationUserAgentReady;
-extern NSString * const kGoNativeCoreDeviceDidShake;
-
-@interface UIImage (MedianIcons)
-+ (UIImage *)imageWithIconName:(NSString *)name size:(CGFloat)size color:(UIColor *)color;
-- (instancetype)initWithIconName:(NSString *)name size:(CGFloat)size color:(UIColor *)color;
-@end
-
-#endif
+#endif // GoNativeAppConfig_DEFINED
 #endif // __OBJC__
