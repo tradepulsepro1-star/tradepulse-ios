@@ -372,7 +372,7 @@
         }
         else if ([self isDeviceiPhone6Plus])
         {
-            if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation])) {
+            if ([UIApplication sharedApplication].isInterfaceOrientationPortrait) {
                 return @"LaunchImage-800-Portrait-736h@3x.png";
             } else {
                 return @"LaunchImage-800-Landscape-736h@3x.png";
@@ -381,7 +381,7 @@
         else
             return images[0]; //Non-retina iPhone
     }
-    else if (UIInterfaceOrientationIsPortrait([[UIApplication sharedApplication] statusBarOrientation]))//iPad Portrait
+    else if ([UIApplication sharedApplication].isInterfaceOrientationPortrait)//iPad Portrait
     {
         if ([self isDeviceRetina])
         {
@@ -546,7 +546,7 @@
         if (appConfig.hasIosCustomJS) {
             [LEANUtilities injectJs:@"iosCustomJS" ToWebview:webview];
         }
-        [[WebViewViewportManager shared] setViewportWithScale:appConfig.initialWebviewZoom width:[appConfig.forceViewportWidth floatValue] webView:webview];
+        [[WebViewViewportManager shared] setViewportWithScale:appConfig.initialWebviewZoom width:appConfig.forceViewportWidth webView:webview];
         
         // Accessibility & Dynamic Type Support
         UIContentSizeCategory contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;

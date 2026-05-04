@@ -9,7 +9,6 @@
 #import "LEANLoadingSpinnerManager.h"
 #import "LEANAppDelegate.h"
 
-
 @interface LEANLoadingSpinnerManager()
 @property id<GNController> controller;
 @end

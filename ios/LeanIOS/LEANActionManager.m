@@ -7,7 +7,6 @@
 //
 
 #import "LEANActionManager.h"
-#import <objc/runtime.h>
 #import "LEANUtilities.h"
 #import "GonativeIO-Swift.h"
 
@@ -248,7 +247,7 @@
     UIButton *button = (UIButton *)sender;
     NSArray *menu = objc_getAssociatedObject(sender, "menu");
     
-    UIView *keyWindow = GNKeyWindow();
+    UIView *keyWindow = UIApplication.sharedApplication.currentKeyWindow;
     
     self.menuView = [[CustomMenu alloc] initWithContainer:keyWindow button:button data:menu onTap:^(NSDictionary *data) {
         [self closeMenu];

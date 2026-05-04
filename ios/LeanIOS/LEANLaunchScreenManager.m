@@ -10,7 +10,6 @@
 #import "LEANAppDelegate.h"
 #import "GonativeIO-Swift.h"
 
-
 @interface LEANLaunchScreenManager()
 @property id<GNController> controller;
 @property UIImageView *launchScreen;
@@ -54,15 +53,7 @@
     centerImageView.translatesAutoresizingMaskIntoConstraints = NO;
     
     [self.launchScreen addSubview:centerImageView];
-    UIWindow *currentWindow = nil;
-    for (UIWindowScene *scene in [UIApplication sharedApplication].connectedScenes) {
-        if (scene.activationState == UISceneActivationStateForegroundActive) {
-            for (UIWindow *w in scene.windows) {
-                if (w.isKeyWindow) { currentWindow = w; break; }
-            }
-        }
-    }
-    if (!currentWindow) currentWindow = [UIApplication sharedApplication].windows.firstObject;
+    UIWindow *currentWindow = [UIApplication sharedApplication].currentKeyWindow;
     [currentWindow addSubview:self.launchScreen];
     
     [NSLayoutConstraint activateConstraints:@[

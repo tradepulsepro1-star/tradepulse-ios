@@ -215,4 +215,22 @@ typedef void (^CustomMenuTapBlock)(NSDictionary *data);
 - (BOOL)shouldShowSidebarForUrl:(NSString *)url;
 @end
 
+
+// GNJSBridgeHandler stub - handles JS bridge URL calls
+@interface GNJSBridgeHandler : NSObject
++ (instancetype)shared;
+- (void)handleUrl:(NSURL *)url query:(NSDictionary *)query wvc:(id)wvc;
+@end
+
+// GNUtilities stub - URL matching utilities
+@interface GNUtilities : NSObject
++ (BOOL)url:(NSString *)url matchesUrl:(NSString *)pattern;
+@end
+
+// GNEventEmitter stub - event emission (no-op)
+@interface GNEventEmitter : NSObject
++ (instancetype)shared;
+- (void)emitEvent:(NSString *)event data:(id)data;
+@end
+
 #endif // __OBJC__

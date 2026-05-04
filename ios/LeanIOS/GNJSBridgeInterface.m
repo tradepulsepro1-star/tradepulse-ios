@@ -15,16 +15,7 @@
 - (LEANWebViewController *)webViewController
 {
     // Get current webview controller
-    UIWindow *keyWindow = nil;
-    for (UIWindowScene *scene in [UIApplication sharedApplication].connectedScenes) {
-        if (scene.activationState == UISceneActivationStateForegroundActive) {
-            for (UIWindow *w in scene.windows) {
-                if (w.isKeyWindow) { keyWindow = w; break; }
-            }
-        }
-    }
-    if (!keyWindow) keyWindow = [UIApplication sharedApplication].windows.firstObject;
-    UIViewController *topController = keyWindow.rootViewController;
+    UIViewController *topController = [UIApplication sharedApplication].currentKeyWindow.rootViewController;
 
     while (topController.presentedViewController && ![topController.presentedViewController isKindOfClass:[UIAlertController class]]) {
         topController = topController.presentedViewController;

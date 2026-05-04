@@ -89,3 +89,24 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
     return YES;
 }
 @end
+
+// GNJSBridgeHandler stub
+@implementation GNJSBridgeHandler
++ (instancetype)shared {
+    static GNJSBridgeHandler *s; static dispatch_once_t t; dispatch_once(&t, ^{ s = [self new]; }); return s;
+}
+- (void)handleUrl:(NSURL *)url query:(NSDictionary *)query wvc:(id)wvc {}
+@end
+
+// GNUtilities stub
+@implementation GNUtilities
++ (BOOL)url:(NSString *)url matchesUrl:(NSString *)pattern { return NO; }
+@end
+
+// GNEventEmitter stub
+@implementation GNEventEmitter
++ (instancetype)shared {
+    static GNEventEmitter *s; static dispatch_once_t t; dispatch_once(&t, ^{ s = [self new]; }); return s;
+}
+- (void)emitEvent:(NSString *)event data:(id)data {}
+@end

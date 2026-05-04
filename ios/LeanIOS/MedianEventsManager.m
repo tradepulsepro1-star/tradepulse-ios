@@ -8,7 +8,6 @@
 
 #import "MedianEventsManager.h"
 
-
 @interface MedianEventsManager()
 @property (weak, nonatomic) LEANWebViewController *wvc;
 @property NSMutableDictionary<NSString *, NSMutableArray *> *queue;
