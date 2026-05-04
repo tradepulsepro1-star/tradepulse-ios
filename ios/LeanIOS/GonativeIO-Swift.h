@@ -5,7 +5,6 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
-#import <WebKit/WebKit.h>
 
 // GNController protocol - used for splash screen and loading spinner controllers
 @protocol GNController <NSObject>
