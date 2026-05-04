@@ -56,8 +56,8 @@
 @property (nonatomic) BOOL toolbarEnabled;
 @property (nonatomic, strong) NSArray *toolbarItems;
 @property (nonatomic, strong) NSArray *toolbarRegexes;
-@property (nonatomic, strong) NSArray *toolbarVisibilityByPages;
-@property (nonatomic, strong) NSArray *toolbarVisibilityByBackButton;
+@property (nonatomic) NSInteger toolbarVisibilityByPages;
+@property (nonatomic) NSInteger toolbarVisibilityByBackButton;
 @property (nonatomic) BOOL showToolbar;
 @property (nonatomic) BOOL showShareButton;
 @property (nonatomic) BOOL showKeyboardAccessoryView;
