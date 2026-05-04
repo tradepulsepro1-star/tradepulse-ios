@@ -10,6 +10,8 @@
 #import "GonativeIO-Swift.h"
 #import <Foundation/Foundation.h>
 
+NSString * GNJSBridgeName = @"JSBridge";
+
 @implementation GNJSBridgeInterface : NSObject
 
 - (LEANWebViewController *)webViewController

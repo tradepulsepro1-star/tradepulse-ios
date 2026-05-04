@@ -175,6 +175,20 @@ static inline UIWindow* GNKeyWindow(void) {
 
 
 
+
+// ActionSelection stub — used by GoNativeAppConfig.actionSelection
+@interface ActionSelection : NSObject
+@property (nonatomic, strong) NSPredicate *regex;
+@property (nonatomic, strong) NSString *identifier;
+@property (nonatomic) BOOL enabled;
+@end
+
+// GNController protocol — used by GNBridge
+@protocol GNController <NSObject>
+@optional
+- (void)handleUrl:(NSURL *)url query:(NSDictionary *)query;
+@end
+
 // GNBridge stub — GoNative internal bridge removed
 #ifndef GNBridge_DEFINED
 #define GNBridge_DEFINED

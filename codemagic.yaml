@@ -29,7 +29,7 @@ workflows:
         script: |
           set -o pipefail
           ARCHIVE_PATH="/Users/builder/clone/TradePulse.xcarchive"
-          LOG_FILE="/Users/builder/clone/build_errors.log"
+          LOG_FILE="/Users/builder/clone/build_full.log"
 
           xcodebuild \
             -workspace ios/TradePulse.xcworkspace \
@@ -41,14 +41,13 @@ workflows:
             DEVELOPMENT_TEAM=5L79BW988P \
             CODE_SIGN_STYLE=Manual \
             "OTHER_LDFLAGS=-ObjC" \
-            archive 2>&1 | tee "$LOG_FILE" | \
-            grep -E "error:|warning: duplicate|Undefined symbol|ld: |linker command|ARCHIVE FAILED|ARCHIVE SUCCEEDED|clang: error" || true
+            archive 2>&1 | tee "$LOG_FILE" || true
 
-          echo "=== FULL ERROR SUMMARY ==="
-          grep -E "error:|Undefined symbol|ld: |duplicate symbol|clang: error" "$LOG_FILE" | head -60 || echo "No errors found in log"
-
-          echo "=== LINKER DETAIL ==="
-          grep -A3 -B1 "Undefined symbol\|duplicate symbol\|ld: warning\|ld: error\|clang: error" "$LOG_FILE" | head -80 || echo "No linker detail"
+          echo ""
+          echo "========================================"
+          echo "=== LINKER / ERROR DETAIL (last 150) ==="
+          echo "========================================"
+          tail -150 "$LOG_FILE"
 
           [ -d "$ARCHIVE_PATH" ] && echo "ARCHIVE OK" || { echo "ARCHIVE MISSING"; exit 1; }
 
@@ -67,6 +66,7 @@ workflows:
     artifacts:
       - /Users/builder/clone/TradePulse.xcarchive
       - /Users/builder/clone/ipa/*.ipa
+      - /Users/builder/clone/build_full.log
 
     publishing:
       app_store_connect:

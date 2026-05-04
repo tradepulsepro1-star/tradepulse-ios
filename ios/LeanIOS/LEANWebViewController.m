@@ -12,6 +12,9 @@
 #import <AVFoundation/AVFoundation.h>
 
 #import "LEANWebViewController.h"
+NSString *kLEANWebViewControllerUserStartedLoading = @"co.median.ios.WebViewController.started";
+NSString *kLEANWebViewControllerUserFinishedLoading = @"co.median.ios.WebViewController.finished";
+NSString *kLEANWebViewControllerClearPools = @"co.median.ios.WebViewController.clearPools";
 #import "LEANAppDelegate.h"
 #import "LEANUtilities.h"
 #import "LEANHeaders.h"

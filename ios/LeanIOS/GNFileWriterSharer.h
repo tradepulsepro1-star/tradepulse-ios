@@ -12,8 +12,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-static NSString * GNFileWriterSharerName = @"fileWriterSharer";
-static NSUInteger GNFileWriterSharerMaxSize = 1024 * 1024 * 1024; // 1 gigabyte
+extern NSString * GNFileWriterSharerName;
+extern NSUInteger GNFileWriterSharerMaxSize;
 
 
 @interface GNFileWriterSharer : NSObject <WKScriptMessageHandler>

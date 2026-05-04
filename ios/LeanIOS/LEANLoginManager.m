@@ -7,6 +7,8 @@
 //
 
 #import "LEANLoginManager.h"
+NSString *kLEANLoginManagerNotificationName = @"co.median.ios.LoginManagerNotification";
+NSString *kLEANLoginManagerStatusChangedNotification = @"co.median.ios.LoginManager.statusChanged";
 #import "LEANUtilities.h"
 #import "NSURL+LEANUtilities.h"
 #import "LEANUrlInspector.h"

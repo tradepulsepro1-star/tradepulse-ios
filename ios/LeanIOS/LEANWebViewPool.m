@@ -7,6 +7,7 @@
 //
 
 #import "LEANWebViewPool.h"
+LEANWebViewPoolDisownPolicy kLEANWebViewPoolDisownPolicyDefault = LEANWebViewPoolDisownPolicyReload;
 #import "LEANWebViewController.h"
 #import "LEANUtilities.h"
 #import "LEANLoginManager.h"
