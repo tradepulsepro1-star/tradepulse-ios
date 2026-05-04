@@ -155,11 +155,11 @@ static NSInteger _currentWindows = 0;
 
 + (void)setCurrentWindows:(NSInteger) currentWindows {
     _currentWindows = currentWindows;
-    [WindowsController windowCountChanged];
+    // WindowsController.windowCountChanged — no-op (GoNative removed)
 }
 
 - (void)updateWindowsController {
-    [WindowsController windowCountChanged];
+    // WindowsController.windowCountChanged — no-op (GoNative removed)
 }
 
 - (void)viewDidLoad
@@ -677,17 +677,7 @@ static NSInteger _currentWindows = 0;
         self.isShowingTopNavBar = title != nil;
         
         if ([title isKindOfClass:[NSString class]] && title.length > 0) {
-            if (@available(iOS 26.0, *)) {
-                if ([LEANUtilities isGlassDesignEnabled]) {
-                    LEANLiquidTitleView *titleView = [LEANLiquidTitleView new];
-                    titleView.text = title;
-                    self.navigationItem.titleView = titleView;
-                } else {
-                    self.navigationItem.title = title;
-                }
-            } else {
-                self.navigationItem.title = title;
-            }
+            self.navigationItem.title = title; // LEANLiquidTitleView removed (iOS 26 glass — not needed)
         }
     }
     
@@ -763,7 +753,12 @@ static NSInteger _currentWindows = 0;
 }
 
 - (void)applyStatusBarOverlay {
-    CGFloat statusBarHeight = [UIApplication sharedApplication].currentStatusBarFrame.size.height;
+    CGFloat statusBarHeight = 0;
+    if (@available(iOS 13.0, *)) {
+        statusBarHeight = GNKeyWindow().windowScene.statusBarManager.statusBarFrame.size.height;
+    } else {
+        statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
+    }
     
     // Top guide is equal to super view (below top navbar)
     if ([LEANUtilities isGlassDesignEnabled]) {
@@ -1433,9 +1428,7 @@ static NSInteger _currentWindows = 0;
 }
 
 -(void)webView:(WKWebView *)webView contextMenuConfigurationForElement:(WKContextMenuElementInfo *)elementInfo completionHandler:(void (^)(UIContextMenuConfiguration * _Nullable))completionHandler {
-    UIContextMenuConfiguration *config = [ContextMenuHandler createConfigurationWithUrl:elementInfo.linkURL shareAction:^{
-        [self.documentSharer shareUrl:elementInfo.linkURL fromView:webView];
-    }];
+    UIContextMenuConfiguration *config = nil; // ContextMenuHandler removed (GoNative)
     completionHandler(config);
 }
 
@@ -1460,9 +1453,7 @@ static NSInteger _currentWindows = 0;
         if([data[@"data"] isKindOfClass:[NSDictionary class]]) query = data[@"data"];
     } else return;
     
-    if (NO) // bridge.shouldLoadRequest removed — always allow {
-        return;
-    }
+    // bridge.shouldLoadRequest removed — always allow
     
     [[GNJSBridgeHandler shared] handleUrl:url query:query wvc:(id)self];
 }
@@ -2715,7 +2706,12 @@ static NSInteger _currentWindows = 0;
 {
     if (self.statusBarBackground) {
         // fix sizing (usually because of rotation) when navigation bar is hidden
-        CGSize statusSize = [UIApplication sharedApplication].currentStatusBarFrame.size;
+        CGSize statusSize = CGSizeZero;
+        if (@available(iOS 13.0, *)) {
+            statusSize = GNKeyWindow().windowScene.statusBarManager.statusBarFrame.size;
+        } else {
+            statusSize = [UIApplication sharedApplication].statusBarFrame.size;
+        }
         CGFloat height = MIN(statusSize.height, statusSize.width);
         // fix for double height status bar on non-iPhoneX
         if (height == 40) {

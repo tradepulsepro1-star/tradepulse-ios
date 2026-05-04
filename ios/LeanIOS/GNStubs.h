@@ -252,5 +252,30 @@ typedef void (^CustomMenuTapHandler)(NSDictionary *data);
 @end
 #endif
 
+
+// WindowsController stub — GoNative multi-window manager (no-op)
+#ifndef WindowsController_DEFINED
+#define WindowsController_DEFINED
+@interface WindowsController : NSObject
++ (void)windowCountChanged;
+@end
+#endif
+
+// ContextMenuHandler stub — GoNative context menu (no-op)
+#ifndef ContextMenuHandler_DEFINED
+#define ContextMenuHandler_DEFINED
+@interface ContextMenuHandler : NSObject
++ (UIContextMenuConfiguration *)createConfigurationWithUrl:(NSURL *)url shareAction:(dispatch_block_t)shareAction;
+@end
+#endif
+
+// LEANLiquidTitleView stub — iOS 26 glass design (no-op)
+#ifndef LEANLiquidTitleView_DEFINED
+#define LEANLiquidTitleView_DEFINED
+@interface LEANLiquidTitleView : UIView
+@property (nonatomic, strong) NSString *text;
+@end
+#endif
+
 #endif // __OBJC__
 

@@ -103,3 +103,19 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
 
 // GNController default implementation (protocol — no @implementation needed)
 
+// WindowsController stub implementation
+@implementation WindowsController
++ (void)windowCountChanged {}
+@end
+
+// ContextMenuHandler stub implementation
+@implementation ContextMenuHandler
++ (UIContextMenuConfiguration *)createConfigurationWithUrl:(NSURL *)url shareAction:(dispatch_block_t)shareAction {
+    return nil;
+}
+@end
+
+// LEANLiquidTitleView stub implementation
+@implementation LEANLiquidTitleView
+@end
+
