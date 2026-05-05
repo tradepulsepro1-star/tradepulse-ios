@@ -12,6 +12,7 @@
 		0A77A9178D61AC21BBF6B3D0 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 208D9B2C8F56314271FBE1A5 /* Settings.bundle */; };
 		0ECDC46C313485A9201642A7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D22A2C8586FC55AA4181D313 /* UIKit.framework */; };
 		0FE0155346E5661200031625 /* GNBackgroundAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = EB37DC30BBA202BDCD2A27D5 /* GNBackgroundAudio.m */; };
+		AC87697DB2CCFAA23A7765F5 /* GNStubsImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = A020337E84AA38017A10D5AB /* GNStubsImpl.m */; };
 		10C1C92374D86E673BC7B359 /* LEANWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C0BDDA16E32334E50F20663 /* LEANWebViewController.m */; };
 		1713560D3B7FF79EEF0A42D5 /* LEANLoadingSpinnerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB4C6AB51E91CEAEC3E4AD5 /* LEANLoadingSpinnerManager.m */; };
 		17E257A28B88B8EE82701D57 /* GNSwiftUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48134ECEC524D50479D91820 /* GNSwiftUtilities.swift */; };
@@ -270,6 +271,7 @@
 		EA21169C7EC9880B23CFFF2A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		EB343AF12C0C978F28049F0B /* UIView+REFrostedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+REFrostedViewController.m"; sourceTree = "<group>"; };
 		EB37DC30BBA202BDCD2A27D5 /* GNBackgroundAudio.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNBackgroundAudio.m; sourceTree = "<group>"; };
+		A020337E84AA38017A10D5AB /* GNStubsImpl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNStubsImpl.m; sourceTree = "<group>"; };
 		EC5CA0C36A0E2B1BD006B3B7 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EC8C4591FD1C8EFCEF662B98 /* LEANLoginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LEANLoginManager.m; sourceTree = "<group>"; };
 		F3EBA5290195B9538DA4DAF6 /* GNCustomHeaders.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNCustomHeaders.m; sourceTree = "<group>"; };
@@ -400,6 +402,7 @@
 				D59D71745CB93302BEE9F924 /* customJS.js */,
 				9DF31436C8F062E903FE616C /* CustomMenu.swift */,
 				EB37DC30BBA202BDCD2A27D5 /* GNBackgroundAudio.m */,
+				A020337E84AA38017A10D5AB /* GNStubsImpl.m */,
 				BD5591F73537C2036BB2E911 /* GNConfigPreferences.m */,
 				F3EBA5290195B9538DA4DAF6 /* GNCustomHeaders.m */,
 				2D16380A29937AE7B96DD03F /* GNFileWriterSharer.m */,
@@ -673,6 +676,7 @@
 				86941957B602BD3A52736F09 /* ContextMenuHandler.swift in Sources */,
 				85C6A2B5F65F443BDE292206 /* CustomMenu.swift in Sources */,
 				0FE0155346E5661200031625 /* GNBackgroundAudio.m in Sources */,
+				AC87697DB2CCFAA23A7765F5 /* GNStubsImpl.m in Sources */,
 				499A080F26C7116F928865DE /* GNConfigPreferences.m in Sources */,
 				5E7B6802A1CE2395421B6F23 /* GNCustomHeaders.m in Sources */,
 				AC52F4CA06CB4D28DC87282A /* GNFileWriterSharer.m in Sources */,
