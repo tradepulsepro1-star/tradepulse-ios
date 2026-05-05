@@ -12,27 +12,21 @@ workflows:
     scripts:
       - name: Force clean source
         script: |
-          echo "=== Forcing clean source checkout ==="
           cd /Users/builder/clone
           git fetch origin main
           git reset --hard origin/main
           git clean -fdx --exclude=".git"
-          echo "=== HEAD after reset ==="
           git log --oneline -1
 
       - name: Verify scheme
         script: |
-          echo "=== xcodebuild -list ==="
           xcodebuild -workspace ios/TradePulse.xcworkspace -list 2>&1 || true
 
       - name: Build and Archive
         script: |
-          set -o pipefail
+          set -e
           ARCHIVE_PATH="/Users/builder/clone/TradePulse.xcarchive"
-          LOG_FILE="/Users/builder/clone/build_full.log"
           DERIVED_DATA="/Users/builder/clone/DerivedData_fresh_$(date +%s)"
-
-          echo "=== Using fresh DerivedData: $DERIVED_DATA ==="
           mkdir -p "$DERIVED_DATA"
 
           xcodebuild \
@@ -46,37 +40,18 @@ workflows:
             DEVELOPMENT_TEAM=5L79BW988P \
             CODE_SIGN_STYLE=Manual \
             "OTHER_LDFLAGS=-ObjC" \
-            archive 2>&1 | tee "$LOG_FILE" || true
-
-          echo ""
-          echo "=============================================="
-          echo "=== ERRORS ONLY (all 'error:' lines) ==="
-          echo "=============================================="
-          grep "error:" "$LOG_FILE" | grep -v "^Binary\|#pragma\|// " | grep -v "^[[:space:]]*//" | head -60
-
-          echo ""
-          echo "=============================================="
-          echo "=== LEANActionManager CONTEXT (50 lines around its error) ==="
-          echo "=============================================="
-          grep -n "LEANActionManager\|ActionManager" "$LOG_FILE" | head -20
-
-          echo ""
-          echo "=== LAST 50 LINES ==="
-          tail -50 "$LOG_FILE"
+            archive 2>&1 | tee /Users/builder/clone/build_full.log
 
           [ -d "$ARCHIVE_PATH" ] && echo "ARCHIVE OK" || { echo "ARCHIVE MISSING"; exit 1; }
 
       - name: Export IPA
         script: |
           set -e
-          ARCHIVE_PATH="/Users/builder/clone/TradePulse.xcarchive"
-          IPA_PATH="/Users/builder/clone/ipa"
-          mkdir -p "$IPA_PATH"
           xcodebuild -exportArchive \
-            -archivePath "$ARCHIVE_PATH" \
+            -archivePath /Users/builder/clone/TradePulse.xcarchive \
             -exportOptionsPlist exportOptions.plist \
-            -exportPath "$IPA_PATH"
-          ls -la "$IPA_PATH/"
+            -exportPath /Users/builder/clone/ipa
+          ls -la /Users/builder/clone/ipa/
 
     artifacts:
       - /Users/builder/clone/TradePulse.xcarchive

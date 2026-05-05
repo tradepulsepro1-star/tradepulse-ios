@@ -10,7 +10,7 @@
 #import <objc/runtime.h>
 #import "LEANUtilities.h"
 #import "GNStubs.h"
-#import "GonativeIO-Swift.h"
+// GonativeIO-Swift.h not needed — CustomMenu removed (GoNative-specific feature)
 
 @implementation LEANActionButtons
 
@@ -25,8 +25,6 @@
 
 @end
 
-@class CustomMenu;  // forward declaration — full interface available via GonativeIO-Swift.h below
-
 @interface LEANActionManager ()
 @property NSMutableArray<UIBarButtonItem *> *items;
 @property (weak, nonatomic) LEANWebViewController *wvc;
@@ -34,7 +32,6 @@
 @property NSMutableArray *buttons;
 @property NSMutableArray *actionsData;
 @property (readwrite, assign) NSString *currentSearchTemplateUrl;
-@property CustomMenu *menuView;
 @end
 
 @implementation LEANActionManager
@@ -250,30 +247,11 @@
 }
 
 - (void)openMenu:(id)sender {
-    [self closeMenu];
-    
-    UIButton *button = (UIButton *)sender;
-    NSArray *menu = objc_getAssociatedObject(sender, "menu");
-    
-    UIView *keyWindow = GNKeyWindow();
-    
-    self.menuView = [[CustomMenu alloc] initWithContainer:keyWindow button:button data:menu onTap:^(NSDictionary *data) {
-        [self closeMenu];
-        
-        NSString *system = data[@"system"];
-        NSString *url = data[@"url"];
-    
-        [self handleAction:system url:url];
-    }];
-    
-    [self.menuView setMenuColor:[UIColor colorNamed:@"navigationBarTintColor"]];
+    // GoNative CustomMenu removed — TradePulse does not use dropdown action menus
 }
 
 - (void)closeMenu {
-    if (self.menuView) {
-        [self.menuView removeFromSuperview];
-        self.menuView = nil;
-    }
+    // no-op — CustomMenu removed
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {
