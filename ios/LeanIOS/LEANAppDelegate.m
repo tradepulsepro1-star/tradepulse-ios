@@ -13,7 +13,7 @@
 #import "LEANConfigUpdater.h"
 #import "LEANUtilities.h"
 #import "GNConfigPreferences.h"
-#import "GonativeIO-Swift.h"
+// GonativeIO-Swift.h removed — GNSwiftUtilities replaced with inline ObjC
 #import <AppTrackingTransparency/ATTrackingManager.h>
 #import "GNStubs.h"
 
@@ -71,8 +71,13 @@
 
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     NSLog(@"Successfully registered for push notifications");
-    [self setApnsToken:[GNSwiftUtilities deviceTokenWithData:deviceToken]];
-    // bridge.didRegisterForRemoteNotifications — no-op (GoNative removed)
+    // Convert device token to hex string (inline — no Swift dependency)
+    NSMutableString *tokenHex = [NSMutableString stringWithCapacity:deviceToken.length * 2];
+    const unsigned char *bytes = (const unsigned char *)deviceToken.bytes;
+    for (NSUInteger i = 0; i < deviceToken.length; i++) {
+        [tokenHex appendFormat:@"%02x", bytes[i]];
+    }
+    [self setApnsToken:[tokenHex copy]];
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
