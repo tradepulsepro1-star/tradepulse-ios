@@ -10,7 +10,7 @@
 #import "LEANTabManager.h"
 #import "LEANUtilities.h"
 #import "GNStubs.h"
-#import "GonativeIO-Swift.h"
+// GonativeIO-Swift.h removed — all Swift types use GNStubs.h ObjC declarations
 
 @interface LEANTabManager() <UITabBarDelegate>
 @property UITabBar *tabBar;

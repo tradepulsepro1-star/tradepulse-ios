@@ -45,7 +45,7 @@ NSString *kLEANWebViewControllerClearPools = @"co.median.ios.WebViewController.c
 #import "GNFileWriterSharer.h"
 #import "GNConfigPreferences.h"
 #import "GNBackgroundAudio.h"
-#import "GonativeIO-Swift.h"
+// GonativeIO-Swift.h removed — all Swift types replaced with ObjC stubs or comments
 #import <AppTrackingTransparency/ATTrackingManager.h>
 #import "GNJSBridgeInterface.h"
 #import "GNLogManager.h"
@@ -54,7 +54,7 @@ NSString *kLEANWebViewControllerClearPools = @"co.median.ios.WebViewController.c
 #define OFFLINE_URL @"http://offline/"
 #define LOCAL_FILE_URL @"http://localFile/"
 
-@interface LEANWebViewController () <UISearchBarDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UITabBarDelegate, WKNavigationDelegate, WKUIDelegate, WKDownloadDelegate, MFMailComposeViewControllerDelegate, CLLocationManagerDelegate, GNJavascriptRunner>
+@interface LEANWebViewController () <UISearchBarDelegate, UIScrollViewDelegate, UITabBarDelegate, WKNavigationDelegate, WKUIDelegate, WKDownloadDelegate, MFMailComposeViewControllerDelegate, CLLocationManagerDelegate, GNJavascriptRunner>
 
 @property WKWebView *wkWebview;
 

@@ -9,7 +9,7 @@
 #import "LEANKeyboardManager.h"
 #import <objc/runtime.h>
 #import <UIKit/UIKit.h>
-#import "GonativeIO-Swift.h"
+// GonativeIO-Swift.h removed — all Swift types use GNStubs.h ObjC declarations
 
 @interface LEANKeyboardManager()
 @property Class noInputAccessoryViewClass;
