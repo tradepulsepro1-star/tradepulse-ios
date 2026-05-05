@@ -756,7 +756,14 @@ static NSInteger _currentWindows = 0;
 }
 
 - (void)applyStatusBarOverlay {
-    CGFloat statusBarHeight = [UIApplication sharedApplication].currentStatusBarFrame.size.height;
+    // currentStatusBarFrame removed in iOS 26 — use statusBarManager or safeAreaInsets
+    CGFloat statusBarHeight = 0;
+    if (@available(iOS 13.0, *)) {
+        UIWindowScene *scene = (UIWindowScene *)[[UIApplication sharedApplication].connectedScenes anyObject];
+        statusBarHeight = scene.statusBarManager.statusBarFrame.size.height;
+    } else {
+        statusBarHeight = [UIApplication sharedApplication].windows.firstObject.safeAreaInsets.top;
+    }
     
     // Top guide is equal to super view (below top navbar)
     if ([LEANUtilities isGlassDesignEnabled]) {
@@ -2704,7 +2711,14 @@ static NSInteger _currentWindows = 0;
 {
     if (self.statusBarBackground) {
         // fix sizing (usually because of rotation) when navigation bar is hidden
-        CGSize statusSize = [UIApplication sharedApplication].currentStatusBarFrame.size;
+        // currentStatusBarFrame removed in iOS 26 — use statusBarManager
+        CGSize statusSize = CGSizeZero;
+        if (@available(iOS 13.0, *)) {
+            UIWindowScene *scene = (UIWindowScene *)[[UIApplication sharedApplication].connectedScenes anyObject];
+            statusSize = scene.statusBarManager.statusBarFrame.size;
+        } else {
+            statusSize = CGSizeMake(UIScreen.mainScreen.bounds.size.width, 20);
+        }
         CGFloat height = MIN(statusSize.height, statusSize.width);
         // fix for double height status bar on non-iPhoneX
         if (height == 40) {

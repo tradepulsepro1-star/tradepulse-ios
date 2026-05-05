@@ -5,6 +5,11 @@
 #ifdef __OBJC__
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+
+// Median event listener key constants (removed from SDK — defined here as stubs)
+#ifndef MEDIAN_KEYBOARD_EVENT_LISTENER
+#define MEDIAN_KEYBOARD_EVENT_LISTENER @"median.keyboard"
+#endif
 #import <WebKit/WebKit.h>
 
 #ifndef GoNativeAppConfig_DEFINED
@@ -124,6 +129,7 @@
 - (NSDictionary *)getRegexRuleForURL:(NSString *)url rules:(id)rules;
 - (void)initializeRegexRules:(id *)rules;
 - (void)setNewRegexRules:(id)rules regexRulesArray:(id *)array;
+- (BOOL)shouldShowSidebarForUrl:(NSString *)url;
 @end
 
 
