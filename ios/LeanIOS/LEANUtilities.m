@@ -7,7 +7,7 @@
 //
 
 #import <MobileCoreServices/MobileCoreServices.h>
-// GonativeIO-Swift.h removed — all Swift types use GNStubs.h ObjC declarations
+#import "GonativeIO-Swift.h"
 #import "LEANUtilities.h"
 #import "LEANAppDelegate.h"
 
