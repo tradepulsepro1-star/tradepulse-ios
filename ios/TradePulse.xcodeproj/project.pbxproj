@@ -12,7 +12,6 @@
 		0A77A9178D61AC21BBF6B3D0 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 208D9B2C8F56314271FBE1A5 /* Settings.bundle */; };
 		0ECDC46C313485A9201642A7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D22A2C8586FC55AA4181D313 /* UIKit.framework */; };
 		0FE0155346E5661200031625 /* GNBackgroundAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = EB37DC30BBA202BDCD2A27D5 /* GNBackgroundAudio.m */; };
-		AC87697DB2CCFAA23A7765F5 /* GNStubsImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = A020337E84AA38017A10D5AB /* GNStubsImpl.m */; };
 		10C1C92374D86E673BC7B359 /* LEANWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C0BDDA16E32334E50F20663 /* LEANWebViewController.m */; };
 		1713560D3B7FF79EEF0A42D5 /* LEANLoadingSpinnerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB4C6AB51E91CEAEC3E4AD5 /* LEANLoadingSpinnerManager.m */; };
 		17E257A28B88B8EE82701D57 /* GNSwiftUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48134ECEC524D50479D91820 /* GNSwiftUtilities.swift */; };
@@ -28,10 +27,12 @@
 		2CAD3943F6D7FD0A63BB2942 /* LEANProfilePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 9D4F5049C756998AF0256D21 /* LEANProfilePicker.m */; };
 		2D8507C6646A78D0E3242FBD /* LEANRootViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 74DBE1511BD4E4CAD485B55F /* LEANRootViewController.m */; };
 		2F784B2026501369BEA85249 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 96C0C65E3785462D1FAEEFBB /* LaunchScreen.storyboard */; };
+		340408F669B3FEE9978FA6F0 /* MedianIcons in Frameworks */ = {isa = PBXBuildFile; productRef = 75096A4D6F864C3F5B7ACA92 /* MedianIcons */; };
 		35426E68080975B903BB21A2 /* LEANMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 96317CD75935483D14CD6E2F /* LEANMenuViewController.m */; };
 		3644D1ECF7480F4FA00CAEDE /* LEANLaunchScreenManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 4ED423FFEFE39890B0621F75 /* LEANLaunchScreenManager.m */; };
 		36BA93CFDBC0055A6A7A9DB2 /* TuistAssets+TradePulse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DD14A1F658516E7EACBECBC /* TuistAssets+TradePulse.swift */; };
 		39193F2208B6F35595582F26 /* LEANAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 847CA84B2CEEAAAB5380AF78 /* LEANAppDelegate.m */; };
+		3A863DFF0330A265E737361E /* GoNativeCore in Frameworks */ = {isa = PBXBuildFile; productRef = FA18443553361F33866B8858 /* GoNativeCore */; };
 		3BE6E25C804827CA5287F85B /* LEANNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 67DC7C9589BB9DB32144EC4C /* LEANNavigationController.m */; };
 		3D49A85280E5B73E567E2DDF /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DB13D856C16986F8A37B11E5 /* PrivacyInfo.xcprivacy */; };
 		3DA0F77295F4B59987B75119 /* LeanIOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = E5ED01948E5274E0B2D92FAF /* LeanIOSTests.m */; };
@@ -271,7 +272,6 @@
 		EA21169C7EC9880B23CFFF2A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/CoreGraphics.framework; sourceTree = DEVELOPER_DIR; };
 		EB343AF12C0C978F28049F0B /* UIView+REFrostedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+REFrostedViewController.m"; sourceTree = "<group>"; };
 		EB37DC30BBA202BDCD2A27D5 /* GNBackgroundAudio.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNBackgroundAudio.m; sourceTree = "<group>"; };
-		A020337E84AA38017A10D5AB /* GNStubsImpl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNStubsImpl.m; sourceTree = "<group>"; };
 		EC5CA0C36A0E2B1BD006B3B7 /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EC8C4591FD1C8EFCEF662B98 /* LEANLoginManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LEANLoginManager.m; sourceTree = "<group>"; };
 		F3EBA5290195B9538DA4DAF6 /* GNCustomHeaders.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNCustomHeaders.m; sourceTree = "<group>"; };
@@ -306,6 +306,8 @@
 				A78B5B33987BD083751CD72A /* Social.framework in Frameworks */,
 				FB307D2FE0FFA4DAB8DAF1FF /* SystemConfiguration.framework in Frameworks */,
 				0ECDC46C313485A9201642A7 /* UIKit.framework in Frameworks */,
+				3A863DFF0330A265E737361E /* GoNativeCore in Frameworks */,
+				340408F669B3FEE9978FA6F0 /* MedianIcons in Frameworks */,
 				52F53935158642DCC04A38EE /* ZipArchive in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -402,7 +404,6 @@
 				D59D71745CB93302BEE9F924 /* customJS.js */,
 				9DF31436C8F062E903FE616C /* CustomMenu.swift */,
 				EB37DC30BBA202BDCD2A27D5 /* GNBackgroundAudio.m */,
-				A020337E84AA38017A10D5AB /* GNStubsImpl.m */,
 				BD5591F73537C2036BB2E911 /* GNConfigPreferences.m */,
 				F3EBA5290195B9538DA4DAF6 /* GNCustomHeaders.m */,
 				2D16380A29937AE7B96DD03F /* GNFileWriterSharer.m */,
@@ -537,6 +538,8 @@
 			);
 			name = TradePulse;
 			packageProductDependencies = (
+				FA18443553361F33866B8858 /* GoNativeCore */,
+				75096A4D6F864C3F5B7ACA92 /* MedianIcons */,
 				4248ED8E78130DD2ED1439B1 /* ZipArchive */,
 			);
 			productName = TradePulse;
@@ -597,6 +600,8 @@
 			mainGroup = 06C2B02FA1E66DBAF184B883;
 			packageReferences = (
 				BBE8B5DE88C7590D99030DC2 /* XCRemoteSwiftPackageReference "ZipArchive" */,
+				80AD530EC27B1D3A8C43DD5E /* XCRemoteSwiftPackageReference "median.go-native-core" */,
+				6D5B05FBBE2A73A27906448C /* XCRemoteSwiftPackageReference "median.median-icons" */,
 			);
 			productRefGroup = 02B5D4824E5C8CF0C1DE7DCE /* Products */;
 			projectDirPath = "";
@@ -676,7 +681,6 @@
 				86941957B602BD3A52736F09 /* ContextMenuHandler.swift in Sources */,
 				85C6A2B5F65F443BDE292206 /* CustomMenu.swift in Sources */,
 				0FE0155346E5661200031625 /* GNBackgroundAudio.m in Sources */,
-				AC87697DB2CCFAA23A7765F5 /* GNStubsImpl.m in Sources */,
 				499A080F26C7116F928865DE /* GNConfigPreferences.m in Sources */,
 				5E7B6802A1CE2395421B6F23 /* GNCustomHeaders.m in Sources */,
 				AC52F4CA06CB4D28DC87282A /* GNFileWriterSharer.m in Sources */,
@@ -844,14 +848,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				BUILD_SETTINGS_APP_NAME = TradePulse;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "LeanIOS/TradePulse.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 76;
+				CODE_SIGN_ENTITLEMENTS = Project.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_LANGUAGE = en;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 5L79BW988P;
-				PROVISIONING_PROFILE_SPECIFIER = "trade pulse";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -895,14 +897,12 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				BUILD_SETTINGS_APP_NAME = TradePulse;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_ENTITLEMENTS = "LeanIOS/TradePulse.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 76;
+				CODE_SIGN_ENTITLEMENTS = Project.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 21;
 				DEVELOPMENT_LANGUAGE = en;
-				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 5L79BW988P;
-				PROVISIONING_PROFILE_SPECIFIER = "trade pulse";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -1117,6 +1117,22 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6D5B05FBBE2A73A27906448C /* XCRemoteSwiftPackageReference "median.median-icons" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "median.median-icons";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.1.4;
+			};
+		};
+		80AD530EC27B1D3A8C43DD5E /* XCRemoteSwiftPackageReference "median.go-native-core" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "median.go-native-core";
+			requirement = {
+				kind = exactVersion;
+				version = 3.0.7;
+			};
+		};
 		BBE8B5DE88C7590D99030DC2 /* XCRemoteSwiftPackageReference "ZipArchive" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ZipArchive/ZipArchive";
@@ -1131,6 +1147,14 @@
 		4248ED8E78130DD2ED1439B1 /* ZipArchive */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ZipArchive;
+		};
+		75096A4D6F864C3F5B7ACA92 /* MedianIcons */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = MedianIcons;
+		};
+		FA18443553361F33866B8858 /* GoNativeCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GoNativeCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
