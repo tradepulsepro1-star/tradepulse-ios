@@ -20,8 +20,6 @@ let project = Project(
         developmentRegion: "en"
     ),
     packages: [
-        .remote(url: "median.go-native-core", requirement: .exact("3.0.6")),
-        .remote(url: "median.median-icons", requirement: .upToNextMajor(from: "1.1.4")),
         .remote(url: "https://github.com/ZipArchive/ZipArchive", requirement: .upToNextMajor(from: "2.6.0")),
         // Active plugins are injected here by the builder at build time.
         // MARK: BUILDER_PLUGINS
@@ -59,8 +57,6 @@ let project = Project(
             ],
             entitlements: "Project.entitlements",
             dependencies: [
-                .package(product: "GoNativeCore"),
-                .package(product: "MedianIcons"),
                 .package(product: "ZipArchive"),
                 // Active plugin dependencies are injected here by the builder at build time.
                 // MARK: BUILDER_PLUGIN_DEPENDENCIES
