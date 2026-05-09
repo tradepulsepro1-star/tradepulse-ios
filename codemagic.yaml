@@ -28,26 +28,25 @@ workflows:
             exit 0
           fi
 
-          echo "Patching pbxproj with sed..."
+          echo "Patching pbxproj..."
 
-          # 1. Add PBXFileReference (after the GoNativeJSBridgeLibrary.js reference line)
-          sed -i '' 's|274A66DFC051712F0B671B3E /\* GoNativeJSBridgeLibrary.js \*/|AA11BB22CC33DD44EE55FF60 /* GNStubsImpl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNStubsImpl.m; sourceTree = "<group>"; };\n\t\t274A66DFC051712F0B671B3E /* GoNativeJSBridgeLibrary.js */|' "$PBXPROJ"
+          # 1. Add PBXFileReference after line 164 (the GoNativeJSBridgeLibrary.js fileref line)
+          sed -i '' 's|^\t\t274A66DFC051712F0B671B3E /\* GoNativeJSBridgeLibrary\.js \*/ = {isa = PBXFileReference.*};$|&\
+\t\tAA11BB22CC33DD44EE55FF60 /* GNStubsImpl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNStubsImpl.m; sourceTree = "<group>"; };|' "$PBXPROJ"
 
-          # 2. Add PBXBuildFile (after the GNBackgroundAudio.m build file line)
-          sed -i '' 's|0FE0155346E5661200031625 /\* GNBackgroundAudio.m in Sources \*/|AA11BB22CC33DD44EE55FF61 /* GNStubsImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF60 /* GNStubsImpl.m */; };\n\t\t0FE0155346E5661200031625 /* GNBackgroundAudio.m in Sources */|' "$PBXPROJ"
+          # 2. Add PBXBuildFile after line 14 (the GNBackgroundAudio.m buildfile line)
+          sed -i '' 's|^\t\t0FE0155346E5661200031625 /\* GNBackgroundAudio\.m in Sources \*/ = {isa = PBXBuildFile.*};$|&\
+\t\tAA11BB22CC33DD44EE55FF61 /* GNStubsImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF60 /* GNStubsImpl.m */; };|' "$PBXPROJ"
 
-          # 3. Add to LeanIOS group children (after GoNativeJSBridgeLibrary.js in group)
-          sed -i '' 's|274A66DFC051712F0B671B3E /\* GoNativeJSBridgeLibrary.js \*/,|274A66DFC051712F0B671B3E /* GoNativeJSBridgeLibrary.js */,\n\t\t\t\tAA11BB22CC33DD44EE55FF60 /* GNStubsImpl.m */,|' "$PBXPROJ"
+          # 3. Add to group after line 410 (the GoNativeJSBridgeLibrary.js group entry)
+          sed -i '' 's|^\t\t\t\t274A66DFC051712F0B671B3E /\* GoNativeJSBridgeLibrary\.js \*/,$|&\
+\t\t\t\tAA11BB22CC33DD44EE55FF60 /* GNStubsImpl.m */,|' "$PBXPROJ"
 
-          # 4. Add to Sources build phase (after GNBackgroundAudio.m in Sources)
-          sed -i '' 's|0FE0155346E5661200031625 /\* GNBackgroundAudio.m in Sources \*/,|0FE0155346E5661200031625 /* GNBackgroundAudio.m in Sources */,\n\t\t\t\tAA11BB22CC33DD44EE55FF61 /* GNStubsImpl.m in Sources */,|' "$PBXPROJ"
+          # 4. Add to Sources after line 675 (the GNBackgroundAudio.m sources entry)
+          sed -i '' 's|^\t\t\t\t0FE0155346E5661200031625 /\* GNBackgroundAudio\.m in Sources \*/,$|&\
+\t\t\t\tAA11BB22CC33DD44EE55FF61 /* GNStubsImpl.m in Sources */,|' "$PBXPROJ"
 
-          if grep -q "GNStubsImpl" "$PBXPROJ"; then
-            echo "Patch successful"
-          else
-            echo "ERROR: patch failed — GNStubsImpl not found after sed"
-            exit 1
-          fi
+          grep -q "GNStubsImpl" "$PBXPROJ" && echo "Patch OK" || { echo "Patch FAILED"; exit 1; }
 
       - name: Verify scheme
         script: |
