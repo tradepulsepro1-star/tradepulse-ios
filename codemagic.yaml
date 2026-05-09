@@ -650,7 +650,6 @@ workflows:
             -configuration Release \
             -archivePath $CM_BUILD_DIR/TradePulse.xcarchive \
             -allowProvisioningUpdates \
-            -disableAutomaticPackageResolution \
             clean archive
 
       - name: Export IPA
