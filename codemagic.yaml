@@ -22,39 +22,14 @@ workflows:
         script: |
           set -e
           PBXPROJ="/Users/builder/clone/ios/TradePulse.xcodeproj/project.pbxproj"
-
-          # Only inject if not already present
           if grep -q "GNStubsImpl" "$PBXPROJ"; then
             echo "GNStubsImpl already in project, skipping"
-            exit 0
+          else
+            echo "Injecting GNStubsImpl.m via xcodeproj gem..."
+            gem install xcodeproj --no-document 2>/dev/null || true
+            ruby /Users/builder/clone/inject_stubs.rb "$PBXPROJ"
+            echo "Injection done"
           fi
-
-          echo "Injecting GNStubsImpl.m into project..."
-
-          # Use ruby to safely edit the pbxproj
-          ruby - "$PBXPROJ" <<'RUBY'
-require 'xcodeproj'
-project = Xcodeproj::Project.open(ARGV[0])
-
-target = project.targets.find { |t| t.name == "TradePulse" }
-raise "Target not found" unless target
-
-group = project.main_group.find_subpath("LeanIOS", false)
-raise "LeanIOS group not found" unless group
-
-# Check if already added
-existing = group.files.find { |f| f.path == "GNStubsImpl.m" }
-unless existing
-  file_ref = group.new_file("GNStubsImpl.m")
-  target.source_build_phase.add_file_reference(file_ref)
-  puts "Added GNStubsImpl.m to project and target sources"
-else
-  puts "GNStubsImpl.m already in group"
-end
-
-project.save
-RUBY
-          echo "Injection complete"
 
       - name: Verify scheme
         script: |
