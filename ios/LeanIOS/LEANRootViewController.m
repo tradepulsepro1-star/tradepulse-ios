@@ -10,7 +10,6 @@
 #import "LEANMenuViewController.h"
 #import "LEANWebViewController.h"
 #import "LEANUtilities.h"
-#import "GNStubs.h"
 
 @interface LEANRootViewController ()
 
@@ -61,6 +60,8 @@
 
 -(void)viewDidLoad
 {
+    // iOS 26 white screen fix — always black background, no white flash
+    self.view.backgroundColor = [UIColor blackColor];
     GoNativeAppConfig *appConfig = [GoNativeAppConfig sharedAppConfig];
     if ([appConfig.iosTheme isEqualToString:@"dark"]) {
         self.view.backgroundColor = [UIColor blackColor];
