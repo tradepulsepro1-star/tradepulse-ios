@@ -12,6 +12,7 @@
 		0A77A9178D61AC21BBF6B3D0 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 208D9B2C8F56314271FBE1A5 /* Settings.bundle */; };
 		0ECDC46C313485A9201642A7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D22A2C8586FC55AA4181D313 /* UIKit.framework */; };
 		0FE0155346E5661200031625 /* GNBackgroundAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = EB37DC30BBA202BDCD2A27D5 /* GNBackgroundAudio.m */; };
+		AA11BB22CC33DD44EE55FF61 /* GNStubsImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF60 /* GNStubsImpl.m */; };
 		10C1C92374D86E673BC7B359 /* LEANWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C0BDDA16E32334E50F20663 /* LEANWebViewController.m */; };
 		1713560D3B7FF79EEF0A42D5 /* LEANLoadingSpinnerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB4C6AB51E91CEAEC3E4AD5 /* LEANLoadingSpinnerManager.m */; };
 		17E257A28B88B8EE82701D57 /* GNSwiftUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48134ECEC524D50479D91820 /* GNSwiftUtilities.swift */; };
@@ -162,6 +163,7 @@
 		23BE19900D40E6DE1FDF4F5A /* WindowsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowsController.swift; sourceTree = "<group>"; };
 		23F9B2A3CEFA0796AC73E637 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		274A66DFC051712F0B671B3E /* GoNativeJSBridgeLibrary.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = GoNativeJSBridgeLibrary.js; sourceTree = "<group>"; };
+		AA11BB22CC33DD44EE55FF60 /* GNStubsImpl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNStubsImpl.m; sourceTree = "<group>"; };
 		2A8DCB3B77A23BE2FB197BC0 /* LEANToolbarManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LEANToolbarManager.m; sourceTree = "<group>"; };
 		2B1B810909D23884DFE136A8 /* MedianIOSTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "MedianIOSTests-Info.plist"; sourceTree = "<group>"; };
 		2BC96C2DA25C9623FBE2A8EA /* localCache.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = localCache.zip; sourceTree = "<group>"; };
@@ -408,6 +410,7 @@
 				5BACCFA38A873B3921CCB365 /* GNRegistrationManager.m */,
 				48134ECEC524D50479D91820 /* GNSwiftUtilities.swift */,
 				274A66DFC051712F0B671B3E /* GoNativeJSBridgeLibrary.js */,
+				AA11BB22CC33DD44EE55FF60 /* GNStubsImpl.m */,
 				DD71E067040302D4118764E2 /* GTMNSString+HTML.m */,
 				107F25331DBE0B7314A2D0DE /* Images.xcassets */,
 				8E94470D4D9DFD7EC1761576 /* iosCustomCSS.css */,
@@ -673,6 +676,7 @@
 				86941957B602BD3A52736F09 /* ContextMenuHandler.swift in Sources */,
 				85C6A2B5F65F443BDE292206 /* CustomMenu.swift in Sources */,
 				0FE0155346E5661200031625 /* GNBackgroundAudio.m in Sources */,
+				AA11BB22CC33DD44EE55FF61 /* GNStubsImpl.m in Sources */,
 				499A080F26C7116F928865DE /* GNConfigPreferences.m in Sources */,
 				5E7B6802A1CE2395421B6F23 /* GNCustomHeaders.m in Sources */,
 				AC52F4CA06CB4D28DC87282A /* GNFileWriterSharer.m in Sources */,
