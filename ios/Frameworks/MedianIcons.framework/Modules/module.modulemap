@@ -1,5 +1,0 @@
-framework module MedianIcons {
-  umbrella header "MedianIcons.h"
-  export *
-  module * { export * }
-}
