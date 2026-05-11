@@ -9,33 +9,30 @@ workflows:
         distribution_type: app_store
         bundle_identifier: net.tradepulsepro
     scripts:
-      - name: Extract source
-        script: |
-          tar -xzf ios_source.tar.gz
-          ls -la ios/
-
       - name: Build and Archive
         script: |
+          cd /Users/builder/clone
+          ls -la ios/
           xcodebuild \
             -workspace ios/TradePulse.xcworkspace \
             -scheme TradePulse \
             -sdk iphoneos \
             -configuration Release \
-            -archivePath $CM_BUILD_DIR/TradePulse.xcarchive \
-            -derivedDataPath $CM_BUILD_DIR/DerivedData_fresh_$(date +%s) \
+            -archivePath /Users/builder/clone/TradePulse.xcarchive \
+            -derivedDataPath /Users/builder/clone/DerivedData_$(date +%s) \
             -allowProvisioningUpdates \
             archive
 
       - name: Export IPA
         script: |
           xcodebuild -exportArchive \
-            -archivePath $CM_BUILD_DIR/TradePulse.xcarchive \
-            -exportOptionsPlist exportOptions.plist \
-            -exportPath $CM_BUILD_DIR/ipa \
+            -archivePath /Users/builder/clone/TradePulse.xcarchive \
+            -exportOptionsPlist /Users/builder/clone/exportOptions.plist \
+            -exportPath /Users/builder/clone/ipa \
             -allowProvisioningUpdates
 
     artifacts:
-      - $CM_BUILD_DIR/ipa/*.ipa
+      - /Users/builder/clone/ipa/*.ipa
 
     publishing:
       app_store_connect:
