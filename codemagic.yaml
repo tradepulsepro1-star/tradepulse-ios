@@ -10,17 +10,16 @@ workflows:
         distribution_type: app_store
         bundle_identifier: net.tradepulsepro
     scripts:
-      - name: Force clean source
+      - name: Extract source
         script: |
-          cd /Users/builder/clone
-          git fetch origin main
-          git reset --hard origin/main
-          git clean -fdx --exclude=".git"
-          git log --oneline -1
+          tar -xzf ios_source.tar.gz
+          ls -la ios/
 
-      - name: Verify scheme
+      - name: Verify scheme and signing
         script: |
           xcodebuild -workspace ios/TradePulse.xcworkspace -list 2>&1 || true
+          grep -E "CODE_SIGN_STYLE|DEVELOPMENT_TEAM|PROVISIONING_PROFILE_SPECIFIER" \
+            ios/TradePulse.xcodeproj/project.pbxproj | sort -u
 
       - name: Build and Archive
         script: |
