@@ -7,10 +7,8 @@
 //
 
 #import "LEANActionManager.h"
-#import <objc/runtime.h>
 #import "LEANUtilities.h"
-#import "GNStubs.h"
-// GonativeIO-Swift.h not needed — CustomMenu removed (GoNative-specific feature)
+#import "GonativeIO-Swift.h"
 
 @implementation LEANActionButtons
 
@@ -32,6 +30,7 @@
 @property NSMutableArray *buttons;
 @property NSMutableArray *actionsData;
 @property (readwrite, assign) NSString *currentSearchTemplateUrl;
+@property CustomMenu *menuView;
 @end
 
 @implementation LEANActionManager
@@ -155,11 +154,7 @@
 }
 
 - (UIButton *)buttonWithIcon:(NSString *)icon {
-    CGFloat iconSz = [self sizeForIcon:icon];
-    UIImageSymbolConfiguration *symCfg = [UIImageSymbolConfiguration configurationWithPointSize:iconSz];
-    UIImage *iconImage = [UIImage systemImageNamed:icon withConfiguration:symCfg];
-    if (!iconImage) iconImage = [UIImage systemImageNamed:@"circle" withConfiguration:symCfg];
-    iconImage = [iconImage imageWithTintColor:[UIColor blackColor] renderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIImage *iconImage = [LEANIcons imageForIconIdentifier:icon size:[self sizeForIcon:icon] color:[UIColor blackColor]];
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     [button setImage:iconImage forState:UIControlStateNormal];
     [button setFrame:CGRectMake(0, 0, 30, 30)];
@@ -247,11 +242,30 @@
 }
 
 - (void)openMenu:(id)sender {
-    // GoNative CustomMenu removed — TradePulse does not use dropdown action menus
+    [self closeMenu];
+    
+    UIButton *button = (UIButton *)sender;
+    NSArray *menu = objc_getAssociatedObject(sender, "menu");
+    
+    UIView *keyWindow = UIApplication.sharedApplication.currentKeyWindow;
+    
+    self.menuView = [[CustomMenu alloc] initWithContainer:keyWindow button:button data:menu onTap:^(NSDictionary *data) {
+        [self closeMenu];
+        
+        NSString *system = data[@"system"];
+        NSString *url = data[@"url"];
+    
+        [self handleAction:system url:url];
+    }];
+    
+    [self.menuView setMenuColor:[UIColor colorNamed:@"navigationBarTintColor"]];
 }
 
 - (void)closeMenu {
-    // no-op — CustomMenu removed
+    if (self.menuView) {
+        [self.menuView removeFromSuperview];
+        self.menuView = nil;
+    }
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection {

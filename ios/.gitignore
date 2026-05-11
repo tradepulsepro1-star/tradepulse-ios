@@ -8,9 +8,9 @@ Pods/
 
 # Tuist
 Derived/
+*.xcodeproj
+*.xcworkspace
+!*.xcworkspace/contents.xcworkspacedata
 .tuist-cache/
 graph.json
 Extensions/
-
-# macOS resource forks
-._*

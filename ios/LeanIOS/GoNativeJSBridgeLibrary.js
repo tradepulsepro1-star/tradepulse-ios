@@ -143,7 +143,7 @@ median.webview = {
         return addCommandCallback("median://webview/getZoom");
     },
     setZoom: function (zoom) {
-        addCommand("median://webview/setZoom", { zoom });
+        return addCommandCallback("median://webview/setZoom", { zoom });
     }
 };
 

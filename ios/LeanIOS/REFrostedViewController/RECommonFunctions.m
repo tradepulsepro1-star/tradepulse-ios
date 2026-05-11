@@ -29,6 +29,18 @@
 
 BOOL REFrostedViewControllerUIKitIsFlatMode(void)
 {
-    // iOS 15.5+ always uses flat (iOS 7+) UI mode
-    return YES;
+    static BOOL isUIKitFlatMode = NO;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        if (floor(NSFoundationVersionNumber) > 993.0) {
+            // If your app is running in legacy mode, tintColor will be nil - else it must be set to some color.
+            if (UIApplication.sharedApplication.currentKeyWindow) {
+                isUIKitFlatMode = [UIApplication.sharedApplication.delegate.window respondsToSelector:@selector(tintColor)];
+            } else {
+                // Possible that we're called early on (e.g. when used in a Storyboard). Adapt and use a temporary window.
+                isUIKitFlatMode = [[UIWindow new] respondsToSelector:@selector(tintColor)];
+            }
+        }
+    });
+    return isUIKitFlatMode;
 }

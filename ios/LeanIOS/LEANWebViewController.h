@@ -12,9 +12,9 @@
 #import "LEANProfilePicker.h"
 @class LEANTabManager;
 
-extern NSString *kLEANWebViewControllerUserStartedLoading;
-extern NSString *kLEANWebViewControllerUserFinishedLoading;
-extern NSString *kLEANWebViewControllerClearPools;
+static NSString *kLEANWebViewControllerUserStartedLoading = @"co.median.ios.WebViewController.started";
+static NSString *kLEANWebViewControllerUserFinishedLoading = @"co.median.ios.WebViewController.finished";
+static NSString *kLEANWebViewControllerClearPools = @"co.median.ios.WebViewController.clearPools";
 
 @interface LEANWebViewController : UIViewController
 @property BOOL checkLoginSignup;

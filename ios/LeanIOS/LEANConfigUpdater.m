@@ -8,7 +8,6 @@
 
 #import "LEANConfigUpdater.h"
 #import "LEANInstallation.h"
-#import "GNStubs.h"
 
 @interface LEANConfigUpdater ()
 

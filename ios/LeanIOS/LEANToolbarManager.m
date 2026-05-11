@@ -9,8 +9,7 @@
 #import "LEANToolbarManager.h"
 #import "LEANWebViewController.h"
 #import "LEANUtilities.h"
-#import "GNStubs.h"
-// GonativeIO-Swift.h removed — all Swift types use GNStubs.h ObjC declarations
+#import "GonativeIO-Swift.h"
 
 @interface LEANToolbarItem : NSObject
 @property BOOL enabled;
@@ -106,11 +105,7 @@
 
 - (UIBarButtonItem *)createButtonWithTitle:(NSString *)title forButton:(NSString *)buttonType andIcon:(NSString *)icon {
     CGFloat imageSize = [LEANUtilities isGlassDesignEnabled] ? 20 : 24;
-    UIImageSymbolConfiguration *symCfgTB = [UIImageSymbolConfiguration configurationWithPointSize:imageSize];
-    UIImage *image = [UIImage systemImageNamed:icon withConfiguration:symCfgTB];
-    if (!image) image = [UIImage systemImageNamed:@"circle" withConfiguration:symCfgTB];
-    UIColor *tintClr = [UIColor colorNamed:@"tintColor"] ?: [UIColor systemBlueColor];
-    image = [image imageWithTintColor:tintClr renderingMode:UIImageRenderingModeAlwaysOriginal];
+    UIImage *image = [LEANIcons imageForIconIdentifier:icon size:imageSize color:[UIColor colorNamed:@"tintColor"]];
     
     UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
     [button setImage:image forState:UIControlStateNormal];

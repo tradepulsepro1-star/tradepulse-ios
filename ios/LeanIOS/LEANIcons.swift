@@ -1,21 +1,18 @@
 //
 //  LEANIcons.swift
-//  TradePulse
+//  GonativeIO
+//
+//  Created by Anuj Sevak on 2021-04-21.
+//  Copyright © 2021 GoNative.io LLC. All rights reserved.
 //
 
 import Foundation
-import UIKit
+import MedianIcons
 
-@objc public class LEANIcons: NSObject {
+@objc class LEANIcons: NSObject {    
     @objc public static let sharedIcons = LEANIcons()
     
     @objc public class func imageForIconIdentifier(_ name: String, size: CGFloat, color: UIColor) -> UIImage? {
-        // Fallback to SF Symbols; return nil if not found
-        let config = UIImage.SymbolConfiguration(pointSize: size)
-        if let img = UIImage(systemName: name, withConfiguration: config) {
-            return img.withTintColor(color, renderingMode: .alwaysOriginal)
-        }
-        return UIImage(systemName: "circle", withConfiguration: config)?
-            .withTintColor(color, renderingMode: .alwaysOriginal)
+        return UIImage.init(iconName: name, size: size, color: color)
     }
 }

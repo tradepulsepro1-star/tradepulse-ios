@@ -12,9 +12,6 @@
 #import <AVFoundation/AVFoundation.h>
 
 #import "LEANWebViewController.h"
-NSString *kLEANWebViewControllerUserStartedLoading = @"co.median.ios.WebViewController.started";
-NSString *kLEANWebViewControllerUserFinishedLoading = @"co.median.ios.WebViewController.finished";
-NSString *kLEANWebViewControllerClearPools = @"co.median.ios.WebViewController.clearPools";
 #import "LEANAppDelegate.h"
 #import "LEANUtilities.h"
 #import "LEANHeaders.h"
@@ -49,7 +46,12 @@ NSString *kLEANWebViewControllerClearPools = @"co.median.ios.WebViewController.c
 #import <AppTrackingTransparency/ATTrackingManager.h>
 #import "GNJSBridgeInterface.h"
 #import "GNLogManager.h"
-#import "GNStubs.h"
+#import <GoNativeCore/GNBridge.h>
+#import <GoNativeCore/GoNativeAppConfig.h>
+#import <GoNativeCore/GNJSBridgeHandler.h>
+#import <GoNativeCore/GNListenerNames.h>
+#import <GoNativeCore/GNNotificationNames.h>
+#import <GoNativeCore/GNUtilities.h>
 
 #define OFFLINE_URL @"http://offline/"
 #define LOCAL_FILE_URL @"http://localFile/"
@@ -136,7 +138,7 @@ NSString *kLEANWebViewControllerClearPools = @"co.median.ios.WebViewController.c
 @property LEANWindowsManager *windowsManager;
 @property LEANPDFManager *pdfManager;
 @property LEANLoadingSpinnerManager *loadingSpinnerManager;
-// WebViewViewportManager removed (GoNative SDK)
+@property WebViewViewportManager *viewportManager;
 
 @property NSNumber* statusBarStyle; // set via native bridge, only works if no navigation bar
 @property IBOutlet NSLayoutConstraint *topGuideConstraint; // modify constant to place content under status bar
@@ -158,11 +160,11 @@ static NSInteger _currentWindows = 0;
 
 + (void)setCurrentWindows:(NSInteger) currentWindows {
     _currentWindows = currentWindows;
-    // WindowsController.windowCountChanged — no-op (GoNative removed)
+    [WindowsController windowCountChanged];
 }
 
 - (void)updateWindowsController {
-    // WindowsController.windowCountChanged — no-op (GoNative removed)
+    [WindowsController windowCountChanged];
 }
 
 - (void)viewDidLoad
@@ -288,7 +290,7 @@ static NSInteger _currentWindows = 0;
     self.registrationManager = [GNRegistrationManager sharedManager];
     self.pdfManager = [LEANPDFManager shared];
     self.loadingSpinnerManager = [[LEANLoadingSpinnerManager alloc] initWithVc:self];
-    // viewportManager removed (GoNative SDK)
+    self.viewportManager = [WebViewViewportManager shared];
     
     // we will always be loading a page at launch, hide webview here to fix a white flash for dark themed apps
     [self hideWebview];
@@ -312,7 +314,7 @@ static NSInteger _currentWindows = 0;
     [self updateStatusBarStyle:appConfig.iosStatusBarStyle];
     [self updateStatusBarOverlay:appConfig.iosEnableOverlayInStatusBar];
     
-    // bridge.runnerDidLoad — no-op
+    [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge runnerDidLoad:self];
 }
 
 - (BOOL)canBecomeFirstResponder {
@@ -372,7 +374,7 @@ static NSInteger _currentWindows = 0;
             [newQueryItems addObjectsFromArray:components.queryItems];
         }
         
-        NSArray *addedQueryItems = @[]; // bridge.getInitialUrlQueryItems removed
+        NSArray *addedQueryItems = [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge getInitialUrlQueryItems];
         [newQueryItems addObjectsFromArray:addedQueryItems];
         
         components.queryItems = newQueryItems;
@@ -532,7 +534,7 @@ static NSInteger _currentWindows = 0;
     
     [self addScriptMessageHandlersInWebView:self.wkWebview];
     
-    // bridge.runnerWillAppear — no-op
+    [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge runnerWillAppear:self];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -544,7 +546,7 @@ static NSInteger _currentWindows = 0;
     }
     [super viewWillDisappear:animated];
     
-    // bridge.runnerWillDisappear — no-op
+    [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge runnerWillDisappear:self];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
@@ -680,7 +682,17 @@ static NSInteger _currentWindows = 0;
         self.isShowingTopNavBar = title != nil;
         
         if ([title isKindOfClass:[NSString class]] && title.length > 0) {
-            self.navigationItem.title = title; // LEANLiquidTitleView removed (iOS 26 glass — not needed)
+            if (@available(iOS 26.0, *)) {
+                if ([LEANUtilities isGlassDesignEnabled]) {
+                    LEANLiquidTitleView *titleView = [LEANLiquidTitleView new];
+                    titleView.text = title;
+                    self.navigationItem.titleView = titleView;
+                } else {
+                    self.navigationItem.title = title;
+                }
+            } else {
+                self.navigationItem.title = title;
+            }
         }
     }
     
@@ -756,13 +768,7 @@ static NSInteger _currentWindows = 0;
 }
 
 - (void)applyStatusBarOverlay {
-    CGFloat statusBarHeight = 0;
-    if (@available(iOS 13.0, *)) {
-        UIWindow *window = [UIApplication sharedApplication].windows.firstObject;
-        statusBarHeight = window ? window.safeAreaInsets.top : 20.0;
-    } else {
-        statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
-    }
+    CGFloat statusBarHeight = [UIApplication sharedApplication].currentStatusBarFrame.size.height;
     
     // Top guide is equal to super view (below top navbar)
     if ([LEANUtilities isGlassDesignEnabled]) {
@@ -1267,7 +1273,7 @@ static NSInteger _currentWindows = 0;
     BOOL openShareDialog = [navigationAction.request.URL.scheme isEqualToString:@"data"] && ![LEANUtilities isOnePixelImage:navigationAction.request.URL];
     if (@available(iOS 15.0, *)) {
         if (navigationAction.shouldPerformDownload) {
-            openShareDialog = NO; // bridge.shouldDownloadUrl removed
+            openShareDialog = [((LEANAppDelegate *)UIApplication.sharedApplication.delegate).bridge webView:webView shouldDownloadUrl:navigationAction.request.URL];
         }
     }
     
@@ -1310,7 +1316,7 @@ static NSInteger _currentWindows = 0;
         return;
     }
     
-    // bridge.handleURL — no-op
+    [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge webView:webView handleURL:navigationResponse.response.URL];
     
     if ([@"application/vnd.apple.pkpass" isEqualToString:navigationResponse.response.MIMEType]) {
         decisionHandler(WKNavigationResponsePolicyCancel);
@@ -1432,7 +1438,9 @@ static NSInteger _currentWindows = 0;
 }
 
 -(void)webView:(WKWebView *)webView contextMenuConfigurationForElement:(WKContextMenuElementInfo *)elementInfo completionHandler:(void (^)(UIContextMenuConfiguration * _Nullable))completionHandler {
-    UIContextMenuConfiguration *config = nil; // ContextMenuHandler removed (GoNative)
+    UIContextMenuConfiguration *config = [ContextMenuHandler createConfigurationWithUrl:elementInfo.linkURL shareAction:^{
+        [self.documentSharer shareUrl:elementInfo.linkURL fromView:webView];
+    }];
     completionHandler(config);
 }
 
@@ -1457,7 +1465,9 @@ static NSInteger _currentWindows = 0;
         if([data[@"data"] isKindOfClass:[NSDictionary class]]) query = data[@"data"];
     } else return;
     
-    // bridge.shouldLoadRequest removed — always allow
+    if (![((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge runner:self shouldLoadRequestWithURL:url withData:query]) {
+        return;
+    }
     
     [[GNJSBridgeHandler shared] handleUrl:url query:query wvc:(id)self];
 }
@@ -1512,7 +1522,7 @@ static NSInteger _currentWindows = 0;
                 [self.wkWebview.configuration.userContentController addUserScript:GNJSBridgeLibrary];
                 
                 // load plugins' js script
-                // bridge.loadUserScripts — no-op
+                [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge loadUserScriptsForContentController:self.wkWebview.configuration.userContentController];
             }
         } else {
             NSString *emptyJSBridgeScript = @"gonative = null";
@@ -1932,7 +1942,7 @@ static NSInteger _currentWindows = 0;
         [self addPullToRefresh];
     }
     
-    // bridge.switchToWebView — no-op
+    [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge switchToWebView:newView withRunner:self];
 }
 
 // To detect single-page app navigation in WKWebView
@@ -2003,7 +2013,7 @@ static NSInteger _currentWindows = 0;
 {
     [self didFinishLoad];
     
-    // bridge.didFinishNavigation — no-op
+    [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge webView:webView didFinishNavigation:navigation withRunner:self];
 }
 
 - (void)didFinishLoad
@@ -2411,7 +2421,7 @@ static NSInteger _currentWindows = 0;
 
 - (void)hideWebview
 {
-    // bridge.hideWebViewWithRunner — no-op
+    [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge hideWebViewWithRunner:self];
     
     if ([GoNativeAppConfig sharedAppConfig].disableAnimations) return;
     
@@ -2703,21 +2713,14 @@ static NSInteger _currentWindows = 0;
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
     }];
     
-    // bridge.willTransitionToSize — no-op
+    [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge runner:self willTransitionToSize:size withTransitionCoordinator:coordinator];
 }
 
 - (void)viewWillLayoutSubviews
 {
     if (self.statusBarBackground) {
         // fix sizing (usually because of rotation) when navigation bar is hidden
-        CGSize statusSize = CGSizeZero;
-        if (@available(iOS 13.0, *)) {
-            UIWindow *window = [UIApplication sharedApplication].windows.firstObject;
-            CGFloat top = window ? window.safeAreaInsets.top : 20.0;
-            statusSize = CGSizeMake(UIScreen.mainScreen.bounds.size.width, top);
-        } else {
-            statusSize = [UIApplication sharedApplication].statusBarFrame.size;
-        }
+        CGSize statusSize = [UIApplication sharedApplication].currentStatusBarFrame.size;
         CGFloat height = MIN(statusSize.height, statusSize.width);
         // fix for double height status bar on non-iPhoneX
         if (height == 40) {

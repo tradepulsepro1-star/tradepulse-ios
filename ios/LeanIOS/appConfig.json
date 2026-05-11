@@ -29,7 +29,7 @@
     "forceSessionCookieExpiry": 0,
     "iosCustomHeaders": {},
     "androidCustomHeaders": {},
-    "version": 11
+    "version": 13
   },
   "navigation": {
     "androidPullToRefresh": false,

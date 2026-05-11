@@ -10,8 +10,7 @@ import UIKit
 
 @objc
 public class GNSwiftUtilities: NSObject {
-    @objc(deviceTokenWithData:)
-    public class func deviceToken(data: Data) -> String {
+    @objc class func deviceToken(data: Data) -> String {
         return data.map { String(format: "%02x", $0) }.joined()
     }
 }

@@ -20,7 +20,7 @@ let project = Project(
         developmentRegion: "en"
     ),
     packages: [
-        .remote(url: "median.go-native-core", requirement: .exact("3.0.6")),
+        .remote(url: "median.go-native-core", requirement: .exact("3.0.7")),
         .remote(url: "median.median-icons", requirement: .upToNextMajor(from: "1.1.4")),
         .remote(url: "https://github.com/ZipArchive/ZipArchive", requirement: .upToNextMajor(from: "2.6.0")),
         // Active plugins are injected here by the builder at build time.

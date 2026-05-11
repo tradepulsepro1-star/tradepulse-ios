@@ -8,7 +8,7 @@
 
 #import "LEANWindowsManager.h"
 #import <SafariServices/SafariServices.h>
-// GonativeIO-Swift.h removed — all Swift types use GNStubs.h ObjC declarations
+#import "GonativeIO-Swift.h"
 
 @interface LEANWindowsManager()<SFSafariViewControllerDelegate>
 @property (weak, nonatomic) LEANWebViewController *wvc;
