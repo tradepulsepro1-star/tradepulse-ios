@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AA0002000000000000000001 /* GoNativeAppConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0001000000000000000001 /* GoNativeAppConfig.m */; };
+		AA0002000000000000000002 /* GNBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0001000000000000000002 /* GNBridge.m */; };
+		AA0002000000000000000003 /* GNEventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0001000000000000000003 /* GNEventEmitter.m */; };
+		AA0002000000000000000004 /* GNJSBridgeHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0001000000000000000004 /* GNJSBridgeHandler.m */; };
+		AA0002000000000000000005 /* GNUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = AA0001000000000000000005 /* GNUtilities.m */; };
 		03DCEC47A019A7B7B5EB70C1 /* BlobDownloader.js in Resources */ = {isa = PBXBuildFile; fileRef = 79E6629D8E289633A0B9D96A /* BlobDownloader.js */; };
 		03EAF5B8C06DA3FE9BD7A513 /* iosCustomJS.js in Resources */ = {isa = PBXBuildFile; fileRef = CD8C7456D8213779B99FEDC8 /* iosCustomJS.js */; };
 		0A77A9178D61AC21BBF6B3D0 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 208D9B2C8F56314271FBE1A5 /* Settings.bundle */; };
@@ -146,6 +151,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		AA0001000000000000000001 /* GoNativeAppConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoNativeCore/GoNativeAppConfig.m; sourceTree = "<group>"; };
+		AA0001000000000000000002 /* GNBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoNativeCore/GNBridge.m; sourceTree = "<group>"; };
+		AA0001000000000000000003 /* GNEventEmitter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoNativeCore/GNEventEmitter.m; sourceTree = "<group>"; };
+		AA0001000000000000000004 /* GNJSBridgeHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoNativeCore/GNJSBridgeHandler.m; sourceTree = "<group>"; };
+		AA0001000000000000000005 /* GNUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoNativeCore/GNUtilities.m; sourceTree = "<group>"; };
 		00CF3BE140CCD9826F1ECF1E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		0B078ACA379A031225A8CE00 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		107F25331DBE0B7314A2D0DE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -304,7 +314,7 @@
 				A78B5B33987BD083751CD72A /* Social.framework in Frameworks */,
 				FB307D2FE0FFA4DAB8DAF1FF /* SystemConfiguration.framework in Frameworks */,
 				0ECDC46C313485A9201642A7 /* UIKit.framework in Frameworks */,
-				52F53935158642DCC04A38EE /* ZipArchive in Frameworks */,
+								52F53935158642DCC04A38EE /* ZipArchive in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -407,6 +417,11 @@
 				4C5A338303E726E16AA835F2 /* GNLogManager.m */,
 				5BACCFA38A873B3921CCB365 /* GNRegistrationManager.m */,
 				48134ECEC524D50479D91820 /* GNSwiftUtilities.swift */,
+				AA0001000000000000000001 /* GoNativeAppConfig.m */,
+				AA0001000000000000000002 /* GNBridge.m */,
+				AA0001000000000000000003 /* GNEventEmitter.m */,
+				AA0001000000000000000004 /* GNJSBridgeHandler.m */,
+				AA0001000000000000000005 /* GNUtilities.m */,
 				274A66DFC051712F0B671B3E /* GoNativeJSBridgeLibrary.js */,
 				DD71E067040302D4118764E2 /* GTMNSString+HTML.m */,
 				107F25331DBE0B7314A2D0DE /* Images.xcassets */,
@@ -841,12 +856,11 @@
 				BUILD_SETTINGS_APP_NAME = TradePulse;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Project.entitlements;
-				CODE_SIGN_IDENTITY = "Apple Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 86;
 				DEVELOPMENT_LANGUAGE = en;
-				DEVELOPMENT_TEAM = 5L79BW988P;
-				PROVISIONING_PROFILE_SPECIFIER = "trade pulse";
+				DEVELOPMENT_TEAM = "";
 				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
@@ -1111,6 +1125,8 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		};
+		};
 		BBE8B5DE88C7590D99030DC2 /* XCRemoteSwiftPackageReference "ZipArchive" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ZipArchive/ZipArchive";
@@ -1130,4 +1146,3 @@
 	};
 	rootObject = 6AC570A2E3819B471CA27E39 /* Project object */;
 }
-
