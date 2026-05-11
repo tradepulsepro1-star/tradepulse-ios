@@ -5,50 +5,39 @@ workflows:
     integrations:
       app_store_connect: Anthony Rosa
     environment:
-      xcode: latest
       ios_signing:
         distribution_type: app_store
         bundle_identifier: net.tradepulsepro
     scripts:
-      - name: Verify scheme and signing
+      - name: Extract source
         script: |
-          xcodebuild -workspace ios/TradePulse.xcworkspace -list 2>&1 || true
-          grep -E "CODE_SIGN_STYLE|DEVELOPMENT_TEAM|PROVISIONING_PROFILE_SPECIFIER" \
-            ios/TradePulse.xcodeproj/project.pbxproj | sort -u
+          tar -xzf ios_source.tar.gz
+          ls -la ios/
 
       - name: Build and Archive
         script: |
-          set -e
-          ARCHIVE_PATH="$CM_BUILD_DIR/TradePulse.xcarchive"
-          DERIVED_DATA="$CM_BUILD_DIR/DerivedData_$(date +%s)"
-
           xcodebuild \
             -workspace ios/TradePulse.xcworkspace \
             -scheme TradePulse \
             -sdk iphoneos \
             -configuration Release \
-            -archivePath "$ARCHIVE_PATH" \
-            -derivedDataPath "$DERIVED_DATA" \
+            -archivePath $CM_BUILD_DIR/TradePulse.xcarchive \
+            -derivedDataPath $CM_BUILD_DIR/DerivedData_fresh_$(date +%s) \
             -allowProvisioningUpdates \
-            archive 2>&1 | tee "$CM_BUILD_DIR/build.log"
-
-          [ -d "$ARCHIVE_PATH" ] && echo "ARCHIVE OK" || { echo "ARCHIVE MISSING"; exit 1; }
+            archive
 
       - name: Export IPA
         script: |
-          set -e
           xcodebuild -exportArchive \
-            -archivePath "$CM_BUILD_DIR/TradePulse.xcarchive" \
+            -archivePath $CM_BUILD_DIR/TradePulse.xcarchive \
             -exportOptionsPlist exportOptions.plist \
-            -exportPath "$CM_BUILD_DIR/ipa" \
+            -exportPath $CM_BUILD_DIR/ipa \
             -allowProvisioningUpdates
 
     artifacts:
       - $CM_BUILD_DIR/ipa/*.ipa
-      - $CM_BUILD_DIR/build.log
 
     publishing:
       app_store_connect:
         auth: integration
         submit_to_testflight: true
-        submit_to_app_store: false
