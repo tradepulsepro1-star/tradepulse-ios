@@ -6,7 +6,7 @@
 
 @implementation GoNativeAppConfig
 
-+ (instancetype)sharedAppConfig {
++ (instancetype)sharedConfig {
     static GoNativeAppConfig *instance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
