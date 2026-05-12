@@ -10,7 +10,7 @@ import Foundation
 
 @objc public class ContextMenuHandler: NSObject {
     @objc public static func createConfigurationWith(url: URL, shareAction: @escaping () -> Void) -> UIContextMenuConfiguration? {
-        let appConfig = GoNativeAppConfig.sharedAppConfig()
+        let appConfig = GoNativeAppConfig.sharedConfig()
         
         if !appConfig.contextMenuEnabled || url.host == nil {
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
@@ -20,21 +20,21 @@ import Foundation
         
         var actionsList = [UIAction]()
         
-        if appConfig.contextMenuLinkActions.contains("copyLink") {
+        if (appConfig.contextMenuLinkActions as? [String])?.contains("copyLink") == true {
             let action = UIAction(title: NSLocalizedString("button-copy-link", comment: ""), image: UIImage(systemName: "doc.on.doc"), identifier: nil) { action in
                 UIPasteboard.general.string = url.absoluteString
             }
             actionsList.append(action)
         }
 
-        if appConfig.contextMenuLinkActions.contains("openExternal") {
+        if (appConfig.contextMenuLinkActions as? [String])?.contains("openExternal") == true {
             let action = UIAction(title: NSLocalizedString("button-open-external", comment: ""), image: UIImage(systemName: "safari"), identifier: nil) { action in
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
             actionsList.append(action)
         }
 
-        if appConfig.contextMenuLinkActions.contains("shareExternal") {
+        if (appConfig.contextMenuLinkActions as? [String])?.contains("shareExternal") == true {
             let action = UIAction(title: NSLocalizedString("button-share-link", comment: ""), image: UIImage(systemName: "square.and.arrow.up"), identifier: nil) { action in
                 shareAction()
             }
