@@ -777,9 +777,7 @@ static NSInteger _currentWindows = 0;
     if (@available(iOS 13.0, *)) {
         UIWindowScene *scene = (UIWindowScene *)[[[UIApplication sharedApplication] connectedScenes] anyObject];
         statusBarHeight = scene.statusBarManager.statusBarFrame.size.height;
-    } else {
-        statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
-    }
+}
     
     // Top guide is equal to super view (below top navbar)
     if ([LEANUtilities isGlassDesignEnabled]) {
@@ -2735,9 +2733,7 @@ static NSInteger _currentWindows = 0;
         if (@available(iOS 13.0, *)) {
             UIWindowScene *scene = (UIWindowScene *)[[[UIApplication sharedApplication] connectedScenes] anyObject];
             statusSize = scene.statusBarManager.statusBarFrame.size;
-        } else {
-            statusSize = [UIApplication sharedApplication].statusBarFrame.size;
-        }
+}
         CGFloat height = MIN(statusSize.height, statusSize.width);
         // fix for double height status bar on non-iPhoneX
         if (height == 40) {
