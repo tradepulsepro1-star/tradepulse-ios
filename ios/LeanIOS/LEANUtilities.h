@@ -42,4 +42,9 @@
 + (void)downloadUrl:(NSURL *)url filename:(NSString *)filename directory:(NSURL *)directory completion:(void (^)(NSURL *fileUrl))completion;
 + (BOOL)isOnePixelImage:(NSURL *)url;
 + (BOOL)isGlassDesignEnabled;
+
+@interface UIApplication (GNKeyWindow)
+@property (nonatomic, readonly, nullable) UIWindow *gn_keyWindow;
+@end
+
 @end
