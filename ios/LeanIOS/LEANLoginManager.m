@@ -11,6 +11,10 @@
 #import "NSURL+LEANUtilities.h"
 #import "LEANUrlInspector.h"
 #import <WebKit/WebKit.h>
+NSString * const kLEANLoginManagerNotificationName = @"co.median.ios.LoginManagerNotification";
+NSString * const kLEANLoginManagerStatusChangedNotification = @"co.median.ios.LoginManager.statusChanged";
+
+
 
 @interface LEANLoginManager () <NSURLSessionDataDelegate, WKNavigationDelegate>
 @property BOOL isChecking;
