@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) NSNumber *interactiveDelay;
 @property (nonatomic, strong, nullable) NSNumber *forceSessionCookieExpiry;
 @property (nonatomic, strong, nullable) NSNumber *iosConnectionOfflineTime;
-@property (nonatomic, assign) double forceViewportWidth;
+@property (nonatomic, strong, nullable) NSNumber *forceViewportWidth;
 @property (nonatomic, strong, nullable) NSString *stringViewport;
 
 // iOS appearance
@@ -92,6 +92,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) NSURL *signupURL;
 @property (nonatomic, strong, nullable) NSArray *tabMenuIDs;
 @property (nonatomic, strong, nullable) NSDictionary *menus;
+
+@property (nonatomic, strong, nullable) NSString *userAgent;
+@property (nonatomic, strong, nullable) NSNumber *initialWebviewZoom;
 
 @end
 
