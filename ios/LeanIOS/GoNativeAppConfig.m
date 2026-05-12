@@ -42,7 +42,7 @@
         _interactiveDelay = 0.0;
         _forceSessionCookieExpiry = 0.0;
         _iosConnectionOfflineTime = 10.0;
-        _forceViewportWidth = 0.0;
+        _forceViewportWidth = @(0.0);
         _contextMenuEnabled = NO;
         _contextMenuLinkActions = @[];
         _customHeaders = @{};
