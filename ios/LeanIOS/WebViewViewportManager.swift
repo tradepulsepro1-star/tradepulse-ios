@@ -6,7 +6,6 @@
 //  Copyright © 2026 GoNative.io LLC. All rights reserved.
 //
 
-import GoNativeCore
 import WebKit
 
 @objc final class WebViewViewportManager: NSObject {

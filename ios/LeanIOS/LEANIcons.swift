@@ -1,18 +1,14 @@
 //
-//  LEANIcons.swift
-//  GonativeIO
+//  LEANIcons.swift — MedianIcons stub (private SPM removed)
 //
-//  Created by Anuj Sevak on 2021-04-21.
-//  Copyright © 2021 GoNative.io LLC. All rights reserved.
-//
-
 import Foundation
-import MedianIcons
+import UIKit
 
-@objc class LEANIcons: NSObject {    
+@objc class LEANIcons: NSObject {
     @objc public static let sharedIcons = LEANIcons()
-    
+
     @objc public class func imageForIconIdentifier(_ name: String, size: CGFloat, color: UIColor) -> UIImage? {
-        return UIImage.init(iconName: name, size: size, color: color)
+        // MedianIcons package removed — return nil gracefully
+        return nil
     }
 }

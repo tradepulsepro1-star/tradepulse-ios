@@ -7,7 +7,6 @@
 //
 
 import Foundation
-import GoNativeCore
 
 @objc public class ContextMenuHandler: NSObject {
     @objc public static func createConfigurationWith(url: URL, shareAction: @escaping () -> Void) -> UIContextMenuConfiguration? {
