@@ -12,8 +12,9 @@ workflows:
       - name: Build and Archive
         script: |
           cd /Users/builder/clone
-          echo "=== Contents ==="
-          ls -la ios/
+          echo "=== Listing schemes ==="
+          xcodebuild -workspace ios/TradePulse.xcworkspace -list
+          echo "=== Archiving ==="
           xcodebuild \
             -workspace ios/TradePulse.xcworkspace \
             -scheme TradePulse \
