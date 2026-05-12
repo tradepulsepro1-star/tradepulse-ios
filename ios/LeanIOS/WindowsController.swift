@@ -15,7 +15,17 @@ import Foundation
             return
         }
         
-        if let rootViewController = UIApplication.shared.windows.first?.rootViewController as? LEANRootViewController,
+        let keyWindow: UIWindow?
+        if #available(iOS 13.0, *) {
+            keyWindow = UIApplication.shared.connectedScenes
+                .compactMap { $0 as? UIWindowScene }
+                .flatMap { $0.windows }
+                .first
+        } else {
+            keyWindow = UIApplication.shared.keyWindow
+        }
+        
+        if let rootViewController = keyWindow?.rootViewController as? LEANRootViewController,
            let navigationController = rootViewController.contentViewController as? UINavigationController {
             var viewControllers = navigationController.viewControllers
             let removeTillIndex = LEANWebViewController.currentWindows - appConfig.maxWindows
