@@ -10,7 +10,7 @@ import Foundation
 
 @objc public class ContextMenuHandler: NSObject {
     @objc public static func createConfigurationWith(url: URL, shareAction: @escaping () -> Void) -> UIContextMenuConfiguration? {
-        let appConfig = GoNativeAppConfig.sharedConfig()
+        let appConfig = GoNativeAppConfig.instance
         
         if !appConfig.contextMenuEnabled || url.host == nil {
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ in
