@@ -52,6 +52,11 @@
 #import "GNListenerNames.h"
 #import "GNNotificationNames.h"
 #import "GNUtilities.h"
+NSString * const kLEANWebViewControllerUserStartedLoading = @"co.median.ios.WebViewController.started";
+NSString * const kLEANWebViewControllerUserFinishedLoading = @"co.median.ios.WebViewController.finished";
+NSString * const kLEANWebViewControllerClearPools = @"co.median.ios.WebViewController.clearPools";
+
+
 
 #define OFFLINE_URL @"http://offline/"
 #define LOCAL_FILE_URL @"http://localFile/"
