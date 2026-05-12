@@ -10,6 +10,7 @@
 #import <objc/runtime.h>
 #import <UIKit/UIKit.h>
 #import "GonativeIO-Swift.h"
+#import "LEANUtilities.h"
 
 @interface LEANKeyboardManager()
 @property Class noInputAccessoryViewClass;
@@ -41,7 +42,7 @@
         return;
     }
     
-    [UIApplication.sharedApplication.currentKeyWindow endEditing:YES];
+    [UIApplication.sharedApplication.gn_keyWindow endEditing:YES];
     
     if (!visible) {
         self.noInputAccessoryViewClass = self.noInputAccessoryView.class;
