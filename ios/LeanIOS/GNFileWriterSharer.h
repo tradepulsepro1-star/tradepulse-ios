@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-static NSString * GNFileWriterSharerName = @"fileWriterSharer";
+extern NSString * const GNFileWriterSharerName;
 static NSUInteger GNFileWriterSharerMaxSize = 1024 * 1024 * 1024; // 1 gigabyte
 
 
