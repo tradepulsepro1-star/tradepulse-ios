@@ -46,12 +46,12 @@
 #import <AppTrackingTransparency/ATTrackingManager.h>
 #import "GNJSBridgeInterface.h"
 #import "GNLogManager.h"
-#import <GoNativeCore/GNBridge.h>
-#import <GoNativeCore/GoNativeAppConfig.h>
-#import <GoNativeCore/GNJSBridgeHandler.h>
-#import <GoNativeCore/GNListenerNames.h>
-#import <GoNativeCore/GNNotificationNames.h>
-#import <GoNativeCore/GNUtilities.h>
+#import "GNBridge.h"
+#import "GoNativeAppConfig.h"
+#import "GNJSBridgeHandler.h"
+#import "GNListenerNames.h"
+#import "GNNotificationNames.h"
+#import "GNUtilities.h"
 
 #define OFFLINE_URL @"http://offline/"
 #define LOCAL_FILE_URL @"http://localFile/"
