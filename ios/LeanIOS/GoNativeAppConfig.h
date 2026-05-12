@@ -133,6 +133,16 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong, nullable) NSDictionary *customHeaders;
 @property (nonatomic, copy, nullable) id configError;
 
+@// Sidebar helper
+- (BOOL)shouldShowSidebarForUrl:(nullable NSString *)url;
+
+
+// Additional properties used in LeanIOS
+@property (nonatomic, assign) BOOL allowsBackForwardNavigationGestures;
+@property (nonatomic, copy, nullable) NSString *currentMenuID;
+@property (nonatomic, strong, nullable) UIFont *font;
+@property (nonatomic, strong, nullable) NSArray *menuItems;
+
 // Regex rules
 @property (nonatomic, strong, nullable) NSArray<NSDictionary *> *regexRules;
 - (void)initializeRegexRules:(NSArray<NSDictionary *> * _Nullable * _Nullable)outRules;
