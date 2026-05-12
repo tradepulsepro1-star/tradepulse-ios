@@ -21,3 +21,6 @@ Extensions/
 !*.xcworkspace/xcshareddata/swiftpm/Package.resolved
 !*.xcworkspace/xcshareddata/xcschemes/
 !*.xcworkspace/xcshareddata/xcschemes/*.xcscheme
+
+# macOS AppleDouble metadata files
+._*
