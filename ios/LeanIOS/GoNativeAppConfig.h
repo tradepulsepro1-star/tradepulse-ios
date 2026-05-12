@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface GoNativeAppConfig : NSObject
 
 // Singleton accessors (both ObjC and Swift styles)
-+ (instancetype)sharedAppConfig;
++ (instancetype)sharedConfig;
 
 // App identity
 @property (nonatomic, strong, nullable) NSString *appName;
