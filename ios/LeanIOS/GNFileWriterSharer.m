@@ -9,6 +9,9 @@
 #import "GNFileWriterSharer.h"
 #import "LEANPDFManager.h"
 #import "LEANUtilities.h"
+NSString * const GNFileWriterSharerName = @"fileWriterSharer";
+
+
 
 @interface GNFileWriterSharerFileInfo : NSObject
 @property NSString *identifier;
