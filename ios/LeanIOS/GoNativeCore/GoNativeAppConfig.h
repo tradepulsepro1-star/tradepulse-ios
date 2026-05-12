@@ -13,6 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface GoNativeAppConfig : NSObject
 
 // Singleton accessors (both ObjC and Swift styles)
+// ObjC singleton accessor (Swift uses .instance class property instead)
++ (instancetype)sharedAppConfig NS_SWIFT_UNAVAILABLE("Use GoNativeAppConfig.instance in Swift");
 @property (class, nonatomic, readonly) GoNativeAppConfig *instance;
 
 // App identity
