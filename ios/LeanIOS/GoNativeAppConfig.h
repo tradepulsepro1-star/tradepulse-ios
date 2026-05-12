@@ -14,7 +14,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Singleton accessors (both ObjC and Swift styles)
 + (instancetype)sharedAppConfig;
-+ (instancetype)shared;
 
 // App identity
 @property (nonatomic, strong, nullable) NSString *appName;
