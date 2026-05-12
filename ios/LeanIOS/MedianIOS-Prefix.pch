@@ -15,4 +15,5 @@
     #import <Foundation/Foundation.h>
 #endif
 
-#import <GoNativeCore/GoNativeAppConfig.h>
+// Use local stub instead of private GoNativeCore SPM framework
+#import "GoNativeAppConfig.h"
