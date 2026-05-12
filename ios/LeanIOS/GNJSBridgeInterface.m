@@ -9,6 +9,9 @@
 #import "GNJSBridgeInterface.h"
 #import "GonativeIO-Swift.h"
 #import <Foundation/Foundation.h>
+NSString * const GNJSBridgeName = @"JSBridge";
+
+
 
 @implementation GNJSBridgeInterface : NSObject
 
