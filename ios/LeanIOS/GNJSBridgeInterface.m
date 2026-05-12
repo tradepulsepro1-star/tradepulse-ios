@@ -8,6 +8,7 @@
 
 #import "GNJSBridgeInterface.h"
 #import "GonativeIO-Swift.h"
+#import "LEANUtilities.h"
 #import <Foundation/Foundation.h>
 NSString * const GNJSBridgeName = @"JSBridge";
 
@@ -18,7 +19,7 @@ NSString * const GNJSBridgeName = @"JSBridge";
 - (LEANWebViewController *)webViewController
 {
     // Get current webview controller
-    UIViewController *topController = [UIApplication sharedApplication].currentKeyWindow.rootViewController;
+    UIViewController *topController = [UIApplication sharedApplication].gn_keyWindow.rootViewController;
 
     while (topController.presentedViewController && ![topController.presentedViewController isKindOfClass:[UIAlertController class]]) {
         topController = topController.presentedViewController;
