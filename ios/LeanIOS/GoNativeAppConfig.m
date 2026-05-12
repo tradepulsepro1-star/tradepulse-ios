@@ -15,9 +15,6 @@
     return instance;
 }
 
-+ (instancetype)shared {
-    return [GoNativeAppConfig sharedAppConfig];
-}
 
 - (instancetype)init {
     self = [super init];
