@@ -929,3 +929,23 @@
 }
 
 @end
+
+@implementation UIApplication (GNKeyWindow)
+- (nullable UIWindow *)gn_keyWindow {
+    for (UIScene *scene in self.connectedScenes) {
+        if (scene.activationState == UISceneActivationStateForegroundActive) {
+            UIWindowScene *windowScene = (UIWindowScene *)scene;
+            if (windowScene.keyWindow) {
+                return windowScene.keyWindow;
+            }
+        }
+    }
+    // Fallback: any foreground window
+    for (UIScene *scene in self.connectedScenes) {
+        UIWindowScene *windowScene = (UIWindowScene *)scene;
+        if (windowScene.keyWindow) return windowScene.keyWindow;
+    }
+    return nil;
+}
+@end
+
