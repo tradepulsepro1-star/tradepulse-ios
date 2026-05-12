@@ -12,6 +12,7 @@ workflows:
       - name: Build and Archive
         script: |
           cd /Users/builder/clone
+          echo "=== Contents ==="
           ls -la ios/
           xcodebuild \
             -workspace ios/TradePulse.xcworkspace \
@@ -19,8 +20,10 @@ workflows:
             -sdk iphoneos \
             -configuration Release \
             -archivePath /Users/builder/clone/TradePulse.xcarchive \
-            -derivedDataPath /Users/builder/clone/DerivedData_$(date +%s) \
+            -derivedDataPath /Users/builder/clone/DerivedData_fresh_$(date +%s) \
             -allowProvisioningUpdates \
+            DEVELOPMENT_TEAM=5L79BW988P \
+            CODE_SIGN_STYLE=Manual \
             archive
 
       - name: Export IPA
