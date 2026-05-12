@@ -1,44 +1,21 @@
-// GonativeIO-Swift.h — Stub replacing Xcode-generated Swift-ObjC bridge
+// GonativeIO-Swift.h — Stub for private GoNativeCore/Median Swift types
+// NOTE: Swift @objc classes (WebViewViewportManager, WindowsController, ContextMenuHandler)
+// are declared by Xcode at build time from Swift source files — do NOT redeclare them here.
+// This stub only provides types that came from the private Median SPM package.
 
 #ifndef GonativeIO_Swift_h
 #define GonativeIO_Swift_h
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import <WebKit/WebKit.h>
-
-// Define Swift interop macros if not already defined
-#ifndef SWIFT_CLASS
-#define SWIFT_CLASS(SWIFT_NAME)
-#endif
-#ifndef SWIFT_PROTOCOL
-#define SWIFT_PROTOCOL(SWIFT_NAME)
-#endif
 
 NS_ASSUME_NONNULL_BEGIN
 
-/// Protocol for native plugin controllers (splash screen, loading spinner, etc.)
+/// GNController protocol — from private Median SPM package (go-native-core)
+/// Used by LEANLaunchScreenManager, LEANLoadingSpinnerManager
 @protocol GNController <NSObject>
 @optional
 - (void)triggerEvent:(NSString *)eventName;
-@end
-
-/// WebViewViewportManager — stub for Swift class exposed to ObjC
-@interface WebViewViewportManager : NSObject
-@property (class, nonatomic, readonly) WebViewViewportManager *shared;
-- (void)handleUrl:(NSURL *)url query:(NSDictionary *)query webView:(WKWebView * _Nullable)webView completion:(void (^)(NSDictionary *))completion;
-- (void)setViewportWithScale:(NSNumber * _Nullable)scale width:(NSNumber * _Nullable)width webView:(WKWebView * _Nullable)webView;
-- (void)getViewportScaleWithWebView:(WKWebView * _Nullable)webView completion:(void (^)(NSDictionary *))completion;
-@end
-
-/// WindowsController — stub for Swift class exposed to ObjC
-@interface WindowsController : NSObject
-+ (void)windowCountChanged;
-@end
-
-/// ContextMenuHandler — stub for Swift class exposed to ObjC
-@interface ContextMenuHandler : NSObject
-+ (UIContextMenuConfiguration * _Nullable)createConfigurationWithUrl:(NSURL *)url shareAction:(void (^)(void))shareAction;
 @end
 
 NS_ASSUME_NONNULL_END
