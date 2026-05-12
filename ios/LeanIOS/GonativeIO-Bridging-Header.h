@@ -1,12 +1,14 @@
 //
-//  Use this file to import your target's public headers that you would like to expose to Swift.
+//  GonativeIO-Bridging-Header.h — Minimal Swift bridging header
 //
 
-#import "LEANUtilities.h"
-#import "LEANWebViewController.h"
-#import "LEANRootViewController.h"
-#import "REFrostedViewController.h"
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
+// GoNativeAppConfig: used by ContextMenuHandler.swift and WebViewViewportManager.swift
 #import "GoNativeAppConfig.h"
+
+// Stubs for GN framework types used in Swift-accessible ObjC
 #import "GNBridge.h"
 #import "GNEventEmitter.h"
 #import "GNJSBridgeHandler.h"
