@@ -41,9 +41,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL disableEventRecorder;
 @property (nonatomic, assign) BOOL userAgentReady;
 @property (nonatomic, assign) NSInteger maxWindows;
-@property (nonatomic, assign) double interactiveDelay;
-@property (nonatomic, assign) double forceSessionCookieExpiry;
-@property (nonatomic, assign) double iosConnectionOfflineTime;
+@property (nonatomic, strong, nullable) NSNumber *interactiveDelay;
+@property (nonatomic, strong, nullable) NSNumber *forceSessionCookieExpiry;
+@property (nonatomic, strong, nullable) NSNumber *iosConnectionOfflineTime;
 @property (nonatomic, assign) double forceViewportWidth;
 @property (nonatomic, strong, nullable) NSString *stringViewport;
 
@@ -60,7 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 // Navigation structure
 @property (nonatomic, strong, nullable) NSArray *menuItems;
 @property (nonatomic, strong, nullable) NSArray *navStructureLevels;
-@property (nonatomic, strong, nullable) NSDictionary *navTitles;
+@property (nonatomic, strong, nullable) NSArray *navTitles;
 @property (nonatomic, strong, nullable) NSDictionary *actions;
 @property (nonatomic, strong, nullable) NSArray *toolbarItems;
 @property (nonatomic, assign) BOOL showToolbar;
@@ -74,12 +74,12 @@ NS_ASSUME_NONNULL_BEGIN
 // Misc
 @property (nonatomic, strong, nullable) NSDictionary *customHeaders;
 @property (nonatomic, strong, nullable) NSDictionary *replaceStrings;
-@property (nonatomic, strong, nullable) NSDictionary *swipeGestures;
+@property (nonatomic, assign) BOOL swipeGestures;
 @property (nonatomic, strong, nullable) NSDictionary *listeners;
 @property (nonatomic, assign) BOOL pullToRefresh;
 @property (nonatomic, strong, nullable) NSArray *webviewPools;
 @property (nonatomic, strong, nullable) id wvc;
-@property (nonatomic, assign) BOOL userIdRegex;
+@property (nonatomic, strong, nullable) NSString *userIdRegex;
 @property (nonatomic, assign) BOOL contextMenuEnabled;
 @property (nonatomic, strong, nullable) NSArray *contextMenuLinkActions;
 
@@ -88,6 +88,10 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setNewRegexRules:(id _Nullable)rules regexRulesArray:(void * _Nullable * _Nullable)regexRulesArray;
 - (nullable NSString *)getRegexRuleForURL:(NSString * _Nullable)urlString rules:(void * _Nullable)rules;
 - (nullable NSString *)userAgentForUrl:(NSURL * _Nullable)url;
+
+@property (nonatomic, strong, nullable) NSURL *signupURL;
+@property (nonatomic, strong, nullable) NSArray *tabMenuIDs;
+@property (nonatomic, strong, nullable) NSDictionary *menus;
 
 @end
 
