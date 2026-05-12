@@ -14,3 +14,10 @@ Derived/
 .tuist-cache/
 graph.json
 Extensions/
+
+# Allow swiftpm Package.resolved and xcschemes inside xcworkspace
+!*.xcworkspace/xcshareddata/
+!*.xcworkspace/xcshareddata/swiftpm/
+!*.xcworkspace/xcshareddata/swiftpm/Package.resolved
+!*.xcworkspace/xcshareddata/xcschemes/
+!*.xcworkspace/xcshareddata/xcschemes/*.xcscheme
