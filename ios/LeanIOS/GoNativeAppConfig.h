@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Singleton
 + (instancetype)sharedAppConfig;
-+ (nullable instancetype)shared;
++ (instancetype)shared;
 
 // Navigation & URL
 @property (nonatomic, strong, nullable) NSURL *initialURL;
