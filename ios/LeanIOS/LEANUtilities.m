@@ -372,16 +372,31 @@
         }
         else if ([self isDeviceiPhone6Plus])
         {
-            if ([UIApplication sharedApplication].isInterfaceOrientationPortrait) {
-                return @"LaunchImage-800-Portrait-736h@3x.png";
-            } else {
-                return @"LaunchImage-800-Landscape-736h@3x.png";
+            {
+                UIInterfaceOrientation orient = UIInterfaceOrientationPortrait;
+                for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {
+                    if ([scene isKindOfClass:[UIWindowScene class]]) {
+                        orient = ((UIWindowScene *)scene).interfaceOrientation;
+                        break;
+                    }
+                }
+                if (UIInterfaceOrientationIsPortrait(orient)) {
+                    return @"LaunchImage-800-Portrait-736h@3x.png";
+                } else {
+                    return @"LaunchImage-800-Landscape-736h@3x.png";
+                }
             }
         }
         else
             return images[0]; //Non-retina iPhone
     }
-    else if ([UIApplication sharedApplication].isInterfaceOrientationPortrait)//iPad Portrait
+    else if (({
+        UIInterfaceOrientation _o = UIInterfaceOrientationPortrait;
+        for (UIScene *_s in [UIApplication sharedApplication].connectedScenes) {
+            if ([_s isKindOfClass:[UIWindowScene class]]) { _o = ((UIWindowScene *)_s).interfaceOrientation; break; }
+        }
+        UIInterfaceOrientationIsPortrait(_o);
+    }))//iPad Portrait
     {
         if ([self isDeviceRetina])
         {
@@ -546,13 +561,13 @@
         if (appConfig.hasIosCustomJS) {
             [LEANUtilities injectJs:@"iosCustomJS" ToWebview:webview];
         }
-        [[WebViewViewportManager shared] setViewportWithScale:appConfig.initialWebviewZoom width:appConfig.forceViewportWidth webView:webview];
+        // WebViewViewportManager removed (GoNative SDK) — viewport set by default
         
         // Accessibility & Dynamic Type Support
         UIContentSizeCategory contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
         [self applyFontScalingForContentSize:contentSizeCategory toWebView:webview asUserScript:YES];
         
-        [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge loadUserScriptsForContentController:webview.configuration.userContentController];
+        // GNBridge.loadUserScripts removed (GoNative SDK) — user scripts injected via NativeBridge
         
         // for our faux content-inset
         webview.scrollView.layer.masksToBounds = NO;
@@ -636,8 +651,6 @@
     }
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 + (WKProcessPool *)wkProcessPool
 {
     static WKProcessPool *processPool;
@@ -651,7 +664,6 @@
         return processPool;
     }
 }
-#pragma clang diagnostic pop
 
 // input can be string or array of strings. Returns an array of NSPredicates.
 +(NSArray<NSPredicate*>*)createRegexArrayFromStrings:(id)input
@@ -674,7 +686,6 @@
         return [NSArray array];
     }
 }
-#pragma clang diagnostic pop
 
 +(BOOL)string:(NSString*)string matchesAnyRegex:(NSArray<NSPredicate*>*)regexes
 {
@@ -929,23 +940,3 @@
 }
 
 @end
-
-@implementation UIApplication (GNKeyWindow)
-- (nullable UIWindow *)gn_keyWindow {
-    for (UIScene *scene in self.connectedScenes) {
-        if (scene.activationState == UISceneActivationStateForegroundActive) {
-            UIWindowScene *windowScene = (UIWindowScene *)scene;
-            if (windowScene.keyWindow) {
-                return windowScene.keyWindow;
-            }
-        }
-    }
-    // Fallback: any foreground window
-    for (UIScene *scene in self.connectedScenes) {
-        UIWindowScene *windowScene = (UIWindowScene *)scene;
-        if (windowScene.keyWindow) return windowScene.keyWindow;
-    }
-    return nil;
-}
-@end
-

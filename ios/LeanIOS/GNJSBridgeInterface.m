@@ -7,19 +7,17 @@
 //
 
 #import "GNJSBridgeInterface.h"
-#import "GonativeIO-Swift.h"
-#import "LEANUtilities.h"
+// GonativeIO-Swift.h removed — all Swift types use GNStubs.h ObjC declarations
 #import <Foundation/Foundation.h>
-NSString * const GNJSBridgeName = @"JSBridge";
 
-
+NSString * GNJSBridgeName = @"JSBridge";
 
 @implementation GNJSBridgeInterface : NSObject
 
 - (LEANWebViewController *)webViewController
 {
     // Get current webview controller
-    UIViewController *topController = [UIApplication sharedApplication].gn_keyWindow.rootViewController;
+    UIViewController *topController = GNKeyWindow().rootViewController;
 
     while (topController.presentedViewController && ![topController.presentedViewController isKindOfClass:[UIAlertController class]]) {
         topController = topController.presentedViewController;

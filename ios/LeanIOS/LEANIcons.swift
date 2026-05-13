@@ -1,14 +1,21 @@
 //
-//  LEANIcons.swift — MedianIcons stub (private SPM removed)
+//  LEANIcons.swift
+//  TradePulse
 //
+
 import Foundation
 import UIKit
 
-@objc class LEANIcons: NSObject {
+@objc public class LEANIcons: NSObject {
     @objc public static let sharedIcons = LEANIcons()
-
+    
     @objc public class func imageForIconIdentifier(_ name: String, size: CGFloat, color: UIColor) -> UIImage? {
-        // MedianIcons package removed — return nil gracefully
-        return nil
+        // Fallback to SF Symbols; return nil if not found
+        let config = UIImage.SymbolConfiguration(pointSize: size)
+        if let img = UIImage(systemName: name, withConfiguration: config) {
+            return img.withTintColor(color, renderingMode: .alwaysOriginal)
+        }
+        return UIImage(systemName: "circle", withConfiguration: config)?
+            .withTintColor(color, renderingMode: .alwaysOriginal)
     }
 }

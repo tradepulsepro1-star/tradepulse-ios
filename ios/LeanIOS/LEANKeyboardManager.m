@@ -9,8 +9,7 @@
 #import "LEANKeyboardManager.h"
 #import <objc/runtime.h>
 #import <UIKit/UIKit.h>
-#import "GonativeIO-Swift.h"
-#import "LEANUtilities.h"
+// GonativeIO-Swift.h removed — all Swift types use GNStubs.h ObjC declarations
 
 @interface LEANKeyboardManager()
 @property Class noInputAccessoryViewClass;
@@ -42,7 +41,7 @@
         return;
     }
     
-    [UIApplication.sharedApplication.gn_keyWindow endEditing:YES];
+    [GNKeyWindow() endEditing:YES];
     
     if (!visible) {
         self.noInputAccessoryViewClass = self.noInputAccessoryView.class;

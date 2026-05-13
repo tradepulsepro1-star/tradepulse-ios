@@ -6,9 +6,11 @@
 //  Copyright (c) 2014 GoNative.io LLC. All rights reserved.
 //
 
+// build-bust: LEANIcons removed b93
 #import "LEANTabManager.h"
 #import "LEANUtilities.h"
-#import "GonativeIO-Swift.h"
+#import "GNStubs.h"
+// GonativeIO-Swift.h removed — all Swift types use GNStubs.h ObjC declarations
 
 @interface LEANTabManager() <UITabBarDelegate>
 @property UITabBar *tabBar;
@@ -120,8 +122,14 @@
             inactiveIcon = activeIcon;
         }
         
-        UIImage *activeImage = [LEANIcons imageForIconIdentifier:activeIcon size:[self sizeForIcon:activeIcon] color:[UIColor blackColor]];
-        UIImage *inactiveImage = [LEANIcons imageForIconIdentifier:inactiveIcon size:[self sizeForIcon:inactiveIcon] color:[UIColor blackColor]];
+        CGFloat iconSize = [self sizeForIcon:activeIcon];
+        UIImageSymbolConfiguration *symConfig = [UIImageSymbolConfiguration configurationWithPointSize:iconSize];
+        UIImage *activeImage = [UIImage systemImageNamed:activeIcon withConfiguration:symConfig];
+        if (!activeImage) activeImage = [UIImage systemImageNamed:@"circle.fill" withConfiguration:symConfig];
+        activeImage = [activeImage imageWithTintColor:[UIColor blackColor] renderingMode:UIImageRenderingModeAlwaysOriginal];
+        UIImage *inactiveImage = [UIImage systemImageNamed:inactiveIcon withConfiguration:symConfig];
+        if (!inactiveImage) inactiveImage = [UIImage systemImageNamed:@"circle" withConfiguration:symConfig];
+        inactiveImage = [inactiveImage imageWithTintColor:[UIColor blackColor] renderingMode:UIImageRenderingModeAlwaysOriginal];
         item = [[UITabBarItem alloc] initWithTitle:title image:inactiveImage selectedImage:activeImage];
         item.tag = tag;
     }

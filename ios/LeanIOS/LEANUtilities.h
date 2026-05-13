@@ -29,10 +29,7 @@
 +(void)configureWebView:(UIView*)webview;
 +(void)getBodyBackgroundColor:(WKWebView *)webview completion:(void (^)(UIColor *color))completion;
 +(void)applyFontScalingForContentSize:(NSString *)contentSizeCategory toWebView:(WKWebView *)webView asUserScript:(BOOL)asUserScript;
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
 + (WKProcessPool *)wkProcessPool;
-#pragma clang diagnostic pop
 +(NSArray<NSPredicate*>*)createRegexArrayFromStrings:(id)input;
 +(BOOL)string:(NSString*)string matchesAnyRegex:(NSArray<NSPredicate*>*)regexes;
 +(NSString*)createJsForPostTo:(NSString*)url data:(NSDictionary*)data;
@@ -42,9 +39,4 @@
 + (void)downloadUrl:(NSURL *)url filename:(NSString *)filename directory:(NSURL *)directory completion:(void (^)(NSURL *fileUrl))completion;
 + (BOOL)isOnePixelImage:(NSURL *)url;
 + (BOOL)isGlassDesignEnabled;
-@end
-
-/// UIApplication category — iOS 26 compatible key window accessor
-@interface UIApplication (GNKeyWindow)
-@property (nonatomic, readonly, nullable) UIWindow *gn_keyWindow;
 @end

@@ -5,40 +5,61 @@ workflows:
     integrations:
       app_store_connect: Anthony Rosa
     environment:
+      xcode: latest
       ios_signing:
         distribution_type: app_store
         bundle_identifier: net.tradepulsepro
     scripts:
-      - name: Build and Archive
+      - name: Force clean source
         script: |
           cd /Users/builder/clone
-          echo "=== Listing schemes ==="
-          xcodebuild -workspace ios/TradePulse.xcworkspace -list
-          echo "=== Archiving ==="
+          git fetch origin main
+          git reset --hard origin/main
+          git clean -fdx --exclude=".git"
+          git log --oneline -1
+
+      - name: Verify scheme
+        script: |
+          xcodebuild -workspace ios/TradePulse.xcworkspace -list 2>&1 || true
+
+      - name: Build and Archive
+        script: |
+          set -e
+          ARCHIVE_PATH="/Users/builder/clone/TradePulse.xcarchive"
+          DERIVED_DATA="/Users/builder/clone/DerivedData_fresh_$(date +%s)"
+          mkdir -p "$DERIVED_DATA"
+
           xcodebuild \
             -workspace ios/TradePulse.xcworkspace \
             -scheme TradePulse \
             -sdk iphoneos \
             -configuration Release \
-            -archivePath /Users/builder/clone/TradePulse.xcarchive \
-            -derivedDataPath /Users/builder/clone/DerivedData_fresh_$(date +%s) \
+            -archivePath "$ARCHIVE_PATH" \
+            -derivedDataPath "$DERIVED_DATA" \
             -allowProvisioningUpdates \
             DEVELOPMENT_TEAM=5L79BW988P \
             CODE_SIGN_STYLE=Manual \
-            archive
+            "OTHER_LDFLAGS=-ObjC" \
+            archive 2>&1 | tee /Users/builder/clone/build_full.log
+
+          [ -d "$ARCHIVE_PATH" ] && echo "ARCHIVE OK" || { echo "ARCHIVE MISSING"; exit 1; }
 
       - name: Export IPA
         script: |
+          set -e
           xcodebuild -exportArchive \
             -archivePath /Users/builder/clone/TradePulse.xcarchive \
-            -exportOptionsPlist /Users/builder/clone/exportOptions.plist \
-            -exportPath /Users/builder/clone/ipa \
-            -allowProvisioningUpdates
+            -exportOptionsPlist exportOptions.plist \
+            -exportPath /Users/builder/clone/ipa
+          ls -la /Users/builder/clone/ipa/
 
     artifacts:
+      - /Users/builder/clone/TradePulse.xcarchive
       - /Users/builder/clone/ipa/*.ipa
+      - /Users/builder/clone/build_full.log
 
     publishing:
       app_store_connect:
         auth: integration
         submit_to_testflight: true
+        submit_to_app_store: false

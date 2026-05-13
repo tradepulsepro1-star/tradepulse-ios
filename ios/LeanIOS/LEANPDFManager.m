@@ -8,7 +8,8 @@
 
 #import "LEANPDFManager.h"
 #import "LEANUtilities.h"
-#import "GonativeIO-Swift.h"
+// GonativeIO-Swift.h removed — all Swift types use GNStubs.h ObjC declarations
+#import "GNStubs.h"
 
 #define TAB_BAR_HEIGHT 49
 
@@ -94,7 +95,7 @@
 }
 
 - (void)setupBottomBar {
-    UIEdgeInsets safeAreaInsets = UIApplication.sharedApplication.gn_keyWindow.safeAreaInsets;
+    UIEdgeInsets safeAreaInsets = GNKeyWindow().safeAreaInsets;
     
     UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleProminent];
     UIVisualEffectView *blurView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];

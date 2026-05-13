@@ -7,11 +7,10 @@
 //
 
 #import "GNFileWriterSharer.h"
+NSString * GNFileWriterSharerName = @"fileWriterSharer";
+NSUInteger GNFileWriterSharerMaxSize = 1024 * 1024 * 1024;
 #import "LEANPDFManager.h"
 #import "LEANUtilities.h"
-NSString * const GNFileWriterSharerName = @"fileWriterSharer";
-
-
 
 @interface GNFileWriterSharerFileInfo : NSObject
 @property NSString *identifier;

@@ -13,8 +13,9 @@
 #import "LEANConfigUpdater.h"
 #import "LEANUtilities.h"
 #import "GNConfigPreferences.h"
-#import "GonativeIO-Swift.h"
+// GonativeIO-Swift.h removed — GNSwiftUtilities replaced with inline ObjC
 #import <AppTrackingTransparency/ATTrackingManager.h>
+#import "GNStubs.h"
 
 @implementation LEANAppDelegate
 
@@ -58,7 +59,7 @@
     
     self.bridge = [GNBridge new];
     
-    [bridge application:application didFinishLaunchingWithOptions:launchOptions];
+    // bridge.didFinishLaunchingWithOptions — no-op
     
     return YES;
 }
@@ -70,8 +71,13 @@
 
 -(void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     NSLog(@"Successfully registered for push notifications");
-    [self setApnsToken:[GNSwiftUtilities deviceTokenWithData:deviceToken]];
-    [self.bridge application:application didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+    // Convert device token to hex string (inline — no Swift dependency)
+    NSMutableString *tokenHex = [NSMutableString stringWithCapacity:deviceToken.length * 2];
+    const unsigned char *bytes = (const unsigned char *)deviceToken.bytes;
+    for (NSUInteger i = 0; i < deviceToken.length; i++) {
+        [tokenHex appendFormat:@"%02x", bytes[i]];
+    }
+    [self setApnsToken:[tokenHex copy]];
 }
 
 - (void)application:(UIApplication *)app didFailToRegisterForRemoteNotificationsWithError:(NSError *)err {
@@ -81,8 +87,7 @@
 
 - (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options
 {
-    if ([bridge application:app openURL:url options:options])
-        return YES;
+    // bridge.openURL — no-op
     
     if ([url.scheme hasSuffix:@".https"] || [url.scheme hasSuffix:@".http"]) {
         UIViewController *rvc = self.window.rootViewController;
@@ -117,7 +122,7 @@
         });
     }
     
-    [bridge applicationDidBecomeActive:application];
+    // bridge.applicationDidBecomeActive — no-op
     if (self.previousInitialUrl) {
         NSString *initialUrl = [[GNConfigPreferences sharedPreferences] getInitialUrl];
         if (![self.previousInitialUrl isEqualToString:initialUrl]) {
@@ -158,12 +163,12 @@
 
 - (void)applicationWillResignActive:(UIApplication *)application
 {
-    [bridge applicationWillResignActive:application];
+    // bridge.applicationWillResignActive — no-op
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    [bridge applicationDidEnterBackground:application];
+    // bridge.applicationDidEnterBackground — no-op
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
@@ -179,19 +184,17 @@
         }
     });
     
-    [bridge applicationWillEnterForeground:application];
+    // bridge.applicationWillEnterForeground — no-op
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
-    [bridge applicationWillTerminate:application];
+    // bridge.applicationWillTerminate — no-op
 }
 
 - (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity restorationHandler:(void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
 {
-    if ([bridge application:application continueUserActivity:userActivity]) {
-        return YES;
-    }
+    // bridge.continueUserActivity — no-op
     
     if ([userActivity.activityType isEqualToString:NSUserActivityTypeBrowsingWeb]) {
         UIViewController *rvc = self.window.rootViewController;
@@ -205,7 +208,7 @@
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    [bridge application:application didReceiveRemoteNotification:userInfo];
+    // bridge.didReceiveRemoteNotification — no-op
 }
 
 #pragma mark -

@@ -8,9 +8,10 @@
 
 #import "LEANDocumentSharer.h"
 #import <MobileCoreServices/MobileCoreServices.h>
-#import "GonativeIO-Swift.h"
+// GonativeIO-Swift.h removed — all Swift types use GNStubs.h ObjC declarations
 #import "LEANUtilities.h"
 #import "LEANPDFManager.h"
+#import "GNStubs.h"
 
 @interface LEANDocumentSharer ()
 @property UIDocumentInteractionController *interactionController;
@@ -320,7 +321,7 @@
                 } else if (view) {
                     [self.interactionController presentOpenInMenuFromRect:CGRectZero inView:view animated:YES];
                 } else {
-                    [self.interactionController presentOpenInMenuFromRect:CGRectZero inView:[UIApplication sharedApplication].gn_keyWindow animated:YES];
+                    [self.interactionController presentOpenInMenuFromRect:CGRectZero inView:GNKeyWindow() animated:YES];
                 }
                 button.enabled = YES;
                 return [self runCompletion:completion error:nil];
@@ -362,7 +363,7 @@
 }
 
 - (UIViewController *)topMostViewController {
-    UIViewController *vc = [UIApplication sharedApplication].gn_keyWindow.rootViewController;
+    UIViewController *vc = GNKeyWindow().rootViewController;
     while (vc.presentedViewController) {
         vc = vc.presentedViewController;
     }

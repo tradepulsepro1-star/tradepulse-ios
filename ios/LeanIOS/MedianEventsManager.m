@@ -7,7 +7,7 @@
 //
 
 #import "MedianEventsManager.h"
-#import "GNEventEmitter.h"
+#import "GNStubs.h"
 
 @interface MedianEventsManager()
 @property (weak, nonatomic) LEANWebViewController *wvc;

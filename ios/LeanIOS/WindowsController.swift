@@ -1,14 +1,13 @@
 //
 //  WindowsController.swift
-//  GonativeIO
-//
-//  Stub: window management is handled in ObjC. This file intentionally left as no-op.
+//  TradePulse
 //
 
 import Foundation
+import UIKit
 
-@objc class WindowsController: NSObject {
+@objc public class WindowsController: NSObject {
     @objc class public func windowCountChanged() {
-        // Window management delegated to ObjC layer
+        // no-op stub - GoNativeCore not available
     }
 }

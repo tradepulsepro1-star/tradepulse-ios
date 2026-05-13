@@ -1,19 +1,10 @@
-//
-//  Prefix header
-//
-//  The contents of this file are implicitly included at the beginning of every source file.
-//
+//  MedianIOS-Prefix.pch
+//  v7 — cache bust
 
 #import <Availability.h>
-
-#ifndef __IPHONE_5_0
-#warning "This project uses features only available in iOS SDK 5.0 and later."
-#endif
 
 #ifdef __OBJC__
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
+    #import "GNStubs.h"
 #endif
-
-// Use local stub instead of private GoNativeCore SPM framework
-#import "GoNativeAppConfig.h"

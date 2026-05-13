@@ -7,9 +7,11 @@
 //
 
 #import "LEANWebViewPool.h"
+LEANWebViewPoolDisownPolicy kLEANWebViewPoolDisownPolicyDefault = LEANWebViewPoolDisownPolicyReload;
 #import "LEANWebViewController.h"
 #import "LEANUtilities.h"
 #import "LEANLoginManager.h"
+#import "GNStubs.h"
 
 @interface LEANWebViewPool () <WKNavigationDelegate>
 @property NSMutableDictionary *urlToWebview;
@@ -183,10 +185,7 @@
         [self.urlsToLoad removeObject:urlString];
         
         WKWebViewConfiguration *config = [[NSClassFromString(@"WKWebViewConfiguration") alloc] init];
-        #pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
         config.processPool = [LEANUtilities wkProcessPool];
-#pragma clang diagnostic pop
         WKWebView *webview = [[NSClassFromString(@"WKWebView") alloc] initWithFrame:CGRectZero configuration:config];
         [LEANUtilities configureWebView:webview];
         webview.navigationDelegate = self;

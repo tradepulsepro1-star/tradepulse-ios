@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-extern NSString * const GNJSBridgeName;
+extern NSString * GNJSBridgeName;
 
 @interface GNJSBridgeInterface : NSObject <WKScriptMessageHandler>
 @end
