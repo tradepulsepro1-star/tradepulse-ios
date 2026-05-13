@@ -12,6 +12,7 @@
 		0A77A9178D61AC21BBF6B3D0 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 208D9B2C8F56314271FBE1A5 /* Settings.bundle */; };
 		0ECDC46C313485A9201642A7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D22A2C8586FC55AA4181D313 /* UIKit.framework */; };
 		0FE0155346E5661200031625 /* GNBackgroundAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = EB37DC30BBA202BDCD2A27D5 /* GNBackgroundAudio.m */; };
+		AA11BB22CC33DD44EE55FF61 /* GNStubsImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF60 /* GNStubsImpl.m */; };
 		10C1C92374D86E673BC7B359 /* LEANWebViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5C0BDDA16E32334E50F20663 /* LEANWebViewController.m */; };
 		1713560D3B7FF79EEF0A42D5 /* LEANLoadingSpinnerManager.m in Sources */ = {isa = PBXBuildFile; fileRef = BDB4C6AB51E91CEAEC3E4AD5 /* LEANLoadingSpinnerManager.m */; };
 		17E257A28B88B8EE82701D57 /* GNSwiftUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48134ECEC524D50479D91820 /* GNSwiftUtilities.swift */; };
@@ -46,11 +47,9 @@
 		535F7B6C787B3180E6D1ABA4 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 77361A47C7C7C797362D6EDD /* Localizable.strings */; };
 		5A26FE421A5B990296C14616 /* TuistBundle+TradePulse.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1F0B6341A5F1F4E432DB402 /* TuistBundle+TradePulse.swift */; };
 		5E7B6802A1CE2395421B6F23 /* GNCustomHeaders.m in Sources */ = {isa = PBXBuildFile; fileRef = F3EBA5290195B9538DA4DAF6 /* GNCustomHeaders.m */; };
-				AA11BB22CC33DD44EE55FF61 /* GNStubsImpl.m in Sources */,
 		60BFB28F411B77D930475432 /* offline.html in Resources */ = {isa = PBXBuildFile; fileRef = D99EBD5F6E8E6E61AEDB80D4 /* offline.html */; };
 		61E8908102C9ED08839A67F2 /* TuistPlists+TradePulse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 12CC93AAEA5B16E2699C91CA /* TuistPlists+TradePulse.swift */; };
 		6490438B96E1F2871718BA94 /* GTMNSString+HTML.m in Sources */ = {isa = PBXBuildFile; fileRef = DD71E067040302D4118764E2 /* GTMNSString+HTML.m */; };
-		AA11BB22CC33DD44EE55FF61 /* GNStubsImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF60 /* GNStubsImpl.m */; };
 		6538DEE75E467BD0DD6AD643 /* LEANConfigUpdater.m in Sources */ = {isa = PBXBuildFile; fileRef = CEBF7760E58B87EB36B2FCE7 /* LEANConfigUpdater.m */; };
 		6789548D639043B8124C6B00 /* REFrostedContainerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = B9CCFB4DAF1E3FA43D99AA20 /* REFrostedContainerViewController.m */; };
 		6CE9BB139AC88F6E3B3EA7FB /* MenuChildIcon.xib in Resources */ = {isa = PBXBuildFile; fileRef = 71A0F3173DB24150A7C2E13E /* MenuChildIcon.xib */; };
@@ -164,6 +163,7 @@
 		23BE19900D40E6DE1FDF4F5A /* WindowsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowsController.swift; sourceTree = "<group>"; };
 		23F9B2A3CEFA0796AC73E637 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		274A66DFC051712F0B671B3E /* GoNativeJSBridgeLibrary.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = GoNativeJSBridgeLibrary.js; sourceTree = "<group>"; };
+		AA11BB22CC33DD44EE55FF60 /* GNStubsImpl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNStubsImpl.m; sourceTree = "<group>"; };
 		2A8DCB3B77A23BE2FB197BC0 /* LEANToolbarManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LEANToolbarManager.m; sourceTree = "<group>"; };
 		2B1B810909D23884DFE136A8 /* MedianIOSTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "MedianIOSTests-Info.plist"; sourceTree = "<group>"; };
 		2BC96C2DA25C9623FBE2A8EA /* localCache.zip */ = {isa = PBXFileReference; lastKnownFileType = archive.zip; path = localCache.zip; sourceTree = "<group>"; };
@@ -262,7 +262,6 @@
 		DB16B4983BB70DE0615CAA4E /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		DC976C2081971B7B6D1A642E /* UIImage+REFrostedViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+REFrostedViewController.m"; sourceTree = "<group>"; };
 		DD71E067040302D4118764E2 /* GTMNSString+HTML.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "GTMNSString+HTML.m"; sourceTree = "<group>"; };
-		AA11BB22CC33DD44EE55FF60 /* GNStubsImpl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNStubsImpl.m; sourceTree = "<group>"; };
 		DFA9B60DA399B0F3C70CDAC7 /* LEANPDFManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LEANPDFManager.m; sourceTree = "<group>"; };
 		E01AD5426F0BF0EF44A0D9B4 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E0CDA3A469CE378E39EA453C /* LaunchScreenNoNav.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreenNoNav.storyboard; sourceTree = "<group>"; };
@@ -405,13 +404,13 @@
 				EB37DC30BBA202BDCD2A27D5 /* GNBackgroundAudio.m */,
 				BD5591F73537C2036BB2E911 /* GNConfigPreferences.m */,
 				F3EBA5290195B9538DA4DAF6 /* GNCustomHeaders.m */,
-				AA11BB22CC33DD44EE55FF60 /* GNStubsImpl.m */,
 				2D16380A29937AE7B96DD03F /* GNFileWriterSharer.m */,
 				931D7458C1926A3DBFBD1D6F /* GNJSBridgeInterface.m */,
 				4C5A338303E726E16AA835F2 /* GNLogManager.m */,
 				5BACCFA38A873B3921CCB365 /* GNRegistrationManager.m */,
 				48134ECEC524D50479D91820 /* GNSwiftUtilities.swift */,
 				274A66DFC051712F0B671B3E /* GoNativeJSBridgeLibrary.js */,
+				AA11BB22CC33DD44EE55FF60 /* GNStubsImpl.m */,
 				DD71E067040302D4118764E2 /* GTMNSString+HTML.m */,
 				107F25331DBE0B7314A2D0DE /* Images.xcassets */,
 				8E94470D4D9DFD7EC1761576 /* iosCustomCSS.css */,
@@ -599,6 +598,7 @@
 			packageReferences = (
 				BBE8B5DE88C7590D99030DC2 /* XCRemoteSwiftPackageReference "ZipArchive" */,
 			);
+			productRefGroup = 02B5D4824E5C8CF0C1DE7DCE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -676,6 +676,7 @@
 				86941957B602BD3A52736F09 /* ContextMenuHandler.swift in Sources */,
 				85C6A2B5F65F443BDE292206 /* CustomMenu.swift in Sources */,
 				0FE0155346E5661200031625 /* GNBackgroundAudio.m in Sources */,
+				AA11BB22CC33DD44EE55FF61 /* GNStubsImpl.m in Sources */,
 				499A080F26C7116F928865DE /* GNConfigPreferences.m in Sources */,
 				5E7B6802A1CE2395421B6F23 /* GNCustomHeaders.m in Sources */,
 				AC52F4CA06CB4D28DC87282A /* GNFileWriterSharer.m in Sources */,
@@ -844,17 +845,19 @@
 				BUILD_SETTINGS_APP_NAME = TradePulse;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "LeanIOS/TradePulse.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 92;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 94;
 				DEVELOPMENT_LANGUAGE = en;
-				DEVELOPMENT_TEAM = "";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = 5L79BW988P;
+				PROVISIONING_PROFILE_SPECIFIER = "trade pulse";
 				ENABLE_BITCODE = NO;
 				ENABLE_PREVIEWS = YES;
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LeanIOS/MedianIOS-Prefix.pch";
-				HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/LeanIOS $(SRCROOT)/LeanIOS/GoNativeCore $(SRCROOT)/LeanIOS/REFrostedViewController";
+				HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/LeanIOS $(SRCROOT)/LeanIOS/REFrostedViewController";
 				INFOPLIST_FILE = "LeanIOS/MedianIOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -893,10 +896,11 @@
 				BUILD_SETTINGS_APP_NAME = TradePulse;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "LeanIOS/TradePulse.entitlements";
-				CODE_SIGN_IDENTITY = "Apple Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 92;
+				CURRENT_PROJECT_VERSION = 94;
 				DEVELOPMENT_LANGUAGE = en;
+				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 5L79BW988P;
 				PROVISIONING_PROFILE_SPECIFIER = "trade pulse";
 				ENABLE_BITCODE = NO;
@@ -904,7 +908,7 @@
 				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "LeanIOS/MedianIOS-Prefix.pch";
-				HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/LeanIOS $(SRCROOT)/LeanIOS/GoNativeCore $(SRCROOT)/LeanIOS/REFrostedViewController";
+				HEADER_SEARCH_PATHS = "$(inherited) $(SRCROOT)/LeanIOS $(SRCROOT)/LeanIOS/REFrostedViewController";
 				INFOPLIST_FILE = "LeanIOS/MedianIOS-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
 				LD_RUNPATH_SEARCH_PATHS = (
