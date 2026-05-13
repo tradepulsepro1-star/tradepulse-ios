@@ -7,11 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		AA000001AA000001AA000001 /* GNBridge.m in Sources */ = {isa = PBXBuildFile; fileRef = AA000002AA000002AA000002 /* GNBridge.m */; };
-		AA000003AA000003AA000003 /* GNEventEmitter.m in Sources */ = {isa = PBXBuildFile; fileRef = AA000004AA000004AA000004 /* GNEventEmitter.m */; };
-		AA000005AA000005AA000005 /* GNJSBridgeHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = AA000006AA000006AA000006 /* GNJSBridgeHandler.m */; };
-		AA000007AA000007AA000007 /* GNUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = AA000008AA000008AA000008 /* GNUtilities.m */; };
-		AA000009AA000009AA000009 /* GoNativeAppConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = AA000010AA000010AA000010 /* GoNativeAppConfig.m */; };
 		03DCEC47A019A7B7B5EB70C1 /* BlobDownloader.js in Resources */ = {isa = PBXBuildFile; fileRef = 79E6629D8E289633A0B9D96A /* BlobDownloader.js */; };
 		03EAF5B8C06DA3FE9BD7A513 /* iosCustomJS.js in Resources */ = {isa = PBXBuildFile; fileRef = CD8C7456D8213779B99FEDC8 /* iosCustomJS.js */; };
 		0A77A9178D61AC21BBF6B3D0 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 208D9B2C8F56314271FBE1A5 /* Settings.bundle */; };
@@ -151,11 +146,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		AA000002AA000002AA000002 /* GNBridge.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNBridge.m; sourceTree = "<group>"; };
-		AA000004AA000004AA000004 /* GNEventEmitter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNEventEmitter.m; sourceTree = "<group>"; };
-		AA000006AA000006AA000006 /* GNJSBridgeHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNJSBridgeHandler.m; sourceTree = "<group>"; };
-		AA000008AA000008AA000008 /* GNUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNUtilities.m; sourceTree = "<group>"; };
-		AA000010AA000010AA000010 /* GoNativeAppConfig.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GoNativeAppConfig.m; sourceTree = "<group>"; };
 		00CF3BE140CCD9826F1ECF1E /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
 		0B078ACA379A031225A8CE00 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		107F25331DBE0B7314A2D0DE /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -469,11 +459,6 @@
 				FC246C3FC3A3DD1608FFCDA6 /* SidebarHeaderView.xib */,
 				8430752567550F4C405C6E5D /* UIApplication+Extensions.swift */,
 				43C1A1E9E157B649D4E3F877 /* WebViewViewportManager.swift */,
-				AA000002AA000002AA000002 /* GNBridge.m */,
-				AA000004AA000004AA000004 /* GNEventEmitter.m */,
-				AA000006AA000006AA000006 /* GNJSBridgeHandler.m */,
-				AA000008AA000008AA000008 /* GNUtilities.m */,
-				AA000010AA000010AA000010 /* GoNativeAppConfig.m */,
 				23BE19900D40E6DE1FDF4F5A /* WindowsController.swift */,
 			);
 			path = LeanIOS;
@@ -690,11 +675,6 @@
 				499A080F26C7116F928865DE /* GNConfigPreferences.m in Sources */,
 				5E7B6802A1CE2395421B6F23 /* GNCustomHeaders.m in Sources */,
 				AC52F4CA06CB4D28DC87282A /* GNFileWriterSharer.m in Sources */,
-				AA000001AA000001AA000001 /* GNBridge.m in Sources */,
-				AA000003AA000003AA000003 /* GNEventEmitter.m in Sources */,
-				AA000005AA000005AA000005 /* GNJSBridgeHandler.m in Sources */,
-				AA000007AA000007AA000007 /* GNUtilities.m in Sources */,
-				AA000009AA000009AA000009 /* GoNativeAppConfig.m in Sources */,
 				70FD472DAB33DFC002F08EB8 /* GNJSBridgeInterface.m in Sources */,
 				2107485176727E809E39D72A /* GNLogManager.m in Sources */,
 				E7AE0FB7755D24DAF8DF3305 /* GNRegistrationManager.m in Sources */,
