@@ -11,7 +11,6 @@
 #import <CoreTelephony/CTTelephonyNetworkInfo.h>
 #import <CoreTelephony/CTCarrier.h>
 #import <sys/utsname.h>
-#import "GNStubs.h"
 
 @implementation LEANInstallation
 

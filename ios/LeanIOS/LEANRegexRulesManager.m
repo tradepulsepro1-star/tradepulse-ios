@@ -8,8 +8,7 @@
 
 #import "LEANRegexRulesManager.h"
 #import "LEANWindowsManager.h"
-// GonativeIO-Swift.h removed — all Swift types use GNStubs.h ObjC declarations
-#import "GNStubs.h"
+#import "GonativeIO-Swift.h"
 
 @interface LEANRegexRulesManager()
 @property LEANWindowsManager *windowsManager;

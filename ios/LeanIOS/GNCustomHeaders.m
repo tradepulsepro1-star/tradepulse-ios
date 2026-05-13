@@ -7,7 +7,6 @@
 //
 
 #import "GNCustomHeaders.h"
-#import "GNStubs.h"
 
 static NSString * kOurRequestProperty = @"co.median.ios.GNCustomHeaders";
 

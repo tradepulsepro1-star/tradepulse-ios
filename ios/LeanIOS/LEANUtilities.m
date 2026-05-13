@@ -372,31 +372,16 @@
         }
         else if ([self isDeviceiPhone6Plus])
         {
-            {
-                UIInterfaceOrientation orient = UIInterfaceOrientationPortrait;
-                for (UIScene *scene in [UIApplication sharedApplication].connectedScenes) {
-                    if ([scene isKindOfClass:[UIWindowScene class]]) {
-                        orient = ((UIWindowScene *)scene).interfaceOrientation;
-                        break;
-                    }
-                }
-                if (UIInterfaceOrientationIsPortrait(orient)) {
-                    return @"LaunchImage-800-Portrait-736h@3x.png";
-                } else {
-                    return @"LaunchImage-800-Landscape-736h@3x.png";
-                }
+            if ([UIApplication sharedApplication].isInterfaceOrientationPortrait) {
+                return @"LaunchImage-800-Portrait-736h@3x.png";
+            } else {
+                return @"LaunchImage-800-Landscape-736h@3x.png";
             }
         }
         else
             return images[0]; //Non-retina iPhone
     }
-    else if (({
-        UIInterfaceOrientation _o = UIInterfaceOrientationPortrait;
-        for (UIScene *_s in [UIApplication sharedApplication].connectedScenes) {
-            if ([_s isKindOfClass:[UIWindowScene class]]) { _o = ((UIWindowScene *)_s).interfaceOrientation; break; }
-        }
-        UIInterfaceOrientationIsPortrait(_o);
-    }))//iPad Portrait
+    else if ([UIApplication sharedApplication].isInterfaceOrientationPortrait)//iPad Portrait
     {
         if ([self isDeviceRetina])
         {
@@ -561,13 +546,13 @@
         if (appConfig.hasIosCustomJS) {
             [LEANUtilities injectJs:@"iosCustomJS" ToWebview:webview];
         }
-        // WebViewViewportManager removed (GoNative SDK) — viewport set by default
+        [[WebViewViewportManager shared] setViewportWithScale:appConfig.initialWebviewZoom width:appConfig.forceViewportWidth webView:webview];
         
         // Accessibility & Dynamic Type Support
         UIContentSizeCategory contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
         [self applyFontScalingForContentSize:contentSizeCategory toWebView:webview asUserScript:YES];
         
-        // GNBridge.loadUserScripts removed (GoNative SDK) — user scripts injected via NativeBridge
+        [((LEANAppDelegate *)[UIApplication sharedApplication].delegate).bridge loadUserScriptsForContentController:webview.configuration.userContentController];
         
         // for our faux content-inset
         webview.scrollView.layer.masksToBounds = NO;

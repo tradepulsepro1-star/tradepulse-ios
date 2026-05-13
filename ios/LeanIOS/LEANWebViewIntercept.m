@@ -13,7 +13,6 @@
 #import "LEANDocumentSharer.h"
 #import "LEANUrlCache.h"
 #import "GNCustomHeaders.h"
-#import "GNStubs.h"
 
 static NSPredicate* schemeHttpTest;
 static NSOperationQueue* queue;
