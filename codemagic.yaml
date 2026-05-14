@@ -5,7 +5,7 @@ workflows:
     integrations:
       app_store_connect: Anthony Rosa
     environment:
-      xcode: "16.3"
+      xcode: latest
       ios_signing:
         distribution_type: app_store
         bundle_identifier: net.tradepulsepro
