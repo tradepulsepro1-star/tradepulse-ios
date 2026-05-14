@@ -337,10 +337,7 @@ static NSInteger _currentWindows = 0;
 {
     GoNativeAppConfig *appConfig = [GoNativeAppConfig sharedAppConfig];
     WKWebViewConfiguration *config = [[NSClassFromString(@"WKWebViewConfiguration") alloc] init];
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     config.processPool = [LEANUtilities wkProcessPool];
-#pragma clang diagnostic pop
     config.allowsInlineMediaPlayback = YES;
     
     WKWebView *wv = [[NSClassFromString(@"WKWebView") alloc] initWithFrame:self.wkWebview.frame configuration:config];
@@ -764,12 +761,7 @@ static NSInteger _currentWindows = 0;
         UIWindow *window = [UIApplication sharedApplication].windows.firstObject;
         statusBarHeight = window ? window.safeAreaInsets.top : 20.0;
     } else {
-        if (@available(iOS 13.0, *)) {
-            UIWindowScene *scene = (UIWindowScene *)[UIApplication sharedApplication].connectedScenes.anyObject;
-            statusBarHeight = scene.statusBarManager.statusBarFrame.size.height;
-        } else {
-            statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
-        }
+        statusBarHeight = [UIApplication sharedApplication].statusBarFrame.size.height;
     }
     
     // Top guide is equal to super view (below top navbar)
@@ -2724,12 +2716,7 @@ static NSInteger _currentWindows = 0;
             CGFloat top = window ? window.safeAreaInsets.top : 20.0;
             statusSize = CGSizeMake(UIScreen.mainScreen.bounds.size.width, top);
         } else {
-            if (@available(iOS 13.0, *)) {
-                UIWindowScene *scene = (UIWindowScene *)[UIApplication sharedApplication].connectedScenes.anyObject;
-                statusSize = scene.statusBarManager.statusBarFrame.size;
-            } else {
-                statusSize = [UIApplication sharedApplication].statusBarFrame.size;
-            }
+            statusSize = [UIApplication sharedApplication].statusBarFrame.size;
         }
         CGFloat height = MIN(statusSize.height, statusSize.width);
         // fix for double height status bar on non-iPhoneX
