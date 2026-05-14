@@ -136,26 +136,26 @@ LEANWebViewPoolDisownPolicy kLEANWebViewPoolDisownPolicyDefault = LEANWebViewPoo
     NSString *name = json[@"appName"];
     self.appName = (name && name.length > 0) ? name : @"TradePulse";
 
-    // Parse iosTheme
-    NSDictionary *ios = json[@"ios"];
-    NSDictionary *appearance = ios[@"appearance"];
-    NSString *theme = appearance[@"theme"];
+    // Parse iosTheme — nil-safe nested access
+    NSDictionary *iosDict = [json[@"ios"] isKindOfClass:[NSDictionary class]] ? json[@"ios"] : @{};
+    NSDictionary *appearance = [iosDict[@"appearance"] isKindOfClass:[NSDictionary class]] ? iosDict[@"appearance"] : @{};
+    NSString *theme = [appearance[@"theme"] isKindOfClass:[NSString class]] ? appearance[@"theme"] : nil;
     self.iosTheme = (theme && theme.length > 0) ? theme : @"dark";
 
     // Navigation
-    NSDictionary *navDict = json[@"navigationLevels"] ?: json[@"navigation"];
     self.showNavigationBar = [json[@"navigationEnabled"] boolValue];
     self.showNavigationMenu = [json[@"sidebarEnabled"] boolValue];
-    self.navTitles = json[@"navigationTitles"] ?: @[];
+    self.navTitles = [json[@"navigationTitles"] isKindOfClass:[NSArray class]] ? json[@"navigationTitles"] : @[];
 
-    // Misc
+    // Misc — nil-safe
     self.swipeGestures = (json[@"swipeGestures"] != nil) ? [json[@"swipeGestures"] boolValue] : YES;
     self.showKeyboardAccessoryView = [json[@"showKeyboardAccessoryView"] boolValue];
     self.keepScreenOn = [json[@"keepScreenOn"] boolValue];
-    self.iosEnableOverlayInStatusBar = [ios[@"statusBar"][@"overlay"] boolValue];
+    NSDictionary *statusBar = [iosDict[@"statusBar"] isKindOfClass:[NSDictionary class]] ? iosDict[@"statusBar"] : @{};
+    self.iosEnableOverlayInStatusBar = [statusBar[@"overlay"] boolValue];
     self.hideWebviewAlpha = json[@"hideWebviewAlpha"] ?: @(0.0);
-    self.profilePickerJS = json[@"profilePickerJS"];
-    self.registrationEndpoints = json[@"registrationEndpoints"];
+    self.profilePickerJS = [json[@"profilePickerJS"] isKindOfClass:[NSString class]] ? json[@"profilePickerJS"] : nil;
+    self.registrationEndpoints = [json[@"registrationEndpoints"] isKindOfClass:[NSArray class]] ? json[@"registrationEndpoints"] : nil;
 
     // Mark ready and fire notification
     self.userAgentReady = YES;
