@@ -1,5 +1,6 @@
 //
 // GNStubsImpl.m - Implementations for GoNativeCore stubs
+// Reads appConfig.json at startup so initialURL and userAgentReady are populated.
 //
 
 #import "GNStubs.h"
@@ -21,8 +22,6 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
 @implementation RegexEnabled
 @end
 
-
-
 // NSAttributedString+GNIcons stub
 @implementation NSAttributedString (GNIcons)
 - (instancetype)initWithIconName:(NSString *)iconName color:(UIColor *)color size:(CGFloat)size {
@@ -30,25 +29,135 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
 }
 @end
 
-
-
-
 // ActionSelection stub
 @implementation ActionSelection
 @end
 
-
 // GoNativeAppConfig main implementation
 @implementation GoNativeAppConfig
+
 + (instancetype)sharedAppConfig {
-    static GoNativeAppConfig *i; static dispatch_once_t t;
-    dispatch_once(&t, ^{ i = [[self alloc] init]; }); return i;
+    static GoNativeAppConfig *i;
+    static dispatch_once_t t;
+    dispatch_once(&t, ^{
+        i = [[self alloc] init];
+        [i loadFromAppConfig];
+    });
+    return i;
 }
+
 + (instancetype)shared { return [self sharedAppConfig]; }
+
+- (void)loadFromAppConfig {
+    // Read appConfig.json from the main bundle
+    NSString *configPath = [[NSBundle mainBundle] pathForResource:@"appConfig" ofType:@"json"];
+    if (!configPath) {
+        // Fallback: set the live app URL directly so the WebView always loads
+        self.initialURL = [NSURL URLWithString:@"https://tradepulsepro.net"];
+        self.appName = @"TradePulse";
+        self.iosTheme = @"dark";
+        self.userAgentReady = YES;
+        self.showNavigationBar = NO;
+        self.showNavigationMenu = NO;
+        self.swipeGestures = YES;
+        self.showKeyboardAccessoryView = NO;
+        self.keepScreenOn = NO;
+        self.iosEnableOverlayInStatusBar = NO;
+        self.navTitles = @[];
+        self.hideWebviewAlpha = @(0.0);
+        // Fire ready notification
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:kGoNativeAppConfigNotificationUserAgentReady object:nil];
+        });
+        return;
+    }
+
+    NSData *data = [NSData dataWithContentsOfFile:configPath];
+    if (!data) {
+        self.initialURL = [NSURL URLWithString:@"https://tradepulsepro.net"];
+        self.userAgentReady = YES;
+        self.appName = @"TradePulse";
+        self.iosTheme = @"dark";
+        self.showNavigationBar = NO;
+        self.showNavigationMenu = NO;
+        self.swipeGestures = YES;
+        self.showKeyboardAccessoryView = NO;
+        self.keepScreenOn = NO;
+        self.iosEnableOverlayInStatusBar = NO;
+        self.navTitles = @[];
+        self.hideWebviewAlpha = @(0.0);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:kGoNativeAppConfigNotificationUserAgentReady object:nil];
+        });
+        return;
+    }
+
+    NSError *error = nil;
+    NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    if (error || !json) {
+        self.initialURL = [NSURL URLWithString:@"https://tradepulsepro.net"];
+        self.userAgentReady = YES;
+        self.appName = @"TradePulse";
+        self.iosTheme = @"dark";
+        self.showNavigationBar = NO;
+        self.showNavigationMenu = NO;
+        self.swipeGestures = YES;
+        self.showKeyboardAccessoryView = NO;
+        self.keepScreenOn = NO;
+        self.iosEnableOverlayInStatusBar = NO;
+        self.navTitles = @[];
+        self.hideWebviewAlpha = @(0.0);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:kGoNativeAppConfigNotificationUserAgentReady object:nil];
+        });
+        return;
+    }
+
+    // Parse initialUrl
+    NSString *urlStr = json[@"initialUrl"];
+    if (urlStr && urlStr.length > 0) {
+        self.initialURL = [NSURL URLWithString:urlStr];
+    } else {
+        self.initialURL = [NSURL URLWithString:@"https://tradepulsepro.net"];
+    }
+
+    // Parse appName
+    NSString *name = json[@"appName"];
+    self.appName = (name && name.length > 0) ? name : @"TradePulse";
+
+    // Parse iosTheme
+    NSDictionary *ios = json[@"ios"];
+    NSDictionary *appearance = ios[@"appearance"];
+    NSString *theme = appearance[@"theme"];
+    self.iosTheme = (theme && theme.length > 0) ? theme : @"dark";
+
+    // Navigation
+    NSDictionary *navDict = json[@"navigationLevels"] ?: json[@"navigation"];
+    self.showNavigationBar = [json[@"navigationEnabled"] boolValue];
+    self.showNavigationMenu = [json[@"sidebarEnabled"] boolValue];
+    self.navTitles = json[@"navigationTitles"] ?: @[];
+
+    // Misc
+    self.swipeGestures = (json[@"swipeGestures"] != nil) ? [json[@"swipeGestures"] boolValue] : YES;
+    self.showKeyboardAccessoryView = [json[@"showKeyboardAccessoryView"] boolValue];
+    self.keepScreenOn = [json[@"keepScreenOn"] boolValue];
+    self.iosEnableOverlayInStatusBar = [ios[@"statusBar"][@"overlay"] boolValue];
+    self.hideWebviewAlpha = json[@"hideWebviewAlpha"] ?: @(0.0);
+    self.profilePickerJS = json[@"profilePickerJS"];
+    self.registrationEndpoints = json[@"registrationEndpoints"];
+
+    // Mark ready and fire notification
+    self.userAgentReady = YES;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [[NSNotificationCenter defaultCenter] postNotificationName:kGoNativeAppConfigNotificationUserAgentReady object:nil];
+    });
+}
+
 - (NSString *)userAgentForUrl:(NSURL *)url { return @""; }
 - (NSDictionary *)getRegexRuleForURL:(NSString *)url rules:(id)rules { return nil; }
 - (void)initializeRegexRules:(id *)rules {}
 - (void)setNewRegexRules:(id)rules regexRulesArray:(id *)array {}
+
 @end
 
 // GoNativeAppConfig sidebar extras
@@ -84,4 +193,3 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
 - (void)loadUserScriptsForContentController:(id)contentController {}
 - (id<GNController>)getControllerForKey:(NSString *)key runner:(id)runner { return nil; }
 @end
-
