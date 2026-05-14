@@ -124,38 +124,53 @@ LEANWebViewPoolDisownPolicy kLEANWebViewPoolDisownPolicyDefault = LEANWebViewPoo
         return;
     }
 
-    // Parse initialUrl
-    NSString *urlStr = json[@"initialUrl"];
+    // appConfig.json is nested: general / navigation / styling sections
+    NSDictionary *general  = [json[@"general"]  isKindOfClass:[NSDictionary class]] ? json[@"general"]  : @{};
+    NSDictionary *nav      = [json[@"navigation"] isKindOfClass:[NSDictionary class]] ? json[@"navigation"] : @{};
+    NSDictionary *styling  = [json[@"styling"]  isKindOfClass:[NSDictionary class]] ? json[@"styling"]  : @{};
+
+    // initialUrl — under "general"
+    NSString *urlStr = [general[@"initialUrl"] isKindOfClass:[NSString class]] ? general[@"initialUrl"] : nil;
     if (urlStr && urlStr.length > 0) {
         self.initialURL = [NSURL URLWithString:urlStr];
     } else {
         self.initialURL = [NSURL URLWithString:@"https://tradepulsepro.net"];
     }
 
-    // Parse appName
-    NSString *name = json[@"appName"];
+    // appName — under "general"
+    NSString *name = [general[@"appName"] isKindOfClass:[NSString class]] ? general[@"appName"] : nil;
     self.appName = (name && name.length > 0) ? name : @"TradePulse";
 
-    // Parse iosTheme — nil-safe nested access
-    NSDictionary *iosDict = [json[@"ios"] isKindOfClass:[NSDictionary class]] ? json[@"ios"] : @{};
-    NSDictionary *appearance = [iosDict[@"appearance"] isKindOfClass:[NSDictionary class]] ? iosDict[@"appearance"] : @{};
-    NSString *theme = [appearance[@"theme"] isKindOfClass:[NSString class]] ? appearance[@"theme"] : nil;
+    // iosTheme — under "styling"
+    NSString *theme = [styling[@"iosTheme"] isKindOfClass:[NSString class]] ? styling[@"iosTheme"] : nil;
     self.iosTheme = (theme && theme.length > 0) ? theme : @"dark";
 
-    // Navigation
-    self.showNavigationBar = [json[@"navigationEnabled"] boolValue];
-    self.showNavigationMenu = [json[@"sidebarEnabled"] boolValue];
-    self.navTitles = [json[@"navigationTitles"] isKindOfClass:[NSArray class]] ? json[@"navigationTitles"] : @[];
+    // Navigation bar / menu — under "styling"
+    self.showNavigationBar = [styling[@"showNavigationBar"] boolValue];
+    self.showNavigationMenu = NO; // sidebar not used
 
-    // Misc — nil-safe
-    self.swipeGestures = (json[@"swipeGestures"] != nil) ? [json[@"swipeGestures"] boolValue] : YES;
-    self.showKeyboardAccessoryView = [json[@"showKeyboardAccessoryView"] boolValue];
-    self.keepScreenOn = [json[@"keepScreenOn"] boolValue];
-    NSDictionary *statusBar = [iosDict[@"statusBar"] isKindOfClass:[NSDictionary class]] ? iosDict[@"statusBar"] : @{};
-    self.iosEnableOverlayInStatusBar = [statusBar[@"overlay"] boolValue];
-    self.hideWebviewAlpha = json[@"hideWebviewAlpha"] ?: @(0.0);
-    self.profilePickerJS = [json[@"profilePickerJS"] isKindOfClass:[NSString class]] ? json[@"profilePickerJS"] : nil;
-    self.registrationEndpoints = [json[@"registrationEndpoints"] isKindOfClass:[NSArray class]] ? json[@"registrationEndpoints"] : nil;
+    // Nav titles — under "navigation" -> "navigationTitles" -> "titles"
+    NSDictionary *navTitlesDict = [nav[@"navigationTitles"] isKindOfClass:[NSDictionary class]] ? nav[@"navigationTitles"] : @{};
+    self.navTitles = [navTitlesDict[@"titles"] isKindOfClass:[NSArray class]] ? navTitlesDict[@"titles"] : @[];
+
+    // Swipe gestures — under "navigation", nil = YES default
+    self.swipeGestures = (nav[@"swipeGestures"] != nil && nav[@"swipeGestures"] != [NSNull null])
+        ? [nav[@"swipeGestures"] boolValue] : YES;
+
+    // keepScreenOn — under "general"
+    self.keepScreenOn = [general[@"keepScreenOn"] boolValue];
+
+    // Status bar overlay — under "styling"
+    self.iosEnableOverlayInStatusBar = [styling[@"iosEnableOverlayInStatusBar"] boolValue];
+
+    // CRITICAL: hideWebviewAlpha — under "styling" — must be 1.0 so WebView is VISIBLE
+    id alphaVal = styling[@"hideWebviewAlpha"];
+    self.hideWebviewAlpha = (alphaVal && alphaVal != [NSNull null]) ? alphaVal : @(1.0);
+
+    // Keyboard, profilePickerJS, registrationEndpoints — not in appConfig, use safe defaults
+    self.showKeyboardAccessoryView = NO;
+    self.profilePickerJS = nil;
+    self.registrationEndpoints = nil;
 
     // Mark ready and fire notification
     self.userAgentReady = YES;
