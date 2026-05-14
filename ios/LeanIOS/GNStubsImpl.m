@@ -75,7 +75,7 @@ LEANWebViewPoolDisownPolicy kLEANWebViewPoolDisownPolicyDefault = LEANWebViewPoo
         self.keepScreenOn = NO;
         self.iosEnableOverlayInStatusBar = NO;
         self.navTitles = @[];
-        self.hideWebviewAlpha = @(0.0);
+        self.hideWebviewAlpha = @(1.0);
         // Fire ready notification
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:kGoNativeAppConfigNotificationUserAgentReady object:nil];
@@ -96,7 +96,7 @@ LEANWebViewPoolDisownPolicy kLEANWebViewPoolDisownPolicyDefault = LEANWebViewPoo
         self.keepScreenOn = NO;
         self.iosEnableOverlayInStatusBar = NO;
         self.navTitles = @[];
-        self.hideWebviewAlpha = @(0.0);
+        self.hideWebviewAlpha = @(1.0);
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:kGoNativeAppConfigNotificationUserAgentReady object:nil];
         });
@@ -117,7 +117,7 @@ LEANWebViewPoolDisownPolicy kLEANWebViewPoolDisownPolicyDefault = LEANWebViewPoo
         self.keepScreenOn = NO;
         self.iosEnableOverlayInStatusBar = NO;
         self.navTitles = @[];
-        self.hideWebviewAlpha = @(0.0);
+        self.hideWebviewAlpha = @(1.0);
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:kGoNativeAppConfigNotificationUserAgentReady object:nil];
         });

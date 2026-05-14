@@ -274,7 +274,7 @@
     "androidSwipeNavigationInactiveColor": "#666666",
     "androidSwipeNavigationInactiveColorDark": "#666666",
     "androidWebviewTextZoom": null,
-    "hideWebviewAlpha": 0.5,
+    "hideWebviewAlpha": 1.0,
     "splashScreen": {
       "ios": {
         "backgroundColor": "#000000",
