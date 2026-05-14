@@ -4,6 +4,7 @@
 //
 
 #import "GNStubs.h"
+#import "LEANWebViewPool.h"
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 
@@ -17,6 +18,16 @@ NSString * const kLEANAppConfigNotificationProcessedTabNavigation = @"co.median.
 NSString * const kLEANAppConfigNotificationProcessedNavigationTitles = @"co.median.ios.AppConfig.processedNavigationTitles";
 NSString * const kLEANAppConfigNotificationProcessedNavigationLevels = @"co.median.ios.AppConfig.processedNavigationLevels";
 NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.median.ios.AppConfig.appTrackingStatusChanged";
+
+// Missing GoNativeCore constants — defined here since we don't link GoNativeCore.framework
+NSString * GNJSBridgeName = @"gonative";
+NSString * GNFileWriterSharerName = @"gonativeFileWriterSharer";
+NSUInteger GNFileWriterSharerMaxSize = 10 * 1024 * 1024; // 10 MB
+
+// Missing LEAN constants
+NSString * kLEANLoginManagerNotificationName = @"co.median.ios.loginManager.notification";
+NSString * kLEANLoginManagerStatusChangedNotification = @"co.median.ios.loginManager.statusChanged";
+LEANWebViewPoolDisownPolicy kLEANWebViewPoolDisownPolicyDefault = LEANWebViewPoolDisownPolicyReload;
 
 // RegexEnabled implementation
 @implementation RegexEnabled
