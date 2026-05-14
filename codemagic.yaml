@@ -40,6 +40,9 @@ workflows:
             DEVELOPMENT_TEAM=5L79BW988P \
             CODE_SIGN_STYLE=Manual \
             "OTHER_LDFLAGS=-ObjC" \
+            "OTHER_CFLAGS=-Wno-deprecated-declarations" \
+            "GCC_WARN_ABOUT_DEPRECATED_FUNCTIONS=NO" \
+            "CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS=NO" \
             archive 2>&1 | tee /Users/builder/clone/build_full.log
 
           [ -d "$ARCHIVE_PATH" ] && echo "ARCHIVE OK" || { echo "ARCHIVE MISSING"; exit 1; }
