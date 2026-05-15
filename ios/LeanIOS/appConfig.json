@@ -200,7 +200,9 @@
       "enabled": false,
       "numWindows": 5,
       "autoClose": false
-    }
+    },
+    "toolbarEnabled": false,
+    "showToolbar": false
   },
   "styling": {
     "icon": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_ios.png",
@@ -339,7 +341,9 @@
     "navigationTitleImageLocationDark": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_ios.png",
     "androidHeaderImage": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_android.png",
     "androidHeaderImageDark": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_android.png",
-    "iosHeaderImageDark": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_ios.png"
+    "iosHeaderImageDark": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_ios.png",
+    "iosFullScreenWebview": false,
+    "showShareButton": false
   },
   "permissions": {
     "usesGeolocation": false,
