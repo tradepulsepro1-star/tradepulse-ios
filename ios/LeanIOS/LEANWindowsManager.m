@@ -8,7 +8,7 @@
 
 #import "LEANWindowsManager.h"
 #import <SafariServices/SafariServices.h>
-#import "GonativeIO-Stubs.h"
+#import "GonativeIO-Swift.h"
 
 @interface LEANWindowsManager()<SFSafariViewControllerDelegate>
 @property (weak, nonatomic) LEANWebViewController *wvc;

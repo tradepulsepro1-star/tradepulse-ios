@@ -13,7 +13,7 @@
 #import "LEANConfigUpdater.h"
 #import "LEANUtilities.h"
 #import "GNConfigPreferences.h"
-#import "GonativeIO-Stubs.h"
+#import "GonativeIO-Swift.h"
 #import <AppTrackingTransparency/ATTrackingManager.h>
 
 @implementation LEANAppDelegate
