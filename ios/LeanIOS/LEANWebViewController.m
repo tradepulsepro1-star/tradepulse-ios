@@ -1251,9 +1251,9 @@ static NSInteger _currentWindows = 0;
         ASWebAuthenticationSession *session = [[ASWebAuthenticationSession alloc]
             initWithURL:authURL
             callbackURLScheme:nil
-            completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {
-                if (callbackURL) {
-                    [self.wkWebview loadRequest:[NSURLRequest requestWithURL:callbackURL]];
+            completionHandler:^(NSURL * _Nullable receivedURL, NSError * _Nullable error) {
+                if (receivedURL) {
+                    [self.wkWebview loadRequest:[NSURLRequest requestWithURL:receivedURL]];
                 }
             }];
         session.presentationContextProvider = self;

@@ -15,7 +15,7 @@
     '* { -webkit-touch-callout: none !important; }',
     // Disable bounce/rubber-band scroll on body
     'html, body { overscroll-behavior: none; overflow: hidden; height: 100%; }',
-    '#root, #app { height: 100%; overflow-y: auto; overscroll-behavior: none; -webkit-overflow-scrolling: touch; }',
+    '#root, #app, .app-container, [data-reactroot] { height: 100%; overflow-y: auto; overscroll-behavior: none; -webkit-overflow-scrolling: touch; }',
     // Prevent cursor from showing on non-input elements
     'body { cursor: default; }',
     // Smooth font rendering — native quality
