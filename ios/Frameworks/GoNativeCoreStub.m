@@ -3,27 +3,6 @@
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 
-@interface GoNativeAppConfig : NSObject
-+ (instancetype)sharedAppConfig;
-+ (instancetype)shared;
-@property (nonatomic) BOOL contextMenuEnabled, pinchToZoom, pullToRefresh, swipeGestures;
-@property (nonatomic) BOOL dynamicTypeEnabled, disableAnimations, disableEventRecorder;
-@property (nonatomic) BOOL enableWindowOpen, injectMedianJS, useWKWebView, userAgentReady;
-@property (nonatomic) BOOL showShareButton, showToolbar, iosAutoHideHomeIndicator, iosShowOfflinePage;
-@property (nonatomic, strong) NSArray *contextMenuLinkActions, *navStructureLevels, *navTitles;
-@property (nonatomic, strong) NSArray *tabMenus, *tabMenuIDs, *tabMenuRegexes, *webviewPools;
-@property (nonatomic, strong) NSArray *loginDetectRegexes, *loginDetectLocations, *menuItems;
-@property (nonatomic, strong) NSArray *menus, *listeners, *toolbarItems, *segmentedControlItems, *replaceStrings;
-@property (nonatomic, strong) NSDictionary *actions, *customHeaders, *font;
-@property (nonatomic, strong) NSString *initialHost, *publicKey, *stringViewport, *sidebarMenuIcon;
-@property (nonatomic, strong) NSString *sidebarIcon, *appName, *userAgent, *userIdRegex;
-@property (nonatomic, strong) NSString *currentMenuID, *signupURL, *targetFrame, *iosTheme, *iosSidebarFont;
-@property (nonatomic, strong) NSNumber *forceViewportWidth, *interactiveDelay, *iosConnectionOfflineTime;
-@property (nonatomic) NSUInteger maxWindows, forceSessionCookieExpiry;
-@property (nonatomic, strong) NSURL *initialURL, *loginDetectionURL;
-@property (nonatomic, strong) UIImage *navigationTitleIcon, *appIcon;
-@end
-
 @implementation GoNativeAppConfig
 + (instancetype)sharedAppConfig {
     static GoNativeAppConfig *i; static dispatch_once_t t;
@@ -36,13 +15,8 @@
 - (void)setNewRegexRules:(id)rules regexRulesArray:(id *)array {}
 @end
 
-@interface GNBridge : NSObject @end
 @implementation GNBridge @end
 
-@interface GNJSBridgeHandler : NSObject
-+ (instancetype)shared;
-- (void)handleUrl:(NSURL *)url query:(NSDictionary *)query wvc:(id)wvc;
-@end
 @implementation GNJSBridgeHandler
 + (instancetype)shared {
     static GNJSBridgeHandler *i; static dispatch_once_t t;
@@ -51,10 +25,6 @@
 - (void)handleUrl:(NSURL *)url query:(NSDictionary *)query wvc:(id)wvc {}
 @end
 
-@interface GNEventEmitter : NSObject
-+ (instancetype)shared;
-- (void)emitEvent:(NSString *)event data:(id)data;
-@end
 @implementation GNEventEmitter
 + (instancetype)shared {
     static GNEventEmitter *i; static dispatch_once_t t;
