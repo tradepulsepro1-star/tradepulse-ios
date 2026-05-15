@@ -15,8 +15,8 @@
 #import "LEANTabManager.h"
 #import "LEANProfilePicker.h"
 #import "LEANUtilities.h"
-// GonativeIO-Swift.h removed — all Swift types use GNStubs.h ObjC declarations
-#import "GNStubs.h"
+#import "GonativeIO-Swift.h"
+@import MedianIcons;
 
 @interface LEANMenuViewController ()
 
