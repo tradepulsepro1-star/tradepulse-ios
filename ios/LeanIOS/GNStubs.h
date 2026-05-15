@@ -228,5 +228,40 @@ static inline UIWindow* GNKeyWindow(void) {
 - (void)emitEvent:(NSString *)event data:(id)data;
 @end
 
+
+// ============================================================
+// Swift @objc class stubs — declared here so ObjC files can
+// use them without waiting for Xcode to generate GonativeIO-Swift.h
+// ============================================================
+
+// LEANIcons — resolves icon identifiers to UIImages
+@interface LEANIcons : NSObject
++ (UIImage * _Nullable)imageForIconIdentifier:(NSString * _Nonnull)name
+                                         size:(CGFloat)size
+                                        color:(UIColor * _Nonnull)color;
+@end
+
+// CustomMenu — floating action menu
+@interface CustomMenu : UIView
+- (nonnull instancetype)initWithContainer:(UIView * _Nonnull)container
+                                   button:(UIButton * _Nonnull)button
+                                     data:(NSArray * _Nonnull)data
+                                    onTap:(void (^ _Nullable)(NSDictionary * _Nullable))onTap;
+- (void)setMenuColor:(UIColor * _Nonnull)color;
+@end
+
+// GNSwiftUtilities — device token helper
+@interface GNSwiftUtilities : NSObject
++ (NSString * _Nonnull)deviceTokenWithData:(NSData * _Nonnull)data;
+@end
+
+// WebViewViewportManager — viewport/zoom control
+@interface WebViewViewportManager : NSObject
+@property (class, readonly, strong) WebViewViewportManager * _Nonnull shared;
+- (void)setViewportWithScale:(CGFloat)scale
+                       width:(NSNumber * _Nullable)width
+                     webView:(id _Nullable)webView;
+@end
+
 #endif // __OBJC__
 
