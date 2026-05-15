@@ -36,6 +36,7 @@
 
 // CustomMenu — defined in CustomMenu.swift
 @interface CustomMenu : UIView
+- (instancetype)initWithContainer:(UIView *)container button:(UIButton *)button data:(NSArray *)data onTap:(void (^)(NSDictionary *))onTap;
 - (void)setMenuColor:(UIColor *)color;
 @end
 
