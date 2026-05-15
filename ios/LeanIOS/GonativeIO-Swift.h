@@ -3,10 +3,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-
-#ifndef SWIFT_CLASS
-#define SWIFT_CLASS(SWIFT_NAME) __attribute__((objc_subclassing_restricted)) __attribute__((swift_name(SWIFT_NAME)))
-#endif
+#import <WebKit/WebKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -23,6 +20,21 @@ __attribute__((objc_subclassing_restricted))
 @interface CustomMenu : UIView
 - (instancetype)initWithContainer:(UIView *)container button:(UIButton *)button data:(NSArray *)data onTap:(void (^ _Nullable)(NSDictionary * _Nullable))onTap;
 - (void)setMenuColor:(UIColor *)color;
+@end
+
+// WebViewViewportManager — declared in WebViewViewportManager.swift
+// Used by: LEANUtilities.m
+__attribute__((objc_subclassing_restricted))
+@interface WebViewViewportManager : NSObject
+@property (class, readonly) WebViewViewportManager *shared;
+- (void)setViewportWithScale:(CGFloat)scale width:(NSNumber * _Nullable)width webView:(WKWebView * _Nullable)webView;
+@end
+
+// GNSwiftUtilities — declared in GNSwiftUtilities.swift
+// Used by: LEANAppDelegate.m
+__attribute__((objc_subclassing_restricted))
+@interface GNSwiftUtilities : NSObject
++ (NSString *)deviceTokenWithData:(NSData *)data;
 @end
 
 NS_ASSUME_NONNULL_END
