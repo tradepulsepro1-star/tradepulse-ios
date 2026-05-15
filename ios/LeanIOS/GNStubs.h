@@ -145,6 +145,17 @@ extern NSString * const kLEANAppConfigNotificationProcessedNavigationTitles;
 extern NSString * const kLEANAppConfigNotificationProcessedNavigationLevels;
 extern NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged;
 
+// LEANToolbar visibility constants (from GoNativeCore)
+typedef NS_ENUM(NSInteger, LEANToolbarVisibilityByPages) {
+    LEANToolbarVisibilityByPagesAlways = 0,
+    LEANToolbarVisibilityByPagesSpecific = 1,
+    LEANToolbarVisibilityByPagesNever = 2
+};
+typedef NS_ENUM(NSInteger, LEANToolbarVisibilityByBackButton) {
+    LEANToolbarVisibilityByBackButtonAlways = 0,
+    LEANToolbarVisibilityByBackButtonActive = 1
+};
+
 // RegexEnabled stub - used by LEANToolbarManager
 @interface RegexEnabled : NSObject
 @property (nonatomic, strong) NSPredicate *regex;
