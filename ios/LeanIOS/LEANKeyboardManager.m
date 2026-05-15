@@ -9,7 +9,6 @@
 #import "LEANKeyboardManager.h"
 #import <objc/runtime.h>
 #import <UIKit/UIKit.h>
-#import "TradePulse-Swift.h"
 
 @interface LEANKeyboardManager()
 @property Class noInputAccessoryViewClass;

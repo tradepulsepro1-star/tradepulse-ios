@@ -15,7 +15,6 @@
 #import "LEANTabManager.h"
 #import "LEANProfilePicker.h"
 #import "LEANUtilities.h"
-#import "TradePulse-Swift.h"
 
 
 @interface LEANMenuViewController ()

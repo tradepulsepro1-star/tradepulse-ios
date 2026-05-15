@@ -8,7 +8,6 @@
 
 #import "LEANTabManager.h"
 #import "LEANUtilities.h"
-#import "TradePulse-Swift.h"
 
 @interface LEANTabManager() <UITabBarDelegate>
 @property UITabBar *tabBar;

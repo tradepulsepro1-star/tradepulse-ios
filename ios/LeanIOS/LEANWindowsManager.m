@@ -8,7 +8,6 @@
 
 #import "LEANWindowsManager.h"
 #import <SafariServices/SafariServices.h>
-#import "TradePulse-Swift.h"
 
 @interface LEANWindowsManager()<SFSafariViewControllerDelegate>
 @property (weak, nonatomic) LEANWebViewController *wvc;
