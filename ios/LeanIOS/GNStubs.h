@@ -199,19 +199,8 @@ static inline UIWindow* GNKeyWindow(void) {
 #ifndef GNBridge_DEFINED
 #define GNBridge_DEFINED
 @interface GNBridge : NSObject
-- (instancetype)init;
 - (void)loadUserScriptsForContentController:(id)contentController;
 - (id<GNController>)getControllerForKey:(NSString *)key runner:(id)runner;
-- (void)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary * _Nullable)options;
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
-- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary *)options;
-- (void)applicationDidBecomeActive:(UIApplication *)application;
-- (void)applicationWillResignActive:(UIApplication *)application;
-- (void)applicationDidEnterBackground:(UIApplication *)application;
-- (void)applicationWillEnterForeground:(UIApplication *)application;
-- (void)applicationWillTerminate:(UIApplication *)application;
-- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity;
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo;
 @end
 #endif
 
@@ -237,53 +226,6 @@ static inline UIWindow* GNKeyWindow(void) {
 @interface GNEventEmitter : NSObject
 + (instancetype)shared;
 - (void)emitEvent:(NSString *)event data:(id)data;
-@end
-
-
-// ============================================================
-// Swift @objc class stubs — declared here so ObjC files can
-// use them without waiting for Xcode to generate GonativeIO-Swift.h
-// ============================================================
-
-// LEANIcons — resolves icon identifiers to UIImages
-@interface LEANIcons : NSObject
-+ (UIImage * _Nullable)imageForIconIdentifier:(NSString * _Nonnull)name
-                                         size:(CGFloat)size
-                                        color:(UIColor * _Nonnull)color;
-@end
-
-// CustomMenu — floating action menu
-@interface CustomMenu : UIView
-- (nonnull instancetype)initWithContainer:(UIView * _Nonnull)container
-                                   button:(UIButton * _Nonnull)button
-                                     data:(NSArray * _Nonnull)data
-                                    onTap:(void (^ _Nullable)(NSDictionary * _Nullable))onTap;
-- (void)setMenuColor:(UIColor * _Nonnull)color;
-@end
-
-// GNSwiftUtilities — device token helper
-@interface GNSwiftUtilities : NSObject
-+ (NSString * _Nonnull)deviceTokenWithData:(NSData * _Nonnull)data;
-@end
-
-// WebViewViewportManager — viewport/zoom control
-@interface WebViewViewportManager : NSObject
-@property (class, readonly, strong) WebViewViewportManager * _Nonnull shared;
-- (void)setViewportWithScale:(CGFloat)scale
-                       width:(NSNumber * _Nullable)width
-                     webView:(id _Nullable)webView;
-@end
-
-
-// ============================================================
-// UIApplication @objc Swift extension — declared as ObjC category
-// so ObjC files can access these properties without waiting for
-// Xcode to generate GonativeIO-Swift.h
-// ============================================================
-@interface UIApplication (SwiftExtensions)
-@property (nonatomic, readonly, nullable) UIWindow *currentKeyWindow;
-@property (nonatomic, readonly) CGRect currentStatusBarFrame;
-@property (nonatomic, readonly) BOOL isInterfaceOrientationPortrait;
 @end
 
 #endif // __OBJC__
