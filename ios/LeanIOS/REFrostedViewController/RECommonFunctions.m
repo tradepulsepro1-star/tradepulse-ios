@@ -24,7 +24,7 @@
 //
 
 #import "RECommonFunctions.h"
-#import "GonativeIO-Swift.h"
+#import "GonativeIO-Stubs.h"
 #import <UIKit/UIKit.h>
 
 BOOL REFrostedViewControllerUIKitIsFlatMode(void)

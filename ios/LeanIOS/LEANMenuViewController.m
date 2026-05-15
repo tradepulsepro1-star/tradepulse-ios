@@ -15,7 +15,7 @@
 #import "LEANTabManager.h"
 #import "LEANProfilePicker.h"
 #import "LEANUtilities.h"
-#import "GonativeIO-Swift.h"
+#import "GonativeIO-Stubs.h"
 
 
 @interface LEANMenuViewController ()

@@ -9,7 +9,7 @@
 #import "LEANToolbarManager.h"
 #import "LEANWebViewController.h"
 #import "LEANUtilities.h"
-#import "GonativeIO-Swift.h"
+#import "GonativeIO-Stubs.h"
 
 @interface LEANToolbarItem : NSObject
 @property BOOL enabled;

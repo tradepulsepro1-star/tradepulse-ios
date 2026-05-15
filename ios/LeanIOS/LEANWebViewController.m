@@ -45,7 +45,7 @@ NSString *kLEANWebViewControllerClearPools = @"co.median.ios.WebViewController.c
 #import "GNFileWriterSharer.h"
 #import "GNConfigPreferences.h"
 #import "GNBackgroundAudio.h"
-#import "GonativeIO-Swift.h"
+#import "GonativeIO-Stubs.h"
 #import <AppTrackingTransparency/ATTrackingManager.h>
 #import "GNJSBridgeInterface.h"
 #import "GNLogManager.h"
