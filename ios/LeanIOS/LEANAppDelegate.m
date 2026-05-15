@@ -13,7 +13,6 @@
 #import "LEANConfigUpdater.h"
 #import "LEANUtilities.h"
 #import "GNConfigPreferences.h"
-#import "GNBridge.h"
 #import "GonativeIO-Swift.h"
 #import <AppTrackingTransparency/ATTrackingManager.h>
 
