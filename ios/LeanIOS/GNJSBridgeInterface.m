@@ -7,6 +7,7 @@
 //
 
 #import "GNJSBridgeInterface.h"
+#import "GonativeIO-Stubs.h"
 #import <Foundation/Foundation.h>
 
 @implementation GNJSBridgeInterface : NSObject

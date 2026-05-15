@@ -178,12 +178,8 @@
                     "pagesToTrigger": "domain"
                 },
                 {
-                    "regex": "https?://([-\\w]+\\.)*tradepulse\\.net(/.*)?$",
-                    "mode": "internal"
-                },
-                {
                     "regex": ".*",
-                    "mode": "internal",
+                    "mode": "appbrowser",
                     "label": "All Other Links",
                     "pagesToTrigger": "all"
                 }
@@ -206,9 +202,7 @@
             "enabled": false,
             "numWindows": 5,
             "autoClose": false
-        },
-        "toolbarEnabled": false,
-        "showToolbar": false
+        }
     },
     "styling": {
         "icon": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_ios.png",
@@ -237,7 +231,7 @@
         "iosTabBarInactiveColorDark": "#818181",
         "iosHeaderImage": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_ios.png",
         "iosIcon": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_ios.png",
-        "iosTheme": "dark",
+        "iosTheme": "default",
         "showActionBar": false,
         "androidBackgroundColor": "#FFFFFF",
         "androidBackgroundColorDark": "#333333",
@@ -347,9 +341,7 @@
         "navigationTitleImageLocationDark": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_ios.png",
         "androidHeaderImage": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_android.png",
         "androidHeaderImageDark": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_android.png",
-        "iosHeaderImageDark": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_ios.png",
-        "iosFullScreenWebview": false,
-        "showShareButton": false
+        "iosHeaderImageDark": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_ios.png"
     },
     "permissions": {
         "usesGeolocation": false,

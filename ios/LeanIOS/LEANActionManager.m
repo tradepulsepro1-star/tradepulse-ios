@@ -8,7 +8,8 @@
 
 #import "LEANActionManager.h"
 #import "LEANUtilities.h"
-#import "TradePulse-Swift.h"
+#import "GonativeIO-Stubs.h"
+#import <objc/runtime.h>
 
 @implementation LEANActionButtons
 

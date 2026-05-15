@@ -8,6 +8,7 @@
 
 #import "LEANRegexRulesManager.h"
 #import "LEANWindowsManager.h"
+#import "GonativeIO-Stubs.h"
 
 @interface LEANRegexRulesManager()
 @property LEANWindowsManager *windowsManager;

@@ -7,7 +7,7 @@
 //
 
 #import <MobileCoreServices/MobileCoreServices.h>
-#import "TradePulse-Swift.h"
+#import "GonativeIO-Stubs.h"
 #import "LEANUtilities.h"
 #import "LEANAppDelegate.h"
 
