@@ -13,6 +13,8 @@
 		0ECDC46C313485A9201642A7 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D22A2C8586FC55AA4181D313 /* UIKit.framework */; };
 		0FE0155346E5661200031625 /* GNBackgroundAudio.m in Sources */ = {isa = PBXBuildFile; fileRef = EB37DC30BBA202BDCD2A27D5 /* GNBackgroundAudio.m */; };
 		AA11BB22CC33DD44EE55FF61 /* GNStubsImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF60 /* GNStubsImpl.m */; };
+		CC000001DD000001 /* GoNativeCoreStub.m in Sources */ = {isa = PBXBuildFile; fileRef = CC000011DD000011 /* GoNativeCoreStub.m */; };
+		EE000001FF000001 /* CustomMenuObjC.m in Sources */ = {isa = PBXBuildFile; fileRef = EE000011FF000011 /* CustomMenuObjC.m */; };
 		AA000001BB000001 /* LEANIcons.m in Sources */ = {isa = PBXBuildFile; fileRef = AA000011BB000011 /* LEANIcons.m */; };
 		AA000002BB000002 /* GNSwiftUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = AA000012BB000012 /* GNSwiftUtilities.m */; };
 		AA000003BB000003 /* WebViewViewportManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AA000013BB000013 /* WebViewViewportManager.m */; };
@@ -167,6 +169,8 @@
 		23F9B2A3CEFA0796AC73E637 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		274A66DFC051712F0B671B3E /* GoNativeJSBridgeLibrary.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = GoNativeJSBridgeLibrary.js; sourceTree = "<group>"; };
 		AA11BB22CC33DD44EE55FF60 /* GNStubsImpl.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNStubsImpl.m; sourceTree = "<group>"; };
+		EE000011FF000011 /* CustomMenuObjC.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomMenuObjC.m; sourceTree = "<group>"; };
+		CC000011DD000011 /* GoNativeCoreStub.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = GoNativeCoreStub.m; path = LeanIOS/GoNativeCoreStub.m; sourceTree = SOURCE_ROOT; };
 		AA000011BB000011 /* LEANIcons.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LEANIcons.m; sourceTree = "<group>"; };
 		AA000012BB000012 /* GNSwiftUtilities.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GNSwiftUtilities.m; sourceTree = "<group>"; };
 		AA000013BB000013 /* WebViewViewportManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WebViewViewportManager.m; sourceTree = "<group>"; };
@@ -417,6 +421,8 @@
 				48134ECEC524D50479D91820 /* GNSwiftUtilities.swift */,
 				274A66DFC051712F0B671B3E /* GoNativeJSBridgeLibrary.js */,
 				AA11BB22CC33DD44EE55FF60 /* GNStubsImpl.m */,
+				CC000011DD000011 /* GoNativeCoreStub.m */,
+				EE000011FF000011 /* CustomMenuObjC.m */,
 				AA000011BB000011 /* LEANIcons.m */,
 				AA000012BB000012 /* GNSwiftUtilities.m */,
 				AA000013BB000013 /* WebViewViewportManager.m */,
@@ -683,9 +689,10 @@
 				61E8908102C9ED08839A67F2 /* TuistPlists+TradePulse.swift in Sources */,
 				4E7B34FF289BFC0D22FD80A0 /* TuistStrings+TradePulse.swift in Sources */,
 				86941957B602BD3A52736F09 /* ContextMenuHandler.swift in Sources */,
-				85C6A2B5F65F443BDE292206 /* CustomMenu.swift in Sources */,
 				0FE0155346E5661200031625 /* GNBackgroundAudio.m in Sources */,
 				AA11BB22CC33DD44EE55FF61 /* GNStubsImpl.m in Sources */,
+				CC000001DD000001 /* GoNativeCoreStub.m in Sources */,
+				EE000001FF000001 /* CustomMenuObjC.m in Sources */,
 				AA000001BB000001 /* LEANIcons.m in Sources */,
 				AA000002BB000002 /* GNSwiftUtilities.m in Sources */,
 				AA000003BB000003 /* WebViewViewportManager.m in Sources */,
