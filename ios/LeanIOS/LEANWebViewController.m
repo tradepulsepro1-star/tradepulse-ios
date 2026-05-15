@@ -343,16 +343,6 @@ static NSInteger _currentWindows = 0;
     WKWebView *wv = [[NSClassFromString(@"WKWebView") alloc] initWithFrame:self.wkWebview.frame configuration:config];
     [LEANUtilities configureWebView:wv];
     
-    // Always inject iosCustomJS.js repaint fix (iOS 26 black screen prevention)
-    NSString *iosCustomJSPath = [[NSBundle mainBundle] pathForResource:@"iosCustomJS" ofType:@"js"];
-    if (iosCustomJSPath) {
-        NSString *iosCustomJSSource = [NSString stringWithContentsOfFile:iosCustomJSPath encoding:NSUTF8StringEncoding error:nil];
-        if (iosCustomJSSource) {
-            WKUserScript *repaintScript = [[WKUserScript alloc] initWithSource:iosCustomJSSource injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
-            [config.userContentController addUserScript:repaintScript];
-        }
-    }
-    
     [self.keyboardManager setTargetWebview:wv];
     [self.keyboardManager showKeyboardAccessoryView:appConfig.showKeyboardAccessoryView];
     

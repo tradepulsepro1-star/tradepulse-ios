@@ -34,21 +34,9 @@
         return;
     }
     
-    // Resolve the window safely — prefer the VC's own window, fall back to AppDelegate window
-    UIWindow *currentWindow = vc.view.window;
-    if (!currentWindow) {
-        // vc.view.window is nil before the view is in the hierarchy — use the app delegate window
-        id<UIApplicationDelegate> appDelegate = [UIApplication sharedApplication].delegate;
-        if ([appDelegate respondsToSelector:@selector(window)]) {
-            currentWindow = [(id)appDelegate window];
-        }
-    }
-    // If still nil, skip the splash overlay entirely — the app will load without it
-    if (!currentWindow) {
-        return;
-    }
-    
     self.isShown = YES;
+    
+    // GNBridge splashScreen controller removed — using native UIImageView fallback
     
     self.launchScreen = [[UIImageView alloc] init];
     self.launchScreen.image = [UIImage imageNamed:@"LaunchBackground"];
@@ -61,6 +49,7 @@
     centerImageView.translatesAutoresizingMaskIntoConstraints = NO;
     
     [self.launchScreen addSubview:centerImageView];
+    UIWindow *currentWindow = GNKeyWindow();
     [currentWindow addSubview:self.launchScreen];
     
     [NSLayoutConstraint activateConstraints:@[
