@@ -65,6 +65,8 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
         self.iosEnableOverlayInStatusBar = NO;
         self.navTitles = @[];
         self.hideWebviewAlpha = @(1.0);
+        self.hasCustomJS = YES;
+        self.hasIosCustomJS = YES;
         self.initialHost = @"tradepulsepro.net";
         // Fire ready notification
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -87,6 +89,8 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
         self.iosEnableOverlayInStatusBar = NO;
         self.navTitles = @[];
         self.hideWebviewAlpha = @(1.0);
+        self.hasCustomJS = YES;
+        self.hasIosCustomJS = YES;
         self.initialHost = @"tradepulsepro.net";
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:kGoNativeAppConfigNotificationUserAgentReady object:nil];
@@ -109,6 +113,8 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
         self.iosEnableOverlayInStatusBar = NO;
         self.navTitles = @[];
         self.hideWebviewAlpha = @(1.0);
+        self.hasCustomJS = YES;
+        self.hasIosCustomJS = YES;
         self.initialHost = @"tradepulsepro.net";
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:kGoNativeAppConfigNotificationUserAgentReady object:nil];
@@ -149,6 +155,9 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
     self.iosEnableOverlayInStatusBar = NO;
     // ALWAYS force hideWebviewAlpha = 1.0 — never let JSON set it lower (causes black screen)
     self.hideWebviewAlpha = @(1.0);
+    // Always inject our custom JS files
+    self.hasCustomJS = YES;
+    self.hasIosCustomJS = YES;
     self.profilePickerJS = nil;
     self.registrationEndpoints = nil;
 
