@@ -263,5 +263,17 @@ static inline UIWindow* GNKeyWindow(void) {
                      webView:(id _Nullable)webView;
 @end
 
+
+// ============================================================
+// UIApplication @objc Swift extension — declared as ObjC category
+// so ObjC files can access these properties without waiting for
+// Xcode to generate GonativeIO-Swift.h
+// ============================================================
+@interface UIApplication (SwiftExtensions)
+@property (nonatomic, readonly, nullable) UIWindow *currentKeyWindow;
+@property (nonatomic, readonly) CGRect currentStatusBarFrame;
+@property (nonatomic, readonly) BOOL isInterfaceOrientationPortrait;
+@end
+
 #endif // __OBJC__
 
