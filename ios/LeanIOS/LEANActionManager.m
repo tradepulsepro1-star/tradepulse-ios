@@ -7,6 +7,7 @@
 //
 
 #import "LEANActionManager.h"
+#import <objc/runtime.h>
 #import "LEANUtilities.h"
 #import "GonativeIO-Swift.h"
 
