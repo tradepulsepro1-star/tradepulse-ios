@@ -10,6 +10,7 @@
 #import <MessageUI/MessageUI.h>
 #import <CoreLocation/CoreLocation.h>
 #import <AVFoundation/AVFoundation.h>
+#import <AuthenticationServices/AuthenticationServices.h>
 
 #import "LEANWebViewController.h"
 NSString *kLEANWebViewControllerUserStartedLoading = @"co.median.ios.WebViewController.started";
@@ -54,9 +55,10 @@ NSString *kLEANWebViewControllerClearPools = @"co.median.ios.WebViewController.c
 #define OFFLINE_URL @"http://offline/"
 #define LOCAL_FILE_URL @"http://localFile/"
 
-@interface LEANWebViewController () <UISearchBarDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UITabBarDelegate, WKNavigationDelegate, WKUIDelegate, WKDownloadDelegate, MFMailComposeViewControllerDelegate, CLLocationManagerDelegate, GNJavascriptRunner>
+@interface LEANWebViewController () <UISearchBarDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UITabBarDelegate, WKNavigationDelegate, WKUIDelegate, WKDownloadDelegate, MFMailComposeViewControllerDelegate, CLLocationManagerDelegate, GNJavascriptRunner, ASWebAuthenticationPresentationContextProviding>
 
 @property WKWebView *wkWebview;
+@property (strong, nonatomic) ASWebAuthenticationSession *googleAuthSession;
 
 @property IBOutlet UIBarButtonItem* backButton;
 @property IBOutlet UIBarButtonItem* forwardButton;
@@ -144,6 +146,7 @@ NSString *kLEANWebViewControllerClearPools = @"co.median.ios.WebViewController.c
 @property IBOutlet UIView *pluginView;
 @property GNJSBridgeInterface *JSBridgeInterface;
 @property NSString *JSBridgeScript;
+
 
 @end
 
@@ -1238,6 +1241,27 @@ static NSInteger _currentWindows = 0;
 #pragma mark - WebView Delegate
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction preferences:(nonnull WKWebpagePreferences *)preferences decisionHandler:(nonnull void (^)(WKNavigationActionPolicy, WKWebpagePreferences * _Nonnull))decisionHandler  API_AVAILABLE(ios(13.0)) {
     BOOL shouldModifyRequest = [self.customHeadersManager shouldModifyRequest:navigationAction.request webview:webView];
+    
+    // ── Google OAuth: open in ASWebAuthenticationSession to avoid disallowed_useragent error ──
+    NSString *urlString = navigationAction.request.URL.absoluteString ?: @"";
+    if ([urlString containsString:@"accounts.google.com"] || [urlString containsString:@"oauth2/auth"] || [urlString containsString:@"google.com/o/oauth2"]) {
+        decisionHandler(WKNavigationActionPolicyCancel, preferences);
+        NSURL *authURL = navigationAction.request.URL;
+        NSURL *callbackURL = [NSURL URLWithString:@"https://tradepulsepro.net"];
+        ASWebAuthenticationSession *session = [[ASWebAuthenticationSession alloc]
+            initWithURL:authURL
+            callbackURLScheme:nil
+            completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {
+                if (callbackURL) {
+                    [self.wkWebview loadRequest:[NSURLRequest requestWithURL:callbackURL]];
+                }
+            }];
+        session.presentationContextProvider = self;
+        session.prefersEphemeralWebBrowserSession = NO;
+        self.googleAuthSession = session;
+        [session start];
+        return;
+    }
     
     // is target="_blank" and we are allowing window open? Always accept, skipping logic. This makes
     // target="_blank" behave like window.open
@@ -2901,6 +2925,13 @@ static NSInteger _currentWindows = 0;
             self.webviewContainer.backgroundColor = color;
         }];
     }
+}
+
+
+#pragma mark - ASWebAuthenticationPresentationContextProviding
+
+- (ASPresentationAnchor)presentationAnchorForWebAuthenticationSession:(ASWebAuthenticationSession *)session API_AVAILABLE(ios(13.0)) {
+    return self.view.window;
 }
 
 @end
