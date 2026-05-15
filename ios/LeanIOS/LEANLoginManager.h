@@ -8,8 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
-extern NSString *kLEANLoginManagerNotificationName;
-extern NSString *kLEANLoginManagerStatusChangedNotification;
+static NSString *kLEANLoginManagerNotificationName = @"co.median.ios.LoginManagerNotification";
+static NSString *kLEANLoginManagerStatusChangedNotification = @"co.median.ios.LoginManager.statusChanged";
 
 @interface LEANLoginManager : NSObject
 @property BOOL loggedIn;

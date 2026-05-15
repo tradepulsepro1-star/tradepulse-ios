@@ -14,7 +14,7 @@ typedef NS_ENUM(NSInteger, LEANWebViewPoolDisownPolicy) {
     LEANWebViewPoolDisownPolicyNever
 };
 
-extern LEANWebViewPoolDisownPolicy kLEANWebViewPoolDisownPolicyDefault;
+static LEANWebViewPoolDisownPolicy kLEANWebViewPoolDisownPolicyDefault = LEANWebViewPoolDisownPolicyReload;
 
 @interface LEANWebViewPool : NSObject
 @property NSURLRequest *currentLoadingRequest;

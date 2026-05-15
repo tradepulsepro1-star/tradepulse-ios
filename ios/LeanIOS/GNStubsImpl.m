@@ -141,10 +141,8 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
     self.swipeGestures = (json[@"swipeGestures"] != nil) ? [json[@"swipeGestures"] boolValue] : YES;
     self.showKeyboardAccessoryView = [json[@"showKeyboardAccessoryView"] boolValue];
     self.keepScreenOn = [json[@"keepScreenOn"] boolValue];
-    NSDictionary *statusBar = ([ios[@"statusBar"] isKindOfClass:[NSDictionary class]] ? ios[@"statusBar"] : nil);
-    self.iosEnableOverlayInStatusBar = [statusBar[@"overlay"] boolValue];
-    NSDictionary *generalSection = [json[@"general"] isKindOfClass:[NSDictionary class]] ? json[@"general"] : json;
-    self.hideWebviewAlpha = generalSection[@"hideWebviewAlpha"] ?: @(1.0);
+    self.iosEnableOverlayInStatusBar = [ios[@"statusBar"][@"overlay"] boolValue];
+    self.hideWebviewAlpha = json[@"hideWebviewAlpha"] ?: @(1.0);
     self.profilePickerJS = json[@"profilePickerJS"];
     self.registrationEndpoints = json[@"registrationEndpoints"];
 
@@ -218,4 +216,3 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
 - (NSArray *)getInitialUrlQueryItems { return @[]; }
 - (id<GNController>)getControllerForKey:(NSString *)key runner:(id)runner { return nil; }
 @end
-

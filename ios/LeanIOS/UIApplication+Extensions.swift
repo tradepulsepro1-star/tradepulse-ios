@@ -1,37 +1,22 @@
 //
 //  UIApplication+Extensions.swift
-//  TradePulse
+//  GonativeIO
 //
-//  Safe window access for iOS 13+ through iOS 26+
+//  Created by bld on 8/24/23.
+//  Copyright © 2023 GoNative.io LLC. All rights reserved.
 //
-
-import UIKit
 
 extension UIApplication {
     @objc public var currentKeyWindow: UIWindow? {
-        if #available(iOS 13.0, *) {
-            // Try foreground active scene first, fall back to any scene
-            let activeWindow = UIApplication.shared.connectedScenes
-                .compactMap { $0 as? UIWindowScene }
-                .filter { $0.activationState == .foregroundActive }
-                .flatMap { $0.windows }
-                .first { $0.isKeyWindow }
-            if activeWindow != nil { return activeWindow }
-            return UIApplication.shared.connectedScenes
-                .compactMap { $0 as? UIWindowScene }
-                .flatMap { $0.windows }
-                .first { $0.isKeyWindow }
-        } else {
-            return UIApplication.shared.windows.first { $0.isKeyWindow }
-        }
+        return UIApplication.shared.windows.last { $0.isKeyWindow }
     }
-
+    
     @objc public var currentStatusBarFrame: CGRect {
-        return currentKeyWindow?.windowScene?.statusBarManager?.statusBarFrame ?? CGRect.zero
+        return currentKeyWindow?.windowScene?.statusBarManager?.statusBarFrame ?? CGRect()
     }
-
+    
     @objc public var isInterfaceOrientationPortrait: Bool {
-        let orientation = currentKeyWindow?.windowScene?.interfaceOrientation
-        return orientation?.isPortrait ?? true
+        let interfaceOrientation = currentKeyWindow?.windowScene?.interfaceOrientation
+        return interfaceOrientation != nil && interfaceOrientation!.isPortrait
     }
 }

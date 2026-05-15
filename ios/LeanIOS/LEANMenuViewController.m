@@ -16,7 +16,7 @@
 #import "LEANProfilePicker.h"
 #import "LEANUtilities.h"
 #import "GonativeIO-Stubs.h"
-
+@import MedianIcons;
 
 @interface LEANMenuViewController ()
 
