@@ -13,10 +13,17 @@ workflows:
       - name: Force clean source
         script: |
           cd /Users/builder/clone
-          git fetch origin main
+          git remote set-url origin https://github.com/tradepulsepro1-star/tradepulse-ios.git
+          git fetch --all --prune
+          git checkout main
           git reset --hard origin/main
           git clean -fdx --exclude=".git"
-          git log --oneline -1
+          echo "=== CURRENT COMMIT ==="
+          git log --oneline -3
+          echo "=== GNBridge.h CONTENT ==="
+          cat ios/LeanIOS/GNBridge.h
+          echo "=== LEANAppDelegate imports ==="
+          head -20 ios/LeanIOS/LEANAppDelegate.m
 
       - name: Verify scheme
         script: |
@@ -49,20 +56,17 @@ workflows:
 
       - name: Export IPA
         script: |
-          set -e
           xcodebuild -exportArchive \
             -archivePath /Users/builder/clone/TradePulse.xcarchive \
             -exportOptionsPlist exportOptions.plist \
-            -exportPath /Users/builder/clone/ipa
-          ls -la /Users/builder/clone/ipa/
+            -exportPath /Users/builder/clone/output \
+            -allowProvisioningUpdates 2>&1
 
     artifacts:
-      - /Users/builder/clone/TradePulse.xcarchive
-      - /Users/builder/clone/ipa/*.ipa
+      - /Users/builder/clone/output/*.ipa
       - /Users/builder/clone/build_full.log
 
     publishing:
       app_store_connect:
         auth: integration
         submit_to_testflight: true
-        submit_to_app_store: false
