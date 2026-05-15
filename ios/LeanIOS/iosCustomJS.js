@@ -1,36 +1,119 @@
-// TradePulse — Native feel + iOS 26 black screen fix + Guru Leagues promo
+// TradePulse — Native feel + iOS 26 black screen fix + Splash + Guru Leagues promo
 
 (function() {
 
-  // ── 0. SKIP LANDING PAGE (mobile app only) ───────────────────────────
-  // Always skip the marketing landing page — go straight to /sign-in
-  // unless already authenticated (then go to /social)
-  function skipLandingPage() {
-    var path = window.location.pathname;
-    var isLanding = path === '/' || path === '/home' || path === '';
-    if (!isLanding) return;
+  // ── 0. APP OPEN SPLASH (shown to everyone before sign-in) ────────────
+  // Shows the TradePulse splash image for 7 seconds, then redirects:
+  //   - Logged in  → /social (with promo after)
+  //   - Not logged in → /sign-in
+  // Only shows once per session (session key: tp_splash_shown)
 
-    // Check for auth token
-    var hasAuth = false;
+  var SPLASH_IMAGE = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/03aec7f64_image.png';
+  var SPLASH_DURATION = 7000;
+  var SPLASH_SESSION_KEY = 'tp_splash_shown';
+
+  function hasAuthToken() {
     try {
       for (var i = 0; i < localStorage.length; i++) {
         var key = localStorage.key(i);
-        if (key && (key.indexOf('token') !== -1 || key.indexOf('auth') !== -1 || key.indexOf('user') !== -1 || key.indexOf('session') !== -1)) {
+        if (key && (key.indexOf('token') !== -1 || key.indexOf('auth') !== -1 ||
+                    key.indexOf('user') !== -1 || key.indexOf('session') !== -1)) {
           var val = localStorage.getItem(key);
-          if (val && val.length > 10) { hasAuth = true; break; }
+          if (val && val.length > 10) return true;
         }
       }
     } catch(e) {}
-
-    if (hasAuth) {
-      window.location.replace('/social');
-    } else {
-      window.location.replace('/sign-in');
-    }
+    return false;
   }
 
-  skipLandingPage();
-  window.addEventListener('load', skipLandingPage);
+  function showSplash() {
+    // Only on landing page, only once per session
+    var path = window.location.pathname;
+    var isLanding = path === '/' || path === '/home' || path === '';
+    if (!isLanding) return;
+    if (sessionStorage.getItem(SPLASH_SESSION_KEY)) {
+      // Already shown this session — skip straight to destination
+      if (hasAuthToken()) {
+        window.location.replace('/social');
+      } else {
+        window.location.replace('/sign-in');
+      }
+      return;
+    }
+    sessionStorage.setItem(SPLASH_SESSION_KEY, '1');
+
+    var overlay = document.createElement('div');
+    overlay.id = 'tp-splash-overlay';
+    overlay.style.cssText = [
+      'position:fixed', 'inset:0', 'z-index:9999999',
+      'background:#000',
+      'display:flex', 'align-items:center', 'justify-content:center',
+      'transition:opacity 0.7s ease', 'opacity:1'
+    ].join(';');
+
+    // Full-screen background image
+    var bg = document.createElement('div');
+    bg.style.cssText = [
+      'position:absolute', 'inset:0',
+      'background-image:url(' + SPLASH_IMAGE + ')',
+      'background-size:cover',
+      'background-position:center center',
+      'background-repeat:no-repeat'
+    ].join(';');
+    overlay.appendChild(bg);
+
+    // Bottom progress bar
+    var track = document.createElement('div');
+    track.style.cssText = [
+      'position:absolute', 'bottom:48px', 'left:32px', 'right:32px',
+      'height:3px',
+      'background:rgba(255,255,255,0.12)',
+      'border-radius:100px', 'overflow:hidden'
+    ].join(';');
+
+    var fill = document.createElement('div');
+    fill.style.cssText = [
+      'height:100%', 'width:0%',
+      'background:linear-gradient(90deg,#B8860B,#F5C842,#FFD700)',
+      'border-radius:100px',
+      'box-shadow:0 0 12px rgba(245,200,66,0.6)'
+    ].join(';');
+    track.appendChild(fill);
+    overlay.appendChild(track);
+
+    document.body.appendChild(overlay);
+
+    // Animate progress bar
+    var startTime = Date.now();
+
+    function animate() {
+      var elapsed = Date.now() - startTime;
+      var pct = Math.min((elapsed / SPLASH_DURATION) * 100, 100);
+      fill.style.width = pct + '%';
+      if (elapsed < SPLASH_DURATION) {
+        requestAnimationFrame(animate);
+      } else {
+        // Fade out then redirect
+        overlay.style.opacity = '0';
+        setTimeout(function() {
+          if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+          if (hasAuthToken()) {
+            window.location.replace('/social');
+          } else {
+            window.location.replace('/sign-in');
+          }
+        }, 720);
+      }
+    }
+    requestAnimationFrame(animate);
+  }
+
+  // Run on load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', showSplash);
+  } else {
+    showSplash();
+  }
 
   // ── 1. NATIVE FEEL CSS ──────────────────────────────────────────────
   var style = document.createElement('style');
@@ -78,18 +161,15 @@
   history.pushState = function() {
     _pushState.apply(history, arguments);
     setTimeout(forceRepaint, 100);
-    setTimeout(skipLandingPage, 150);
   };
 
   history.replaceState = function() {
     _replaceState.apply(history, arguments);
     setTimeout(forceRepaint, 100);
-    setTimeout(skipLandingPage, 150);
   };
 
   window.addEventListener('popstate', function() {
     setTimeout(forceRepaint, 100);
-    setTimeout(skipLandingPage, 150);
   });
 
   var count = 0;
@@ -100,8 +180,7 @@
   }, 500);
 
   // ── 5. GURU LEAGUES PROMO OVERLAY ────────────────────────────────────
-  // Shows ONCE per session — triggered only after a successful sign-in
-  // Detected by: user was on /sign-in or /login, then navigated to /social or /
+  // Shows ONCE per session — only triggered after sign-in → /social
   var PROMO_CONFIG = {
     image: 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/f0d93aec4_ChatGPTImageMay15202603_07_35PM.png',
     enabled: true,
@@ -183,22 +262,22 @@
     ].join(';');
     bottom.appendChild(lbl);
 
-    var track = document.createElement('div');
-    track.style.cssText = [
+    var track2 = document.createElement('div');
+    track2.style.cssText = [
       'width:100%', 'max-width:320px', 'height:4px',
       'background:rgba(255,255,255,0.15)',
       'border-radius:100px', 'overflow:hidden'
     ].join(';');
 
-    var fill = document.createElement('div');
-    fill.style.cssText = [
+    var fill2 = document.createElement('div');
+    fill2.style.cssText = [
       'height:100%', 'width:0%',
       'background:linear-gradient(90deg,#B8860B,#F5C842,#FFD700)',
       'border-radius:100px',
       'box-shadow:0 0 10px rgba(245,200,66,0.5)'
     ].join(';');
-    track.appendChild(fill);
-    bottom.appendChild(track);
+    track2.appendChild(fill2);
+    bottom.appendChild(track2);
 
     var countdown = document.createElement('div');
     countdown.style.cssText = [
@@ -219,7 +298,7 @@
       var elapsed = Date.now() - startTime;
       var pct = Math.min((elapsed / dur) * 100, 100);
       var remaining = Math.max(Math.ceil((dur - elapsed) / 1000), 0);
-      fill.style.width = pct + '%';
+      fill2.style.width = pct + '%';
       countdown.textContent = remaining > 0 ? ('Loading in ' + remaining + 's\u2026') : 'Loading\u2026';
       if (elapsed < dur) {
         requestAnimationFrame(animate);
@@ -233,7 +312,6 @@
     requestAnimationFrame(animate);
   }
 
-  // Track when user is on auth pages
   function checkNavForPromo() {
     var path = window.location.pathname;
     var isAuthPage = path.indexOf('sign-in') !== -1 || path.indexOf('login') !== -1 ||
@@ -241,12 +319,10 @@
     var isFeed = path === '/social' || path.indexOf('/social') !== -1;
 
     if (isAuthPage) {
-      // Mark that we came from auth
       sessionStorage.setItem(PROMO_CAME_FROM_AUTH, '1');
     }
 
     if (isFeed && sessionStorage.getItem(PROMO_CAME_FROM_AUTH)) {
-      // User just signed in and landed on feed — show promo
       sessionStorage.removeItem(PROMO_CAME_FROM_AUTH);
       fetchPromoConfig(function() {
         setTimeout(showPromoOverlay, 400);
