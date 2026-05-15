@@ -190,9 +190,32 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
 - (void)emitEvent:(NSString *)event data:(id)data {}
 @end
 
-// GNBridge stub implementation
+// GNBridge stub implementation — all lifecycle methods are no-ops
 @implementation GNBridge
+// App lifecycle
+- (void)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {}
+- (void)applicationDidBecomeActive:(UIApplication *)application {}
+- (void)applicationWillResignActive:(UIApplication *)application {}
+- (void)applicationDidEnterBackground:(UIApplication *)application {}
+- (void)applicationWillEnterForeground:(UIApplication *)application {}
+- (void)applicationWillTerminate:(UIApplication *)application {}
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary *)options { return NO; }
+- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity { return NO; }
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {}
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {}
+// Runner lifecycle
+- (void)runnerDidLoad:(id)runner {}
+- (void)runnerWillAppear:(id)runner {}
+- (void)runnerWillDisappear:(id)runner {}
+- (void)runner:(id)runner willTransitionToSize:(CGSize)size withTransitionCoordinator:(id)coordinator {}
+- (BOOL)runner:(id)runner shouldLoadRequestWithURL:(NSURL *)url withData:(NSDictionary *)data { return YES; }
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation withRunner:(id)runner {}
+- (void)webView:(WKWebView *)webView handleURL:(NSURL *)url {}
+- (BOOL)webView:(WKWebView *)webView shouldDownloadUrl:(NSURL *)url { return NO; }
+- (void)switchToWebView:(WKWebView *)webView withRunner:(id)runner {}
+- (void)hideWebViewWithRunner:(id)runner {}
 - (void)loadUserScriptsForContentController:(id)contentController {}
+- (NSArray *)getInitialUrlQueryItems { return @[]; }
 - (id<GNController>)getControllerForKey:(NSString *)key runner:(id)runner { return nil; }
 @end
 
