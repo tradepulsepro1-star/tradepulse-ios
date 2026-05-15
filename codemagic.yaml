@@ -22,6 +22,38 @@ workflows:
         script: |
           xcodebuild -workspace ios/TradePulse.xcworkspace -list 2>&1 || true
 
+      - name: Generate GonativeIO-Swift.h before ObjC compile
+        script: |
+          cd /Users/builder/clone
+          SWIFT_DERIVED="/Users/builder/clone/DerivedData_swift"
+          mkdir -p "$SWIFT_DERIVED"
+
+          # Build only the Swift compile phase by running a partial build
+          # This forces Xcode to generate GonativeIO-Swift.h in DerivedData
+          xcodebuild \
+            -workspace ios/TradePulse.xcworkspace \
+            -scheme TradePulse \
+            -sdk iphoneos \
+            -configuration Release \
+            -derivedDataPath "$SWIFT_DERIVED" \
+            -allowProvisioningUpdates \
+            DEVELOPMENT_TEAM=5L79BW988P \
+            CODE_SIGN_STYLE=Manual \
+            -target TradePulse \
+            ONLY_ACTIVE_ARCH=NO \
+            2>&1 | grep -E "error:|Compile Swift|GonativeIO-Swift|Generate Swift" | tail -20 || true
+
+          # Find and copy the real generated header
+          GENERATED=$(find "$SWIFT_DERIVED" -name "GonativeIO-Swift.h" 2>/dev/null | head -1)
+          if [ -n "$GENERATED" ]; then
+            echo "Found: $GENERATED"
+            cp "$GENERATED" /Users/builder/clone/ios/LeanIOS/GonativeIO-Swift.h
+            echo "Copied real GonativeIO-Swift.h into source"
+            wc -l /Users/builder/clone/ios/LeanIOS/GonativeIO-Swift.h
+          else
+            echo "Not found in preswift build, will rely on archive phase ordering"
+          fi
+
       - name: Build and Archive
         script: |
           set -e
@@ -41,6 +73,9 @@ workflows:
             CODE_SIGN_STYLE=Manual \
             "OTHER_LDFLAGS=-ObjC" \
             archive 2>&1 | tee /Users/builder/clone/build_full.log
+
+          echo "=== BUILD ERRORS ==="
+          grep -n "error:" /Users/builder/clone/build_full.log | grep -v "^Binary" | head -40 || true
 
           [ -d "$ARCHIVE_PATH" ] && echo "ARCHIVE OK" || { echo "ARCHIVE MISSING"; exit 1; }
 
