@@ -201,16 +201,6 @@ static inline UIWindow* GNKeyWindow(void) {
 @interface GNBridge : NSObject
 - (void)loadUserScriptsForContentController:(id)contentController;
 - (id<GNController>)getControllerForKey:(NSString *)key runner:(id)runner;
-- (void)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken;
-- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary *)options;
-- (void)applicationDidBecomeActive:(UIApplication *)application;
-- (void)applicationWillResignActive:(UIApplication *)application;
-- (void)applicationDidEnterBackground:(UIApplication *)application;
-- (void)applicationWillEnterForeground:(UIApplication *)application;
-- (void)applicationWillTerminate:(UIApplication *)application;
-- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity;
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo;
 @end
 #endif
 

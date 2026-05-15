@@ -4,7 +4,6 @@
 //
 
 #import "GNStubs.h"
-#import "LEANWebViewPool.h"
 #import <UIKit/UIKit.h>
 #import <WebKit/WebKit.h>
 
@@ -18,16 +17,6 @@ NSString * const kLEANAppConfigNotificationProcessedTabNavigation = @"co.median.
 NSString * const kLEANAppConfigNotificationProcessedNavigationTitles = @"co.median.ios.AppConfig.processedNavigationTitles";
 NSString * const kLEANAppConfigNotificationProcessedNavigationLevels = @"co.median.ios.AppConfig.processedNavigationLevels";
 NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.median.ios.AppConfig.appTrackingStatusChanged";
-
-// Missing GoNativeCore constants — defined here since we don't link GoNativeCore.framework
-NSString * GNJSBridgeName = @"gonative";
-NSString * GNFileWriterSharerName = @"gonativeFileWriterSharer";
-NSUInteger GNFileWriterSharerMaxSize = 10 * 1024 * 1024; // 10 MB
-
-// Missing LEAN constants
-NSString * kLEANLoginManagerNotificationName = @"co.median.ios.loginManager.notification";
-NSString * kLEANLoginManagerStatusChangedNotification = @"co.median.ios.loginManager.statusChanged";
-LEANWebViewPoolDisownPolicy kLEANWebViewPoolDisownPolicyDefault = LEANWebViewPoolDisownPolicyReload;
 
 // RegexEnabled implementation
 @implementation RegexEnabled
@@ -124,53 +113,39 @@ LEANWebViewPoolDisownPolicy kLEANWebViewPoolDisownPolicyDefault = LEANWebViewPoo
         return;
     }
 
-    // appConfig.json is nested: general / navigation / styling sections
-    NSDictionary *general  = [json[@"general"]  isKindOfClass:[NSDictionary class]] ? json[@"general"]  : @{};
-    NSDictionary *nav      = [json[@"navigation"] isKindOfClass:[NSDictionary class]] ? json[@"navigation"] : @{};
-    NSDictionary *styling  = [json[@"styling"]  isKindOfClass:[NSDictionary class]] ? json[@"styling"]  : @{};
-
-    // initialUrl — under "general"
-    NSString *urlStr = [general[@"initialUrl"] isKindOfClass:[NSString class]] ? general[@"initialUrl"] : nil;
+    // Parse initialUrl
+    NSString *urlStr = json[@"initialUrl"];
     if (urlStr && urlStr.length > 0) {
         self.initialURL = [NSURL URLWithString:urlStr];
     } else {
         self.initialURL = [NSURL URLWithString:@"https://tradepulsepro.net"];
     }
 
-    // appName — under "general"
-    NSString *name = [general[@"appName"] isKindOfClass:[NSString class]] ? general[@"appName"] : nil;
+    // Parse appName
+    NSString *name = json[@"appName"];
     self.appName = (name && name.length > 0) ? name : @"TradePulse";
 
-    // iosTheme — under "styling"
-    NSString *theme = [styling[@"iosTheme"] isKindOfClass:[NSString class]] ? styling[@"iosTheme"] : nil;
+    // Parse iosTheme
+    NSDictionary *ios = json[@"ios"];
+    NSDictionary *appearance = ios[@"appearance"];
+    NSString *theme = appearance[@"theme"];
     self.iosTheme = (theme && theme.length > 0) ? theme : @"dark";
 
-    // Navigation bar / menu — under "styling"
-    self.showNavigationBar = [styling[@"showNavigationBar"] boolValue];
-    self.showNavigationMenu = NO; // sidebar not used
+    // Navigation
+    NSDictionary *navDict = json[@"navigationLevels"] ?: json[@"navigation"];
+    self.showNavigationBar = [json[@"navigationEnabled"] boolValue];
+    self.showNavigationMenu = [json[@"sidebarEnabled"] boolValue];
+    self.navTitles = json[@"navigationTitles"] ?: @[];
 
-    // Nav titles — under "navigation" -> "navigationTitles" -> "titles"
-    NSDictionary *navTitlesDict = [nav[@"navigationTitles"] isKindOfClass:[NSDictionary class]] ? nav[@"navigationTitles"] : @{};
-    self.navTitles = [navTitlesDict[@"titles"] isKindOfClass:[NSArray class]] ? navTitlesDict[@"titles"] : @[];
-
-    // Swipe gestures — under "navigation", nil = YES default
-    self.swipeGestures = (nav[@"swipeGestures"] != nil && nav[@"swipeGestures"] != [NSNull null])
-        ? [nav[@"swipeGestures"] boolValue] : YES;
-
-    // keepScreenOn — under "general"
-    self.keepScreenOn = [general[@"keepScreenOn"] boolValue];
-
-    // Status bar overlay — under "styling"
-    self.iosEnableOverlayInStatusBar = [styling[@"iosEnableOverlayInStatusBar"] boolValue];
-
-    // CRITICAL: hideWebviewAlpha — under "styling" — must be 1.0 so WebView is VISIBLE
-    id alphaVal = styling[@"hideWebviewAlpha"];
-    self.hideWebviewAlpha = (alphaVal && alphaVal != [NSNull null]) ? alphaVal : @(1.0);
-
-    // Keyboard, profilePickerJS, registrationEndpoints — not in appConfig, use safe defaults
-    self.showKeyboardAccessoryView = NO;
-    self.profilePickerJS = nil;
-    self.registrationEndpoints = nil;
+    // Misc
+    self.swipeGestures = (json[@"swipeGestures"] != nil) ? [json[@"swipeGestures"] boolValue] : YES;
+    self.showKeyboardAccessoryView = [json[@"showKeyboardAccessoryView"] boolValue];
+    self.keepScreenOn = [json[@"keepScreenOn"] boolValue];
+    self.iosEnableOverlayInStatusBar = [ios[@"statusBar"][@"overlay"] boolValue];
+    NSDictionary *generalSection = [json[@"general"] isKindOfClass:[NSDictionary class]] ? json[@"general"] : json;
+    self.hideWebviewAlpha = generalSection[@"hideWebviewAlpha"] ?: @(1.0);
+    self.profilePickerJS = json[@"profilePickerJS"];
+    self.registrationEndpoints = json[@"registrationEndpoints"];
 
     // Mark ready and fire notification
     self.userAgentReady = YES;
@@ -218,14 +193,4 @@ LEANWebViewPoolDisownPolicy kLEANWebViewPoolDisownPolicyDefault = LEANWebViewPoo
 @implementation GNBridge
 - (void)loadUserScriptsForContentController:(id)contentController {}
 - (id<GNController>)getControllerForKey:(NSString *)key runner:(id)runner { return nil; }
-- (void)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {}
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {}
-- (BOOL)application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary *)options { return NO; }
-- (void)applicationDidBecomeActive:(UIApplication *)application {}
-- (void)applicationWillResignActive:(UIApplication *)application {}
-- (void)applicationDidEnterBackground:(UIApplication *)application {}
-- (void)applicationWillEnterForeground:(UIApplication *)application {}
-- (void)applicationWillTerminate:(UIApplication *)application {}
-- (BOOL)application:(UIApplication *)application continueUserActivity:(NSUserActivity *)userActivity { return NO; }
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {}
 @end
