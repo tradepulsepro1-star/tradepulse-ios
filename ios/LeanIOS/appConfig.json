@@ -235,7 +235,7 @@
     "iosTabBarInactiveColorDark": "#818181",
     "iosHeaderImage": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_ios.png",
     "iosIcon": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_ios.png",
-    "iosTheme": "default",
+    "iosTheme": "dark",
     "showActionBar": false,
     "androidBackgroundColor": "#FFFFFF",
     "androidBackgroundColorDark": "#333333",
