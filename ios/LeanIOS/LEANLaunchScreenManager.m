@@ -50,6 +50,11 @@
     
     [self.launchScreen addSubview:centerImageView];
     UIWindow *currentWindow = GNKeyWindow();
+    if (!currentWindow) {
+        // No window available yet — skip launch screen overlay
+        self.isShown = NO;
+        return;
+    }
     [currentWindow addSubview:self.launchScreen];
     
     [NSLayoutConstraint activateConstraints:@[

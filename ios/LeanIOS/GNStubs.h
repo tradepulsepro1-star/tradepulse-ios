@@ -166,14 +166,32 @@ extern NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged;
 
 
 // Helper macro for iOS 15+ key window access
+// Safe for early launch — falls back through multiple strategies to avoid nil crashes
 static inline UIWindow* GNKeyWindow(void) {
+    // Strategy 1: foreground active scene with key window
     for (UIWindowScene *scene in [UIApplication sharedApplication].connectedScenes) {
-        if (scene.activationState == UISceneActivationStateForegroundActive) {
+        if ([scene isKindOfClass:[UIWindowScene class]] && scene.activationState == UISceneActivationStateForegroundActive) {
             for (UIWindow *w in ((UIWindowScene *)scene).windows) {
                 if (w.isKeyWindow) return w;
             }
         }
     }
+    // Strategy 2: any scene, any key window
+    for (UIWindowScene *scene in [UIApplication sharedApplication].connectedScenes) {
+        if ([scene isKindOfClass:[UIWindowScene class]]) {
+            for (UIWindow *w in ((UIWindowScene *)scene).windows) {
+                if (w.isKeyWindow) return w;
+            }
+        }
+    }
+    // Strategy 3: any scene, first window
+    for (UIWindowScene *scene in [UIApplication sharedApplication].connectedScenes) {
+        if ([scene isKindOfClass:[UIWindowScene class]]) {
+            UIWindow *w = ((UIWindowScene *)scene).windows.firstObject;
+            if (w) return w;
+        }
+    }
+    // Strategy 4: legacy fallback
     return [UIApplication sharedApplication].windows.firstObject;
 }
 
