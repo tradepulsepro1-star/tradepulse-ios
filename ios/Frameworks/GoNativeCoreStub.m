@@ -123,3 +123,15 @@ NSString * const kGoNativeCoreDeviceDidShake = @"kGoNativeCoreDeviceDidShake";
 - (NSArray *)getInitialUrlQueryItems { return @[]; }
 - (id)getControllerForKey:(NSString *)key runner:(id)runner { return nil; }
 @end
+
+// Missing extern constants — defined here to satisfy linker
+NSString * GNFileWriterSharerName = @"gonative_file_writer_sharer";
+NSUInteger GNFileWriterSharerMaxSize = 10 * 1024 * 1024; // 10MB
+NSString * GNJSBridgeName = @"gonative";
+NSString *kLEANLoginManagerNotificationName = @"kLEANLoginManagerNotification";
+NSString *kLEANLoginManagerStatusChangedNotification = @"kLEANLoginManagerStatusChangedNotification";
+
+// kLEANWebViewPoolDisownPolicyDefault — defined as LEANWebViewPoolDisownPolicyNever (2)
+// Must match LEANWebViewPool.h enum: Always=0, Reload=1, Never=2
+// kLEANWebViewPoolDisownPolicyDefault — type must match LEANWebViewPool.h NS_ENUM (NSInteger)
+NSInteger kLEANWebViewPoolDisownPolicyDefault = 2; // LEANWebViewPoolDisownPolicyNever
