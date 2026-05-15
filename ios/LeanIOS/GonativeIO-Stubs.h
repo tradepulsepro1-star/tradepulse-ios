@@ -21,7 +21,7 @@
 
 // ContextMenuHandler — still in Swift, declared here for ObjC callers
 @interface ContextMenuHandler : NSObject
-+ (UIContextMenuConfiguration * _Nullable)createConfigurationWithUrl:(NSURL *)url shareAction:(void (^)(void))shareAction;
++ (UIContextMenuConfiguration * _Nullable)createConfigurationWithUrl:(NSURL * _Nonnull)url shareAction:(void (^ _Nullable)(void))shareAction;
 @end
 
 // WindowsController — still in Swift, declared here for ObjC callers
