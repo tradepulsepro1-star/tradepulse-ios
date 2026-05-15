@@ -176,8 +176,12 @@
           "pagesToTrigger": "domain"
         },
         {
+          "regex": "https?://([-\\w]+\\.)*tradepulse\\.net(/.*)?$",
+          "mode": "internal"
+        },
+        {
           "regex": ".*",
-          "mode": "appbrowser",
+          "mode": "internal",
           "label": "All Other Links",
           "pagesToTrigger": "all"
         }
