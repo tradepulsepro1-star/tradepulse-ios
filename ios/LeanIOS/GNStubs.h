@@ -112,6 +112,7 @@
 @property (nonatomic) BOOL facebookEnabled;
 @property (nonatomic) BOOL iOSRequestATTConsentOnLoad;
 @property (nonatomic) BOOL userAgentReady;
+@property (nonatomic, strong) NSArray *parsedRegexRules;
 @property (nonatomic, strong) NSArray *nativeBridgeUrls;
 @property (nonatomic, strong) NSDictionary *listeners;
 // Actions / Menus

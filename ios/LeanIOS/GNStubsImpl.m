@@ -155,6 +155,12 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
     // Set initialHost from initialURL
     self.initialHost = self.initialURL.host ?: @"tradepulsepro.net";
 
+    // Parse regex rules from navigation.regexInternalExternal.rules
+    NSDictionary *navSection = ([json[@"navigation"] isKindOfClass:[NSDictionary class]] ? json[@"navigation"] : @{});
+    NSDictionary *regexConfig = ([navSection[@"regexInternalExternal"] isKindOfClass:[NSDictionary class]] ? navSection[@"regexInternalExternal"] : @{});
+    NSArray *rules = ([regexConfig[@"rules"] isKindOfClass:[NSArray class]] ? regexConfig[@"rules"] : @[]);
+    self.parsedRegexRules = rules;
+
     // Mark ready and fire notification
     self.userAgentReady = YES;
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -163,7 +169,23 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
 }
 
 - (NSString *)userAgentForUrl:(NSURL *)url { return @""; }
-- (NSDictionary *)getRegexRuleForURL:(NSString *)url rules:(id)rules { return nil; }
+- (NSDictionary *)getRegexRuleForURL:(NSString *)url rules:(id)rules {
+    // Use the parsed regex rules from appConfig.json
+    if (!self.parsedRegexRules || !url) return nil;
+    for (NSDictionary *rule in self.parsedRegexRules) {
+        NSString *pattern = rule[@"regex"];
+        NSString *mode = rule[@"mode"];
+        if (!pattern || !mode) continue;
+        NSError *err = nil;
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:pattern options:0 error:&err];
+        if (err || !regex) continue;
+        NSRange range = [regex rangeOfFirstMatchInString:url options:0 range:NSMakeRange(0, url.length)];
+        if (range.location != NSNotFound) {
+            return @{@"matches": @YES, @"mode": mode};
+        }
+    }
+    return nil;
+}
 - (void)initializeRegexRules:(id *)rules {}
 - (void)setNewRegexRules:(id)rules regexRulesArray:(id *)array {}
 
