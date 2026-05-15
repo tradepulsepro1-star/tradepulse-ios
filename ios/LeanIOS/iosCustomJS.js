@@ -3,14 +3,14 @@
 (function() {
 
   // ── 0. SKIP LANDING PAGE (mobile app only) ───────────────────────────
-  // Logged-in users should never see the marketing landing page in the app.
-  // If we're on / or /home and there's an auth token, redirect to /social.
+  // Always skip the marketing landing page — go straight to /sign-in
+  // unless already authenticated (then go to /social)
   function skipLandingPage() {
     var path = window.location.pathname;
     var isLanding = path === '/' || path === '/home' || path === '';
     if (!isLanding) return;
 
-    // Check for any auth token in localStorage (Base44 stores it here)
+    // Check for auth token
     var hasAuth = false;
     try {
       for (var i = 0; i < localStorage.length; i++) {
@@ -24,10 +24,11 @@
 
     if (hasAuth) {
       window.location.replace('/social');
+    } else {
+      window.location.replace('/sign-in');
     }
   }
 
-  // Run immediately + on load to catch both hard loads and SPA navigations
   skipLandingPage();
   window.addEventListener('load', skipLandingPage);
 
@@ -99,6 +100,8 @@
   }, 500);
 
   // ── 5. GURU LEAGUES PROMO OVERLAY ────────────────────────────────────
+  // Shows ONCE per session — triggered only after a successful sign-in
+  // Detected by: user was on /sign-in or /login, then navigated to /social or /
   var PROMO_CONFIG = {
     image: 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/f0d93aec4_ChatGPTImageMay15202603_07_35PM.png',
     enabled: true,
@@ -107,6 +110,7 @@
   };
 
   var PROMO_SESSION_KEY = 'tp_promo_shown';
+  var PROMO_CAME_FROM_AUTH = 'tp_came_from_auth';
 
   function fetchPromoConfig(callback) {
     try {
@@ -169,21 +173,19 @@
       'align-items:center', 'gap:12px'
     ].join(';');
 
-    var label = document.createElement('div');
-    label.textContent = PROMO_CONFIG.label;
-    label.style.cssText = [
-      'color:#F5C842',
-      'font-size:11px', 'font-weight:700',
+    var lbl = document.createElement('div');
+    lbl.textContent = PROMO_CONFIG.label;
+    lbl.style.cssText = [
+      'color:#F5C842', 'font-size:11px', 'font-weight:700',
       'letter-spacing:3px', 'text-transform:uppercase',
       'font-family:-apple-system,BlinkMacSystemFont,sans-serif',
       'opacity:0.9'
     ].join(';');
-    bottom.appendChild(label);
+    bottom.appendChild(lbl);
 
     var track = document.createElement('div');
     track.style.cssText = [
-      'width:100%', 'max-width:320px',
-      'height:4px',
+      'width:100%', 'max-width:320px', 'height:4px',
       'background:rgba(255,255,255,0.15)',
       'border-radius:100px', 'overflow:hidden'
     ].join(';');
@@ -200,8 +202,7 @@
 
     var countdown = document.createElement('div');
     countdown.style.cssText = [
-      'color:rgba(255,255,255,0.4)',
-      'font-size:11px',
+      'color:rgba(255,255,255,0.4)', 'font-size:11px',
       'font-family:-apple-system,BlinkMacSystemFont,sans-serif',
       'font-weight:500'
     ].join(';');
@@ -232,12 +233,23 @@
     requestAnimationFrame(animate);
   }
 
-  function checkAndShowPromo() {
-    var path = window.location.pathname + window.location.hash;
-    var isFeed = path === '/social' || path.indexOf('/social') !== -1 || path.indexOf('#/social') !== -1;
-    if (isFeed) {
+  // Track when user is on auth pages
+  function checkNavForPromo() {
+    var path = window.location.pathname;
+    var isAuthPage = path.indexOf('sign-in') !== -1 || path.indexOf('login') !== -1 ||
+                     path.indexOf('sign-up') !== -1 || path.indexOf('register') !== -1;
+    var isFeed = path === '/social' || path.indexOf('/social') !== -1;
+
+    if (isAuthPage) {
+      // Mark that we came from auth
+      sessionStorage.setItem(PROMO_CAME_FROM_AUTH, '1');
+    }
+
+    if (isFeed && sessionStorage.getItem(PROMO_CAME_FROM_AUTH)) {
+      // User just signed in and landed on feed — show promo
+      sessionStorage.removeItem(PROMO_CAME_FROM_AUTH);
       fetchPromoConfig(function() {
-        setTimeout(showPromoOverlay, 300);
+        setTimeout(showPromoOverlay, 400);
       });
     }
   }
@@ -245,16 +257,16 @@
   var origPush2 = history.pushState;
   history.pushState = function() {
     origPush2.apply(history, arguments);
-    checkAndShowPromo();
+    checkNavForPromo();
   };
 
   var origReplace2 = history.replaceState;
   history.replaceState = function() {
     origReplace2.apply(history, arguments);
-    checkAndShowPromo();
+    checkNavForPromo();
   };
 
-  window.addEventListener('popstate', checkAndShowPromo);
-  window.addEventListener('load', checkAndShowPromo);
+  window.addEventListener('popstate', checkNavForPromo);
+  window.addEventListener('load', checkNavForPromo);
 
 })();
