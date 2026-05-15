@@ -2,6 +2,35 @@
 
 (function() {
 
+  // ── 0. SKIP LANDING PAGE (mobile app only) ───────────────────────────
+  // Logged-in users should never see the marketing landing page in the app.
+  // If we're on / or /home and there's an auth token, redirect to /social.
+  function skipLandingPage() {
+    var path = window.location.pathname;
+    var isLanding = path === '/' || path === '/home' || path === '';
+    if (!isLanding) return;
+
+    // Check for any auth token in localStorage (Base44 stores it here)
+    var hasAuth = false;
+    try {
+      for (var i = 0; i < localStorage.length; i++) {
+        var key = localStorage.key(i);
+        if (key && (key.indexOf('token') !== -1 || key.indexOf('auth') !== -1 || key.indexOf('user') !== -1 || key.indexOf('session') !== -1)) {
+          var val = localStorage.getItem(key);
+          if (val && val.length > 10) { hasAuth = true; break; }
+        }
+      }
+    } catch(e) {}
+
+    if (hasAuth) {
+      window.location.replace('/social');
+    }
+  }
+
+  // Run immediately + on load to catch both hard loads and SPA navigations
+  skipLandingPage();
+  window.addEventListener('load', skipLandingPage);
+
   // ── 1. NATIVE FEEL CSS ──────────────────────────────────────────────
   var style = document.createElement('style');
   style.textContent = [
@@ -48,15 +77,18 @@
   history.pushState = function() {
     _pushState.apply(history, arguments);
     setTimeout(forceRepaint, 100);
+    setTimeout(skipLandingPage, 150);
   };
 
   history.replaceState = function() {
     _replaceState.apply(history, arguments);
     setTimeout(forceRepaint, 100);
+    setTimeout(skipLandingPage, 150);
   };
 
   window.addEventListener('popstate', function() {
     setTimeout(forceRepaint, 100);
+    setTimeout(skipLandingPage, 150);
   });
 
   var count = 0;
@@ -67,7 +99,6 @@
   }, 500);
 
   // ── 5. GURU LEAGUES PROMO OVERLAY ────────────────────────────────────
-  // Default config — overridden at runtime by PlatformConfig entity
   var PROMO_CONFIG = {
     image: 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/f0d93aec4_ChatGPTImageMay15202603_07_35PM.png',
     enabled: true,
@@ -77,7 +108,6 @@
 
   var PROMO_SESSION_KEY = 'tp_promo_shown';
 
-  // Fetch live config from backend (PlatformConfig entity via backend function)
   function fetchPromoConfig(callback) {
     try {
       fetch('https://tradepulsepro.net/api/functions/getMobilePromoConfig', {
@@ -87,10 +117,10 @@
       .then(function(r) { return r.json(); })
       .then(function(data) {
         if (data && data.image) {
-          PROMO_CONFIG.image   = data.image;
-          PROMO_CONFIG.enabled = data.enabled !== false;
+          PROMO_CONFIG.image    = data.image;
+          PROMO_CONFIG.enabled  = data.enabled !== false;
           PROMO_CONFIG.duration = data.duration || 6000;
-          PROMO_CONFIG.label   = data.label || PROMO_CONFIG.label;
+          PROMO_CONFIG.label    = data.label || PROMO_CONFIG.label;
         }
         callback();
       })
@@ -113,7 +143,6 @@
       'transition:opacity 0.6s ease', 'opacity:1'
     ].join(';');
 
-    // Background image
     var bg = document.createElement('div');
     bg.style.cssText = [
       'position:absolute', 'inset:0',
@@ -124,7 +153,6 @@
     ].join(';');
     overlay.appendChild(bg);
 
-    // Bottom gradient
     var gradient = document.createElement('div');
     gradient.style.cssText = [
       'position:absolute', 'bottom:0', 'left:0', 'right:0',
@@ -133,7 +161,6 @@
     ].join(';');
     overlay.appendChild(gradient);
 
-    // Bottom container
     var bottom = document.createElement('div');
     bottom.style.cssText = [
       'position:absolute', 'bottom:0', 'left:0', 'right:0',
@@ -142,7 +169,6 @@
       'align-items:center', 'gap:12px'
     ].join(';');
 
-    // Label
     var label = document.createElement('div');
     label.textContent = PROMO_CONFIG.label;
     label.style.cssText = [
@@ -154,7 +180,6 @@
     ].join(';');
     bottom.appendChild(label);
 
-    // Progress bar track
     var track = document.createElement('div');
     track.style.cssText = [
       'width:100%', 'max-width:320px',
@@ -173,7 +198,6 @@
     track.appendChild(fill);
     bottom.appendChild(track);
 
-    // Countdown
     var countdown = document.createElement('div');
     countdown.style.cssText = [
       'color:rgba(255,255,255,0.4)',
@@ -187,7 +211,6 @@
     overlay.appendChild(bottom);
     document.body.appendChild(overlay);
 
-    // Animate
     var startTime = Date.now();
     var dur = PROMO_CONFIG.duration;
 
@@ -209,12 +232,9 @@
     requestAnimationFrame(animate);
   }
 
-  // Detect landing on feed after sign-in
   function checkAndShowPromo() {
     var path = window.location.pathname + window.location.hash;
-    var isFeed = path === '/' || path === '/#/' ||
-                 path.indexOf('/social') !== -1 ||
-                 path.indexOf('#/social') !== -1;
+    var isFeed = path === '/social' || path.indexOf('/social') !== -1 || path.indexOf('#/social') !== -1;
     if (isFeed) {
       fetchPromoConfig(function() {
         setTimeout(showPromoOverlay, 300);
@@ -222,16 +242,15 @@
     }
   }
 
-  // Hook SPA navigation
-  var origPush = history.pushState;
+  var origPush2 = history.pushState;
   history.pushState = function() {
-    origPush.apply(history, arguments);
+    origPush2.apply(history, arguments);
     checkAndShowPromo();
   };
 
-  var origReplace = history.replaceState;
+  var origReplace2 = history.replaceState;
   history.replaceState = function() {
-    origReplace.apply(history, arguments);
+    origReplace2.apply(history, arguments);
     checkAndShowPromo();
   };
 
