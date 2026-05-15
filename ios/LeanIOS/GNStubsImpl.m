@@ -138,14 +138,14 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
     self.iosTheme = (theme && theme.length > 0) ? theme : @"dark";
 
     // Navigation
-    self.showNavigationBar = [styling[@"showNavigationBar"] boolValue];
+    self.showNavigationBar = [styling[@"showNavigationBar"] isKindOfClass:[NSNumber class]] ? [styling[@"showNavigationBar"] boolValue] : NO;
     self.showNavigationMenu = NO;
     self.navTitles = @[];
 
     // Misc
     self.swipeGestures = YES;
     self.showKeyboardAccessoryView = NO;
-    self.keepScreenOn = [general[@"keepScreenOn"] boolValue];
+    self.keepScreenOn = [general[@"keepScreenOn"] isKindOfClass:[NSNumber class]] ? [general[@"keepScreenOn"] boolValue] : NO;
     self.iosEnableOverlayInStatusBar = NO;
     // ALWAYS force hideWebviewAlpha = 1.0 — never let JSON set it lower (causes black screen)
     self.hideWebviewAlpha = @(1.0);
