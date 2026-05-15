@@ -113,38 +113,41 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
         return;
     }
 
-    // Parse initialUrl
-    NSString *urlStr = json[@"initialUrl"];
-    if (urlStr && urlStr.length > 0) {
+    // Parse sections
+    NSDictionary *general = ([json[@"general"] isKindOfClass:[NSDictionary class]] ? json[@"general"] : @{});
+    NSDictionary *styling = ([json[@"styling"] isKindOfClass:[NSDictionary class]] ? json[@"styling"] : @{});
+    NSDictionary *navigation = ([json[@"navigation"] isKindOfClass:[NSDictionary class]] ? json[@"navigation"] : @{});
+
+    // Parse initialUrl (nested under "general")
+    NSString *urlStr = general[@"initialUrl"];
+    if (urlStr && [urlStr isKindOfClass:[NSString class]] && urlStr.length > 0) {
         self.initialURL = [NSURL URLWithString:urlStr];
     } else {
         self.initialURL = [NSURL URLWithString:@"https://tradepulsepro.net"];
     }
 
     // Parse appName
-    NSString *name = json[@"appName"];
-    self.appName = (name && name.length > 0) ? name : @"TradePulse";
+    NSString *name = general[@"appName"];
+    self.appName = (name && [name isKindOfClass:[NSString class]] && name.length > 0) ? name : @"TradePulse";
 
-    // Parse iosTheme
-    NSDictionary *ios = ([json[@"ios"] isKindOfClass:[NSDictionary class]] ? json[@"ios"] : @{});
-    NSDictionary *appearance = ([ios[@"appearance"] isKindOfClass:[NSDictionary class]] ? ios[@"appearance"] : nil);
-    NSString *theme = ([appearance[@"theme"] isKindOfClass:[NSString class]] ? appearance[@"theme"] : nil);
+    // Parse iosTheme (from styling)
+    NSString *theme = ([styling[@"iosTheme"] isKindOfClass:[NSString class]] ? styling[@"iosTheme"] : nil);
     self.iosTheme = (theme && theme.length > 0) ? theme : @"dark";
 
     // Navigation
-    NSDictionary *navDict = json[@"navigationLevels"] ?: json[@"navigation"];
-    self.showNavigationBar = [json[@"navigationEnabled"] boolValue];
-    self.showNavigationMenu = [json[@"sidebarEnabled"] boolValue];
-    self.navTitles = json[@"navigationTitles"] ?: @[];
+    self.showNavigationBar = [styling[@"showNavigationBar"] boolValue];
+    self.showNavigationMenu = NO;
+    self.navTitles = @[];
 
     // Misc
-    self.swipeGestures = (json[@"swipeGestures"] != nil) ? [json[@"swipeGestures"] boolValue] : YES;
-    self.showKeyboardAccessoryView = [json[@"showKeyboardAccessoryView"] boolValue];
-    self.keepScreenOn = [json[@"keepScreenOn"] boolValue];
-    self.iosEnableOverlayInStatusBar = [ios[@"statusBar"][@"overlay"] boolValue];
-    self.hideWebviewAlpha = json[@"hideWebviewAlpha"] ?: @(1.0);
-    self.profilePickerJS = json[@"profilePickerJS"];
-    self.registrationEndpoints = json[@"registrationEndpoints"];
+    self.swipeGestures = YES;
+    self.showKeyboardAccessoryView = NO;
+    self.keepScreenOn = [general[@"keepScreenOn"] boolValue];
+    self.iosEnableOverlayInStatusBar = NO;
+    // ALWAYS force hideWebviewAlpha = 1.0 — never let JSON set it lower (causes black screen)
+    self.hideWebviewAlpha = @(1.0);
+    self.profilePickerJS = nil;
+    self.registrationEndpoints = nil;
 
     // Mark ready and fire notification
     self.userAgentReady = YES;
