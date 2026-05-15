@@ -126,9 +126,9 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
     self.appName = (name && name.length > 0) ? name : @"TradePulse";
 
     // Parse iosTheme
-    NSDictionary *ios = json[@"ios"];
-    NSDictionary *appearance = ios[@"appearance"];
-    NSString *theme = appearance[@"theme"];
+    NSDictionary *ios = ([json[@"ios"] isKindOfClass:[NSDictionary class]] ? json[@"ios"] : @{});
+    NSDictionary *appearance = ([ios[@"appearance"] isKindOfClass:[NSDictionary class]] ? ios[@"appearance"] : nil);
+    NSString *theme = ([appearance[@"theme"] isKindOfClass:[NSString class]] ? appearance[@"theme"] : nil);
     self.iosTheme = (theme && theme.length > 0) ? theme : @"dark";
 
     // Navigation
@@ -141,7 +141,8 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
     self.swipeGestures = (json[@"swipeGestures"] != nil) ? [json[@"swipeGestures"] boolValue] : YES;
     self.showKeyboardAccessoryView = [json[@"showKeyboardAccessoryView"] boolValue];
     self.keepScreenOn = [json[@"keepScreenOn"] boolValue];
-    self.iosEnableOverlayInStatusBar = [ios[@"statusBar"][@"overlay"] boolValue];
+    NSDictionary *statusBar = ([ios[@"statusBar"] isKindOfClass:[NSDictionary class]] ? ios[@"statusBar"] : nil);
+    self.iosEnableOverlayInStatusBar = [statusBar[@"overlay"] boolValue];
     NSDictionary *generalSection = [json[@"general"] isKindOfClass:[NSDictionary class]] ? json[@"general"] : json;
     self.hideWebviewAlpha = generalSection[@"hideWebviewAlpha"] ?: @(1.0);
     self.profilePickerJS = json[@"profilePickerJS"];
