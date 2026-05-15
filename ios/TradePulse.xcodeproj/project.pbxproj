@@ -691,7 +691,6 @@
 				86941957B602BD3A52736F09 /* ContextMenuHandler.swift in Sources */,
 				0FE0155346E5661200031625 /* GNBackgroundAudio.m in Sources */,
 				AA11BB22CC33DD44EE55FF61 /* GNStubsImpl.m in Sources */,
-				CC000001DD000001 /* GoNativeCoreStub.m in Sources */,
 				EE000001FF000001 /* CustomMenuObjC.m in Sources */,
 				AA000001BB000001 /* LEANIcons.m in Sources */,
 				AA000002BB000002 /* GNSwiftUtilities.m in Sources */,

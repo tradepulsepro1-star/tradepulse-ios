@@ -194,3 +194,8 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
 - (void)loadUserScriptsForContentController:(id)contentController {}
 - (id<GNController>)getControllerForKey:(NSString *)key runner:(id)runner { return nil; }
 @end
+
+// Missing constants needed by LEANLoginManager and LEANWebViewPool
+NSString *kLEANLoginManagerNotificationName = @"kLEANLoginManagerNotification";
+NSString *kLEANLoginManagerStatusChangedNotification = @"kLEANLoginManagerStatusChangedNotification";
+NSInteger kLEANWebViewPoolDisownPolicyDefault = 2; // LEANWebViewPoolDisownPolicyNever
