@@ -63,7 +63,7 @@
     } else  {
         NSString *initialHost = [GoNativeAppConfig sharedAppConfig].initialHost;
         
-        if (![hostname isEqualToString:initialHost] && ![hostname hasSuffix:[@"." stringByAppendingString:initialHost]]) {
+        if (initialHost && hostname && ![hostname isEqualToString:initialHost] && ![hostname hasSuffix:[@"." stringByAppendingString:initialHost]]) {
             [self.windowsManager openUrl:request.URL mode:@"external"];
             return NO;
         }

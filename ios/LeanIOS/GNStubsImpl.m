@@ -65,6 +65,7 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
         self.iosEnableOverlayInStatusBar = NO;
         self.navTitles = @[];
         self.hideWebviewAlpha = @(1.0);
+        self.initialHost = @"tradepulsepro.net";
         // Fire ready notification
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:kGoNativeAppConfigNotificationUserAgentReady object:nil];
@@ -86,6 +87,7 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
         self.iosEnableOverlayInStatusBar = NO;
         self.navTitles = @[];
         self.hideWebviewAlpha = @(1.0);
+        self.initialHost = @"tradepulsepro.net";
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:kGoNativeAppConfigNotificationUserAgentReady object:nil];
         });
@@ -107,6 +109,7 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
         self.iosEnableOverlayInStatusBar = NO;
         self.navTitles = @[];
         self.hideWebviewAlpha = @(1.0);
+        self.initialHost = @"tradepulsepro.net";
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:kGoNativeAppConfigNotificationUserAgentReady object:nil];
         });
@@ -148,6 +151,9 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
     self.hideWebviewAlpha = @(1.0);
     self.profilePickerJS = nil;
     self.registrationEndpoints = nil;
+
+    // Set initialHost from initialURL
+    self.initialHost = self.initialURL.host ?: @"tradepulsepro.net";
 
     // Mark ready and fire notification
     self.userAgentReady = YES;
