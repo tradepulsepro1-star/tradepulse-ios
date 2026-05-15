@@ -8,7 +8,7 @@
 
 #import "LEANRegexRulesManager.h"
 #import "LEANWindowsManager.h"
-#import "GonativeIO-Swift.h"
+#import "TradePulse-Swift.h"
 
 @interface LEANRegexRulesManager()
 @property LEANWindowsManager *windowsManager;

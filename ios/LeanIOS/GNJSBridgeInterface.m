@@ -7,7 +7,7 @@
 //
 
 #import "GNJSBridgeInterface.h"
-#import "GonativeIO-Swift.h"
+#import "TradePulse-Swift.h"
 #import <Foundation/Foundation.h>
 
 @implementation GNJSBridgeInterface : NSObject

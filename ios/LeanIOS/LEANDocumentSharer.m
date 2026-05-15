@@ -8,7 +8,7 @@
 
 #import "LEANDocumentSharer.h"
 #import <MobileCoreServices/MobileCoreServices.h>
-#import "GonativeIO-Swift.h"
+#import "TradePulse-Swift.h"
 #import "LEANUtilities.h"
 #import "LEANPDFManager.h"
 
