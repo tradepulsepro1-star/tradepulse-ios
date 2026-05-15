@@ -22,8 +22,9 @@
 
 // WebViewViewportManager — defined in WebViewViewportManager.swift
 @interface WebViewViewportManager : NSObject
+@property (class, nonatomic, strong, readonly) WebViewViewportManager *shared;
 - (void)setViewportWithScale:(CGFloat)scale width:(NSNumber *)width webView:(WKWebView *)webView;
-- (void)handleUrl:(NSURL *)url query:(NSDictionary *)query webView:(WKWebView *)webView wvc:(id)wvc;
+- (void)handleUrl:(NSURL *)url query:(NSDictionary *)query webView:(WKWebView *)webView completion:(void (^)(NSDictionary *))completion;
 - (void)getViewportScale:(WKWebView *)webView completion:(void (^)(NSDictionary *))completion;
 - (void)updateViewport;
 @end

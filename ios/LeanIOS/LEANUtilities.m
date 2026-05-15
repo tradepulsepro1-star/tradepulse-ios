@@ -546,7 +546,7 @@
         if (appConfig.hasIosCustomJS) {
             [LEANUtilities injectJs:@"iosCustomJS" ToWebview:webview];
         }
-        [[WebViewViewportManager shared] setViewportWithScale:appConfig.initialWebviewZoom width:appConfig.forceViewportWidth webView:webview];
+        [[[WebViewViewportManager alloc] init] setViewportWithScale:appConfig.initialWebviewZoom width:appConfig.forceViewportWidth webView:webview];
         
         // Accessibility & Dynamic Type Support
         UIContentSizeCategory contentSizeCategory = [UIApplication sharedApplication].preferredContentSizeCategory;
