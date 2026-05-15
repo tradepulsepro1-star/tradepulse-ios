@@ -195,12 +195,3 @@ NSString * const kLEANAppConfigNotificationAppTrackingStatusChanged = @"co.media
 - (id<GNController>)getControllerForKey:(NSString *)key runner:(id)runner { return nil; }
 @end
 
-// Missing constants needed by LEANLoginManager and LEANWebViewPool
-NSString *kLEANLoginManagerNotificationName = @"kLEANLoginManagerNotification";
-NSString *kLEANLoginManagerStatusChangedNotification = @"kLEANLoginManagerStatusChangedNotification";
-NSInteger kLEANWebViewPoolDisownPolicyDefault = 2; // LEANWebViewPoolDisownPolicyNever
-
-// Missing constants from GNFileWriterSharer and GNJSBridgeInterface
-NSString * GNFileWriterSharerName = @"gonative_file_writer_sharer";
-NSUInteger GNFileWriterSharerMaxSize = 10 * 1024 * 1024; // 10MB
-NSString * GNJSBridgeName = @"gonative";
