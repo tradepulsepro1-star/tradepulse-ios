@@ -14,6 +14,22 @@
   ].join('\n');
   document.head.appendChild(style);
 
+  // ── SUPPRESS READER MODE & BROWSER CHROME ────────────────────────────
+  // Prevents iOS "Reader Available" bar and browser chrome from appearing
+  var noReader = document.createElement('meta');
+  noReader.name = 'apple-mobile-web-app-capable';
+  noReader.content = 'yes';
+  document.head.appendChild(noReader);
+
+  var viewport = document.querySelector('meta[name="viewport"]');
+  if (!viewport) {
+    viewport = document.createElement('meta');
+    viewport.name = 'viewport';
+    viewport.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
+    document.head.appendChild(viewport);
+  }
+
+
   // ── PREVENT CONTEXT MENU ─────────────────────────────────────────────
   document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; }, true);
 
