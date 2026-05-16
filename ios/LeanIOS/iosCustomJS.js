@@ -1,34 +1,34 @@
 // TradePulse iOS — Native feel + Splash + Guru Leagues promo
+// Injected at DocumentStart — body may not exist yet, use DOMContentLoaded for DOM ops
 
 (function() {
 
-  // ── NATIVE FEEL CSS ───────────────────────────────────────────────────
-  var style = document.createElement('style');
-  style.textContent = [
-    '* { -webkit-user-select: none !important; user-select: none !important; }',
-    'input, textarea, [contenteditable] { -webkit-user-select: text !important; user-select: text !important; }',
-    '* { -webkit-tap-highlight-color: transparent !important; }',
-    '* { -webkit-touch-callout: none !important; }',
-    '* { -webkit-font-smoothing: antialiased; }',
-    'body { overscroll-behavior-y: none; }'
-  ].join('\n');
-  document.head.appendChild(style);
+  // ── NATIVE FEEL CSS (safe at DocumentStart via <head>) ────────────────
+  function applyNativeCSS() {
+    var style = document.createElement('style');
+    style.textContent = [
+      '* { -webkit-user-select: none !important; user-select: none !important; }',
+      'input, textarea, [contenteditable] { -webkit-user-select: text !important; user-select: text !important; }',
+      '* { -webkit-tap-highlight-color: transparent !important; }',
+      '* { -webkit-touch-callout: none !important; }',
+      '* { -webkit-font-smoothing: antialiased; }',
+      'body { overscroll-behavior-y: none; }'
+    ].join('\n');
+    document.head.appendChild(style);
 
-  // ── SUPPRESS READER MODE & BROWSER CHROME ────────────────────────────
-  // Prevents iOS "Reader Available" bar and browser chrome from appearing
-  var noReader = document.createElement('meta');
-  noReader.name = 'apple-mobile-web-app-capable';
-  noReader.content = 'yes';
-  document.head.appendChild(noReader);
-
-  var viewport = document.querySelector('meta[name="viewport"]');
-  if (!viewport) {
-    viewport = document.createElement('meta');
-    viewport.name = 'viewport';
-    viewport.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
-    document.head.appendChild(viewport);
+    // Suppress Reader Mode
+    var noReader = document.createElement('meta');
+    noReader.name = 'apple-mobile-web-app-capable';
+    noReader.content = 'yes';
+    document.head.appendChild(noReader);
   }
 
+  // head is available at DocumentStart
+  if (document.head) {
+    applyNativeCSS();
+  } else {
+    document.addEventListener('DOMContentLoaded', applyNativeCSS);
+  }
 
   // ── PREVENT CONTEXT MENU ─────────────────────────────────────────────
   document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; }, true);
@@ -57,8 +57,6 @@
   }
 
   // ── SPLASH SCREEN ─────────────────────────────────────────────────────
-  // Shows ONCE per session on EVERY cold open — logged in OR out.
-  // After splash: logged-in → /social | logged-out → /sign-in
   var SPLASH_IMAGE    = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/03aec7f64_image.png';
   var SPLASH_DURATION = 7000;
 
@@ -90,7 +88,6 @@
         overlay.style.opacity = '0';
         setTimeout(function() {
           if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
-          // Route based on auth
           window.location.replace(hasAuthToken() ? '/social' : '/sign-in');
         }, 720);
       }
@@ -98,29 +95,28 @@
     requestAnimationFrame(tick);
   }
 
-  // ── BOOT: always show splash on first page load this session ──────────
-  // Runs regardless of which page the app opens on (/, /social, /sign-in, etc.)
-  function bootSplash() {
-    if (sessionStorage.getItem(SPLASH_KEY)) {
-      // Splash already shown — just enforce no landing page
-      var p = window.location.pathname;
-      if (p === '/' || p === '' || p === '/home') {
-        window.location.replace(hasAuthToken() ? '/social' : '/sign-in');
-      }
+  // ── BOOT — waits for body to exist ───────────────────────────────────
+  function boot() {
+    // Always show splash once per session on cold open
+    if (!sessionStorage.getItem(SPLASH_KEY)) {
+      showSplash();
       return;
     }
-    // First load this session — always show splash
-    showSplash();
+    // Splash already shown — block landing page
+    var p = window.location.pathname;
+    if (p === '/' || p === '' || p === '/home') {
+      window.location.replace(hasAuthToken() ? '/social' : '/sign-in');
+    }
   }
 
+  // DOMContentLoaded fires when body is ready
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', bootSplash);
+    document.addEventListener('DOMContentLoaded', boot);
   } else {
-    bootSplash();
+    boot();
   }
 
-  // ── CONTINUOUS LANDING PAGE WATCHER ──────────────────────────────────
-  // Catches SPA navigation back to '/' at any time
+  // ── SPA NAV WATCHER — block landing page on SPA navigation ───────────
   var lastPath = window.location.pathname;
   setInterval(function() {
     var cur = window.location.pathname;
@@ -182,11 +178,7 @@
     popup.appendChild(xBtn);
 
     document.body.appendChild(popup);
-
-    setTimeout(function() {
-      backdrop.style.opacity = '1';
-      popup.style.opacity = '1';
-    }, 50);
+    setTimeout(function() { backdrop.style.opacity = '1'; popup.style.opacity = '1'; }, 50);
   }
 
   function fetchAndShowPromo() {
@@ -203,7 +195,6 @@
     } catch(e) { showPromoPopup(cfg); }
   }
 
-  // Check if opening directly on /social
   if (window.location.pathname === '/social' || window.location.pathname.indexOf('/social') === 0) {
     setTimeout(fetchAndShowPromo, 1000);
   }
