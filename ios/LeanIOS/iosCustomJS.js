@@ -40,38 +40,14 @@
     return false;
   }
 
-  function isLandingPage() {
-    var p = window.location.pathname;
-    return p === '/' || p === '' || p === '/home';
-  }
-
-  // ── HARD LANDING PAGE BLOCK ───────────────────────────────────────────
-  // Landing page is NEVER shown in the mobile app.
-  // First session open → show splash then route.
-  // Any subsequent landing on '/' → route instantly.
-  function handleLandingPage() {
-    if (!isLandingPage()) return false;
-
-    // Not yet shown splash this session → show it
-    if (!sessionStorage.getItem(SPLASH_KEY)) {
-      showSplash();
-      return true;
-    }
-
-    // Already shown splash — hard redirect immediately
-    window.location.replace(hasAuthToken() ? '/social' : '/sign-in');
-    return true;
-  }
-
   // ── SPLASH SCREEN ─────────────────────────────────────────────────────
+  // Shows ONCE per session on EVERY cold open — logged in OR out.
+  // After splash: logged-in → /social | logged-out → /sign-in
   var SPLASH_IMAGE    = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/03aec7f64_image.png';
   var SPLASH_DURATION = 7000;
 
   function showSplash() {
     sessionStorage.setItem(SPLASH_KEY, '1');
-
-    // Hide page content while splash is up
-    document.documentElement.style.visibility = 'hidden';
 
     var overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed;inset:0;z-index:9999999;background:#000;opacity:1;transition:opacity 0.7s ease';
@@ -86,9 +62,6 @@
     fill.style.cssText = 'height:100%;width:0%;background:linear-gradient(90deg,#B8860B,#F5C842,#FFD700);border-radius:100px;transition:none';
     track.appendChild(fill);
     overlay.appendChild(track);
-
-    // Make sure overlay renders even if body is hidden
-    document.documentElement.style.visibility = 'visible';
     document.body.appendChild(overlay);
 
     var start = Date.now();
@@ -101,6 +74,7 @@
         overlay.style.opacity = '0';
         setTimeout(function() {
           if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+          // Route based on auth
           window.location.replace(hasAuthToken() ? '/social' : '/sign-in');
         }, 720);
       }
@@ -108,30 +82,43 @@
     requestAnimationFrame(tick);
   }
 
+  // ── BOOT: always show splash on first page load this session ──────────
+  // Runs regardless of which page the app opens on (/, /social, /sign-in, etc.)
+  function bootSplash() {
+    if (sessionStorage.getItem(SPLASH_KEY)) {
+      // Splash already shown — just enforce no landing page
+      var p = window.location.pathname;
+      if (p === '/' || p === '' || p === '/home') {
+        window.location.replace(hasAuthToken() ? '/social' : '/sign-in');
+      }
+      return;
+    }
+    // First load this session — always show splash
+    showSplash();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bootSplash);
+  } else {
+    bootSplash();
+  }
+
   // ── CONTINUOUS LANDING PAGE WATCHER ──────────────────────────────────
-  // Catches SPA navigation back to '/' (e.g. user taps logo)
+  // Catches SPA navigation back to '/' at any time
   var lastPath = window.location.pathname;
-
-  function checkPath() {
+  setInterval(function() {
     var cur = window.location.pathname;
-
-    // Block landing page on any SPA navigation
     if (cur !== lastPath) {
       lastPath = cur;
-
       if (cur === '/' || cur === '' || cur === '/home') {
         window.location.replace(hasAuthToken() ? '/social' : '/sign-in');
         return;
       }
-
-      // Trigger promo when arriving at /social
       if (cur === '/social' || cur.indexOf('/social') === 0) {
         setTimeout(fetchAndShowPromo, 600);
       }
     }
-  }
-
-  setInterval(checkPath, 300);
+  }, 300);
 
   // ── GURU LEAGUES PROMO POPUP ──────────────────────────────────────────
   var PROMO_FALLBACK = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/f0d93aec4_ChatGPTImageMay15202603_07_35PM.png';
@@ -200,17 +187,9 @@
     } catch(e) { showPromoPopup(cfg); }
   }
 
-  // Also check on /social direct open
+  // Check if opening directly on /social
   if (window.location.pathname === '/social' || window.location.pathname.indexOf('/social') === 0) {
     setTimeout(fetchAndShowPromo, 1000);
-  }
-
-  // ── BOOT ─────────────────────────────────────────────────────────────
-  // Run landing page check immediately on load
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', function() { handleLandingPage(); });
-  } else {
-    handleLandingPage();
   }
 
 })();
