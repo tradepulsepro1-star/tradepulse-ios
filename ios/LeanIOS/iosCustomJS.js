@@ -187,52 +187,114 @@
     if (sessionStorage.getItem(PROMO_KEY)) return;
     sessionStorage.setItem(PROMO_KEY, '1');
 
-    var overlay = document.createElement('div');
-    overlay.id = 'tp-promo-overlay';
-    overlay.style.cssText = 'position:fixed;inset:0;z-index:999999;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:1;transition:opacity 0.6s ease';
+    // Dark backdrop
+    var backdrop = document.createElement('div');
+    backdrop.style.cssText = 'position:fixed;inset:0;z-index:999998;background:rgba(0,0,0,0.75);opacity:0;transition:opacity 0.3s ease';
+    document.body.appendChild(backdrop);
 
-    var bg = document.createElement('div');
-    bg.style.cssText = 'position:absolute;inset:0;background-image:url(' + PROMO_CONFIG.image + ');background-size:cover;background-position:center top;background-repeat:no-repeat';
-    overlay.appendChild(bg);
+    // Popup card
+    var popup = document.createElement('div');
+    popup.style.cssText = [
+      'position:fixed',
+      'left:50%',
+      'top:50%',
+      'transform:translate(-50%,-50%) scale(0.92)',
+      'z-index:999999',
+      'width:88vw',
+      'max-width:380px',
+      'border-radius:20px',
+      'overflow:hidden',
+      'background:#0A0E1A',
+      'box-shadow:0 24px 80px rgba(0,0,0,0.8)',
+      'opacity:0',
+      'transition:opacity 0.35s ease,transform 0.35s ease'
+    ].join(';');
 
-    var gradient = document.createElement('div');
-    gradient.style.cssText = 'position:absolute;bottom:0;left:0;right:0;height:220px;background:linear-gradient(to top,rgba(0,0,0,0.97) 0%,rgba(0,0,0,0.5) 60%,transparent 100%)';
-    overlay.appendChild(gradient);
+    // Image
+    var img = document.createElement('div');
+    img.style.cssText = 'width:100%;aspect-ratio:1/1.1;background-image:url(' + PROMO_CONFIG.image + ');background-size:cover;background-position:center top;background-repeat:no-repeat;position:relative';
 
+    // Gradient over image bottom
+    var grad = document.createElement('div');
+    grad.style.cssText = 'position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,#0A0E1A 0%,transparent 100%)';
+    img.appendChild(grad);
+    popup.appendChild(img);
+
+    // Bottom section
     var bottom = document.createElement('div');
-    bottom.style.cssText = 'position:absolute;bottom:0;left:0;right:0;padding:0 32px 60px;display:flex;flex-direction:column;align-items:center;gap:16px';
+    bottom.style.cssText = 'padding:16px 20px 24px;background:#0A0E1A;display:flex;flex-direction:column;align-items:center;gap:12px';
 
     var label = document.createElement('div');
     label.textContent = PROMO_CONFIG.label;
-    label.style.cssText = 'color:rgba(255,255,255,0.7);font-size:13px;font-family:-apple-system,sans-serif;letter-spacing:0.5px;text-align:center';
+    label.style.cssText = 'color:#F5C842;font-size:14px;font-weight:600;font-family:-apple-system,sans-serif;letter-spacing:0.3px;text-align:center';
     bottom.appendChild(label);
 
-    var track = document.createElement('div');
-    track.style.cssText = 'width:100%;height:3px;background:rgba(255,255,255,0.12);border-radius:100px;overflow:hidden';
-    var fill = document.createElement('div');
-    fill.style.cssText = 'height:100%;width:0%;background:linear-gradient(90deg,#B8860B,#F5C842,#FFD700);border-radius:100px;box-shadow:0 0 12px rgba(245,200,66,0.6)';
-    track.appendChild(fill);
-    bottom.appendChild(track);
-    overlay.appendChild(bottom);
+    // X close button
+    var closeBtn = document.createElement('button');
+    closeBtn.textContent = '✕  Close';
+    closeBtn.style.cssText = [
+      'margin-top:4px',
+      'background:rgba(255,255,255,0.08)',
+      'border:1px solid rgba(255,255,255,0.12)',
+      'color:#fff',
+      'font-size:14px',
+      'font-family:-apple-system,sans-serif',
+      'font-weight:500',
+      'padding:10px 32px',
+      'border-radius:100px',
+      'cursor:pointer',
+      'letter-spacing:0.2px',
+      '-webkit-appearance:none'
+    ].join(';');
 
-    document.body.appendChild(overlay);
-
-    var dur = PROMO_CONFIG.duration;
-    var startTime = Date.now();
-    function animate() {
-      var elapsed = Date.now() - startTime;
-      var pct = Math.min((elapsed / dur) * 100, 100);
-      fill.style.width = pct + '%';
-      if (elapsed < dur) {
-        requestAnimationFrame(animate);
-      } else {
-        overlay.style.opacity = '0';
-        setTimeout(function() {
-          if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
-        }, 650);
-      }
+    function dismiss() {
+      popup.style.opacity = '0';
+      popup.style.transform = 'translate(-50%,-50%) scale(0.92)';
+      backdrop.style.opacity = '0';
+      setTimeout(function() {
+        if (popup.parentNode) popup.parentNode.removeChild(popup);
+        if (backdrop.parentNode) backdrop.parentNode.removeChild(backdrop);
+      }, 350);
     }
-    requestAnimationFrame(animate);
+
+    closeBtn.addEventListener('click', dismiss);
+    backdrop.addEventListener('click', dismiss);
+    bottom.appendChild(closeBtn);
+    popup.appendChild(bottom);
+
+    // X icon top-right
+    var xBtn = document.createElement('button');
+    xBtn.textContent = '✕';
+    xBtn.style.cssText = [
+      'position:absolute',
+      'top:12px',
+      'right:12px',
+      'z-index:10',
+      'width:30px',
+      'height:30px',
+      'border-radius:50%',
+      'background:rgba(0,0,0,0.55)',
+      'border:none',
+      'color:#fff',
+      'font-size:13px',
+      'display:flex',
+      'align-items:center',
+      'justify-content:center',
+      'cursor:pointer',
+      '-webkit-appearance:none',
+      'line-height:1'
+    ].join(';');
+    xBtn.addEventListener('click', dismiss);
+    img.appendChild(xBtn);
+
+    document.body.appendChild(popup);
+
+    // Animate in
+    setTimeout(function() {
+      backdrop.style.opacity = '1';
+      popup.style.opacity = '1';
+      popup.style.transform = 'translate(-50%,-50%) scale(1)';
+    }, 50);
   }
 
   function checkForPromo() {
