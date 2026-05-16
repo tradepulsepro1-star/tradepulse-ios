@@ -7,7 +7,7 @@
 //
 
 #import <MobileCoreServices/MobileCoreServices.h>
-#import "GonativeIO-Swift.h"
+#import "GonativeIO-Stubs.h"
 #import "LEANUtilities.h"
 #import "LEANAppDelegate.h"
 
