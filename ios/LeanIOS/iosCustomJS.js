@@ -3,11 +3,12 @@
 (function() {
 
   // ── INSTANT AUTH REDIRECT (runs before React mounts) ─────────────────
-  // If logged-in user lands on / for ANY reason → send to /social immediately
+  // Only redirect if splash was already shown this session
   (function() {
     var path = window.location.pathname;
     var isLanding = path === '/' || path === '' || path === '/home';
     if (!isLanding) return;
+    if (!sessionStorage.getItem('tp_splash_shown')) return; // splash not shown yet — let it run
     try {
       for (var i = 0; i < localStorage.length; i++) {
         var key = localStorage.key(i);
@@ -95,18 +96,17 @@
     var isLanding = path === '/' || path === '' || path === '/home';
     if (!isLanding) return;
 
-    // Logged-in user — never show landing page, skip straight to /social
-    if (hasAuthToken()) {
-      window.location.replace('/social');
-      return;
-    }
-
-    // Splash already shown this session — send to sign-in
+    // Splash already shown this session — route based on auth, skip splash
     if (sessionStorage.getItem(SPLASH_KEY)) {
-      window.location.replace('/sign-in');
+      if (hasAuthToken()) {
+        window.location.replace('/social');
+      } else {
+        window.location.replace('/sign-in');
+      }
       return;
     }
 
+    // Always show splash on first open — for everyone
     sessionStorage.setItem(SPLASH_KEY, '1');
 
     var overlay = document.createElement('div');
