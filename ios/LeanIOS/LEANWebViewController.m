@@ -421,7 +421,7 @@ static NSInteger _currentWindows = 0;
 "
     @"  var SPLASH_IMG = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/03aec7f64_image.png';
 "
-    @"  var SPLASH_MS  = 7000;
+    @"  var SPLASH_MS  = 8000;
 "
     @"
 "
