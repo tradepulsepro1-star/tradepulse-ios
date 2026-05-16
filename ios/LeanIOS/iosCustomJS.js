@@ -2,6 +2,32 @@
 
 (function() {
 
+  // ── INSTANT AUTH REDIRECT ─────────────────────────────────────────────
+  // If user is on landing page (/) and already has an auth token,
+  // redirect to /social IMMEDIATELY — before React mounts, no flash.
+  (function() {
+    var path = window.location.pathname;
+    var isLanding = path === '/' || path === '' || path === '/home';
+    if (!isLanding) return;
+    try {
+      for (var i = 0; i < localStorage.length; i++) {
+        var key = localStorage.key(i);
+        if (key && (key.indexOf('token') !== -1 || key.indexOf('auth') !== -1 ||
+                    key.indexOf('user') !== -1 || key.indexOf('session') !== -1)) {
+          var val = localStorage.getItem(key);
+          if (val && val.length > 10) {
+            // Authenticated — skip landing page entirely
+            // But only skip if splash was already shown this session
+            if (sessionStorage.getItem('tp_splash_shown')) {
+              window.location.replace('/social');
+              return;
+            }
+          }
+        }
+      }
+    } catch(e) {}
+  })();
+
   // ── 0. APP OPEN SPLASH (shown to everyone before sign-in) ────────────
   // Shows the TradePulse splash image for 7 seconds, then redirects:
   //   - Logged in  → /social (with promo after)
@@ -31,13 +57,22 @@
     var path = window.location.pathname;
     var isLanding = path === '/' || path === '/home' || path === '';
     if (!isLanding) return;
-    if (sessionStorage.getItem(SPLASH_SESSION_KEY)) {
-      // Already shown this session — skip straight to destination
-      if (hasAuthToken()) {
-        window.location.replace('/social');
+
+    // If already authenticated, NEVER show landing page — redirect immediately
+    if (hasAuthToken()) {
+      if (!sessionStorage.getItem(SPLASH_SESSION_KEY)) {
+        // First open this session — show splash then go to social
+        // fall through to splash display below
       } else {
-        window.location.replace('/sign-in');
+        // Subsequent navigation to / while logged in → instant redirect to /social
+        window.location.replace('/social');
+        return;
       }
+    }
+
+    if (sessionStorage.getItem(SPLASH_SESSION_KEY)) {
+      // Splash already shown, not logged in → go to sign-in
+      window.location.replace('/sign-in');
       return;
     }
     sessionStorage.setItem(SPLASH_SESSION_KEY, '1');
