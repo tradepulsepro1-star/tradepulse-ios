@@ -161,7 +161,6 @@
     label: '⚡ Coming Soon'
   };
   var PROMO_KEY = 'tp_promo_shown';
-  var PROMO_AUTH_KEY = 'tp_came_from_auth';
 
   function fetchPromoConfig(callback) {
     try {
@@ -240,32 +239,21 @@
     var path = window.location.pathname;
     var isFeed = path === '/social' || path.indexOf('/social') === 0;
     if (!isFeed) return;
-    if (!sessionStorage.getItem(PROMO_AUTH_KEY)) return;
     if (sessionStorage.getItem(PROMO_KEY)) return;
     fetchPromoConfig(showPromoOverlay);
   }
 
-  // Mark that user came through auth (sign-in page)
-  function trackAuthNavigation() {
-    var path = window.location.pathname;
-    if (path.indexOf('sign-in') !== -1 || path.indexOf('login') !== -1 || path.indexOf('auth') !== -1) {
-      sessionStorage.setItem(PROMO_AUTH_KEY, '1');
-    }
-  }
-
-  // Watch for SPA route changes (without touching pushState — use polling instead)
+  // Watch for SPA route changes via polling
   var lastPath = window.location.pathname;
   setInterval(function() {
     var currentPath = window.location.pathname;
     if (currentPath !== lastPath) {
       lastPath = currentPath;
-      trackAuthNavigation();
       checkForPromo();
     }
   }, 300);
 
-  // Also check on initial load
-  trackAuthNavigation();
-  setTimeout(checkForPromo, 800);
+  // Also check on initial load (e.g. app opens directly to /social)
+  setTimeout(checkForPromo, 1000);
 
 })();
