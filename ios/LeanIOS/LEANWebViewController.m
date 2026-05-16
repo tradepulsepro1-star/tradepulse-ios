@@ -427,9 +427,7 @@ static NSInteger _currentWindows = 0;
 "
     @"  function showSplash() {
 "
-    @"    if (sessionStorage.getItem(SPLASH_KEY)) return;
-"
-    @"    sessionStorage.setItem(SPLASH_KEY, '1');
+    @"    // Always show on cold open — no session gate
 "
     @"
 "

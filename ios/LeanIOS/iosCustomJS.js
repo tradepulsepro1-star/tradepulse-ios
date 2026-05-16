@@ -39,8 +39,7 @@
   var SPLASH_MS  = 8000;
 
   function showSplash() {
-    if (sessionStorage.getItem(SPLASH_KEY)) return;
-    sessionStorage.setItem(SPLASH_KEY, '1');
+    // Always show on cold open — no session gate
 
     var ov = document.createElement('div');
     ov.style.cssText = 'position:fixed;inset:0;z-index:9999999;background:#000;opacity:1;transition:opacity 0.6s ease';
