@@ -8,7 +8,7 @@
 
 #import "LEANTabManager.h"
 #import "LEANUtilities.h"
-#import "GonativeIO-Stubs.h"
+#import "GonativeIO-Swift.h"
 
 @interface LEANTabManager() <UITabBarDelegate>
 @property UITabBar *tabBar;
