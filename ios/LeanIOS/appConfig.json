@@ -1,6 +1,6 @@
 {
   "general": {
-    "initialUrl": "https://tradepulsepro.net/sign-in",
+    "initialUrl": "https://tradepulsepro.net",
     "appName": "TradePulse",
     "userAgentAdd": "median",
     "publicKey": "rdjakwd",

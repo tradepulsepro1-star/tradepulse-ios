@@ -350,7 +350,7 @@ static NSInteger _currentWindows = 0;
             NSError *jsReadError = nil;
             NSString *iosCustomJSSource = [NSString stringWithContentsOfFile:iosCustomJSPath encoding:NSUTF8StringEncoding error:&jsReadError];
             if (iosCustomJSSource && !jsReadError) {
-                WKUserScript *iosCustomScript = [[WKUserScript alloc] initWithSource:iosCustomJSSource injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
+                WKUserScript *iosCustomScript = [[WKUserScript alloc] initWithSource:iosCustomJSSource injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:YES];
                 [wv.configuration.userContentController addUserScript:iosCustomScript];
             }
         }

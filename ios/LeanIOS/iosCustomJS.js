@@ -42,7 +42,7 @@
 
   function isLandingPage() {
     var p = window.location.pathname;
-    return p === '/' || p === '' || p === '/home';
+    return p === '/' || p === '' || p === '/home' || p === '/sign-in';
   }
 
   // ── SPLASH SCREEN ─────────────────────────────────────────────────────
