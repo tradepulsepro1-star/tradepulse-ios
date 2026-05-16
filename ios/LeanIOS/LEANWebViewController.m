@@ -7,6 +7,7 @@
 //
 
 #import <WebKit/WebKit.h>
+#import <AuthenticationServices/AuthenticationServices.h>
 #import <MessageUI/MessageUI.h>
 #import <CoreLocation/CoreLocation.h>
 #import <AVFoundation/AVFoundation.h>
@@ -1250,6 +1251,34 @@ static NSInteger _currentWindows = 0;
 
 #pragma mark - WebView Delegate
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction preferences:(nonnull WKWebpagePreferences *)preferences decisionHandler:(nonnull void (^)(WKNavigationActionPolicy, WKWebpagePreferences * _Nonnull))decisionHandler  API_AVAILABLE(ios(13.0)) {
+    // INTERCEPT Google OAuth — open via ASWebAuthenticationSession to avoid disallowed_useragent
+    NSString *reqHost = navigationAction.request.URL.host ?: @"";
+    if (([reqHost isEqualToString:@"accounts.google.com"] || [reqHost hasSuffix:@".google.com"]) &&
+        navigationAction.targetFrame.isMainFrame) {
+        decisionHandler(WKNavigationActionPolicyCancel, preferences);
+        NSURL *authURL = navigationAction.request.URL;
+        NSString *callbackScheme = @"net.tradepulsepro";
+        __weak typeof(self) weakSelf = self;
+        ASWebAuthenticationSession *session = [[ASWebAuthenticationSession alloc]
+            initWithURL:authURL
+            callbackURLScheme:callbackScheme
+            completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {
+                if (callbackURL && !error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf.wkWebview loadRequest:[NSURLRequest requestWithURL:callbackURL]];
+                    });
+                }
+            }];
+        session.prefersEphemeralWebBrowserSession = NO;
+        if (@available(iOS 13.0, *)) {
+            session.presentationContextProvider = (id<ASWebAuthenticationPresentationContextProviding>)self;
+        }
+        // Retain session
+        static ASWebAuthenticationSession *retainedSession;
+        retainedSession = session;
+        [session start];
+        return;
+    }
     BOOL shouldModifyRequest = [self.customHeadersManager shouldModifyRequest:navigationAction.request webview:webView];
     
     // is target="_blank" and we are allowing window open? Always accept, skipping logic. This makes
@@ -2914,6 +2943,12 @@ static NSInteger _currentWindows = 0;
             self.webviewContainer.backgroundColor = color;
         }];
     }
+}
+
+
+// ASWebAuthenticationPresentationContextProviding for Google OAuth
+- (ASPresentationAnchor)presentationAnchorForWebAuthenticationSession:(ASWebAuthenticationSession *)session API_AVAILABLE(ios(13.0)) {
+    return self.view.window ?: [UIApplication sharedApplication].windows.firstObject;
 }
 
 @end

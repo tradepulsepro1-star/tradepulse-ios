@@ -11,7 +11,7 @@ class GoogleSignInManager: NSObject {
     
     // TradePulse Google OAuth Client ID (iOS)
     // Set this to your actual Google OAuth2 iOS client ID from Firebase/Google Cloud Console
-    private let clientID = "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com"
+    private let clientID = "393001366701-5uh7a36evemmbes17ae9cmlkbr14ufrf.apps.googleusercontent.com"
     private let redirectScheme = "net.tradepulsepro"
     private let redirectURI = "net.tradepulsepro:/oauth2redirect"
     
