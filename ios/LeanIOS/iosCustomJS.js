@@ -3,12 +3,11 @@
 (function() {
 
   // ── INSTANT AUTH REDIRECT (runs before React mounts) ─────────────────
+  // If logged-in user lands on / for ANY reason → send to /social immediately
   (function() {
     var path = window.location.pathname;
     var isLanding = path === '/' || path === '' || path === '/home';
     if (!isLanding) return;
-    // If splash already shown this session and user is logged in → skip landing page
-    if (!sessionStorage.getItem('tp_splash_shown')) return;
     try {
       for (var i = 0; i < localStorage.length; i++) {
         var key = localStorage.key(i);
@@ -96,13 +95,15 @@
     var isLanding = path === '/' || path === '' || path === '/home';
     if (!isLanding) return;
 
-    // Splash already shown this session
+    // Logged-in user — never show landing page, skip straight to /social
+    if (hasAuthToken()) {
+      window.location.replace('/social');
+      return;
+    }
+
+    // Splash already shown this session — send to sign-in
     if (sessionStorage.getItem(SPLASH_KEY)) {
-      if (hasAuthToken()) {
-        window.location.replace('/social');
-      } else {
-        window.location.replace('/sign-in');
-      }
+      window.location.replace('/sign-in');
       return;
     }
 
