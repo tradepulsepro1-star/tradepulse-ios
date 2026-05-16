@@ -2,13 +2,13 @@
 
 (function() {
 
-  // ── INSTANT AUTH REDIRECT ─────────────────────────────────────────────
-  // If user is on landing page (/) and already has an auth token,
-  // redirect to /social IMMEDIATELY — before React mounts, no flash.
+  // ── INSTANT AUTH REDIRECT (runs before React mounts) ─────────────────
   (function() {
     var path = window.location.pathname;
     var isLanding = path === '/' || path === '' || path === '/home';
     if (!isLanding) return;
+    // If splash already shown this session and user is logged in → skip landing page
+    if (!sessionStorage.getItem('tp_splash_shown')) return;
     try {
       for (var i = 0; i < localStorage.length; i++) {
         var key = localStorage.key(i);
@@ -16,27 +16,66 @@
                     key.indexOf('user') !== -1 || key.indexOf('session') !== -1)) {
           var val = localStorage.getItem(key);
           if (val && val.length > 10) {
-            // Authenticated — skip landing page entirely
-            // But only skip if splash was already shown this session
-            if (sessionStorage.getItem('tp_splash_shown')) {
-              window.location.replace('/social');
-              return;
-            }
+            window.location.replace('/social');
+            return;
           }
         }
       }
     } catch(e) {}
   })();
 
-  // ── 0. APP OPEN SPLASH (shown to everyone before sign-in) ────────────
-  // Shows the TradePulse splash image for 7 seconds, then redirects:
-  //   - Logged in  → /social (with promo after)
-  //   - Not logged in → /sign-in
-  // Only shows once per session (session key: tp_splash_shown)
+  // ── NATIVE FEEL CSS ───────────────────────────────────────────────────
+  var style = document.createElement('style');
+  style.textContent = [
+    // Disable text selection everywhere except inputs
+    '* { -webkit-user-select: none !important; user-select: none !important; }',
+    'input, textarea, [contenteditable] { -webkit-user-select: text !important; user-select: text !important; }',
+    // No tap highlight flash
+    '* { -webkit-tap-highlight-color: transparent !important; }',
+    // No callout popups on long press
+    '* { -webkit-touch-callout: none !important; }',
+    // Smooth fonts
+    '* { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }',
+    // No bounce scroll on body — allow scroll on content containers
+    'body { overscroll-behavior-y: none; }',
+  ].join('\n');
+  document.head.appendChild(style);
 
+  // ── PREVENT CONTEXT MENU ──────────────────────────────────────────────
+  document.addEventListener('contextmenu', function(e) {
+    e.preventDefault();
+    return false;
+  }, true);
+
+  // ── PREVENT SELECTION VIA TOUCH ──────────────────────────────────────
+  document.addEventListener('selectstart', function(e) {
+    if (!e.target.matches('input, textarea, [contenteditable]')) {
+      e.preventDefault();
+    }
+  }, true);
+
+  // ── iOS 26 BLACK SCREEN FIX ───────────────────────────────────────────
+  // Only runs ONCE on initial load — does NOT hook pushState (breaks SPA nav)
+  function forceRepaint() {
+    try {
+      document.body.style.display = 'none';
+      void document.body.offsetHeight;
+      document.body.style.display = '';
+    } catch(e) {}
+  }
+
+  if (document.readyState === 'complete') {
+    setTimeout(forceRepaint, 50);
+  } else {
+    window.addEventListener('load', function() {
+      setTimeout(forceRepaint, 50);
+    });
+  }
+
+  // ── APP OPEN SPLASH ───────────────────────────────────────────────────
   var SPLASH_IMAGE = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/03aec7f64_image.png';
   var SPLASH_DURATION = 7000;
-  var SPLASH_SESSION_KEY = 'tp_splash_shown';
+  var SPLASH_KEY = 'tp_splash_shown';
 
   function hasAuthToken() {
     try {
@@ -53,74 +92,40 @@
   }
 
   function showSplash() {
-    // Only on landing page, only once per session
     var path = window.location.pathname;
-    var isLanding = path === '/' || path === '/home' || path === '';
+    var isLanding = path === '/' || path === '' || path === '/home';
     if (!isLanding) return;
 
-    // If already authenticated, NEVER show landing page — redirect immediately
-    if (hasAuthToken()) {
-      if (!sessionStorage.getItem(SPLASH_SESSION_KEY)) {
-        // First open this session — show splash then go to social
-        // fall through to splash display below
-      } else {
-        // Subsequent navigation to / while logged in → instant redirect to /social
+    // Splash already shown this session
+    if (sessionStorage.getItem(SPLASH_KEY)) {
+      if (hasAuthToken()) {
         window.location.replace('/social');
-        return;
+      } else {
+        window.location.replace('/sign-in');
       }
-    }
-
-    if (sessionStorage.getItem(SPLASH_SESSION_KEY)) {
-      // Splash already shown, not logged in → go to sign-in
-      window.location.replace('/sign-in');
       return;
     }
-    sessionStorage.setItem(SPLASH_SESSION_KEY, '1');
+
+    sessionStorage.setItem(SPLASH_KEY, '1');
 
     var overlay = document.createElement('div');
     overlay.id = 'tp-splash-overlay';
-    overlay.style.cssText = [
-      'position:fixed', 'inset:0', 'z-index:9999999',
-      'background:#000',
-      'display:flex', 'align-items:center', 'justify-content:center',
-      'transition:opacity 0.7s ease', 'opacity:1'
-    ].join(';');
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:9999999;background:#000;display:flex;align-items:center;justify-content:center;opacity:1;transition:opacity 0.7s ease';
 
-    // Full-screen background image
     var bg = document.createElement('div');
-    bg.style.cssText = [
-      'position:absolute', 'inset:0',
-      'background-image:url(' + SPLASH_IMAGE + ')',
-      'background-size:cover',
-      'background-position:center center',
-      'background-repeat:no-repeat'
-    ].join(';');
+    bg.style.cssText = 'position:absolute;inset:0;background-image:url(' + SPLASH_IMAGE + ');background-size:cover;background-position:center center;background-repeat:no-repeat';
     overlay.appendChild(bg);
 
-    // Bottom progress bar
     var track = document.createElement('div');
-    track.style.cssText = [
-      'position:absolute', 'bottom:48px', 'left:32px', 'right:32px',
-      'height:3px',
-      'background:rgba(255,255,255,0.12)',
-      'border-radius:100px', 'overflow:hidden'
-    ].join(';');
-
+    track.style.cssText = 'position:absolute;bottom:48px;left:32px;right:32px;height:3px;background:rgba(255,255,255,0.12);border-radius:100px;overflow:hidden';
     var fill = document.createElement('div');
-    fill.style.cssText = [
-      'height:100%', 'width:0%',
-      'background:linear-gradient(90deg,#B8860B,#F5C842,#FFD700)',
-      'border-radius:100px',
-      'box-shadow:0 0 12px rgba(245,200,66,0.6)'
-    ].join(';');
+    fill.style.cssText = 'height:100%;width:0%;background:linear-gradient(90deg,#B8860B,#F5C842,#FFD700);border-radius:100px;box-shadow:0 0 12px rgba(245,200,66,0.6)';
     track.appendChild(fill);
     overlay.appendChild(track);
 
     document.body.appendChild(overlay);
 
-    // Animate progress bar
     var startTime = Date.now();
-
     function animate() {
       var elapsed = Date.now() - startTime;
       var pct = Math.min((elapsed / SPLASH_DURATION) * 100, 100);
@@ -128,7 +133,6 @@
       if (elapsed < SPLASH_DURATION) {
         requestAnimationFrame(animate);
       } else {
-        // Fade out then redirect
         overlay.style.opacity = '0';
         setTimeout(function() {
           if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
@@ -143,88 +147,21 @@
     requestAnimationFrame(animate);
   }
 
-  // Run on load
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', showSplash);
   } else {
     showSplash();
   }
 
-  // ── 1. NATIVE FEEL CSS ──────────────────────────────────────────────
-  var style = document.createElement('style');
-  style.textContent = [
-    '* { -webkit-user-select: none !important; user-select: none !important; }',
-    'input, textarea, [contenteditable] { -webkit-user-select: text !important; user-select: text !important; }',
-    '* { -webkit-tap-highlight-color: transparent !important; }',
-    '* { -webkit-touch-callout: none !important; }',
-    'html, body { overscroll-behavior: none; overflow: hidden; height: 100%; }',
-    '#root, #app, .app-container, [data-reactroot] { height: 100%; overflow-y: auto; overscroll-behavior: none; -webkit-overflow-scrolling: touch; }',
-    'body { cursor: default; }',
-    '* { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }'
-  ].join('\n');
-  document.head.appendChild(style);
-
-  // ── 2. PREVENT CONTEXT MENU ──────────────────────────────────────────
-  document.addEventListener('contextmenu', function(e) {
-    e.preventDefault();
-    return false;
-  }, true);
-
-  // ── 3. PREVENT SELECTION VIA TOUCH ──────────────────────────────────
-  document.addEventListener('selectstart', function(e) {
-    if (!e.target.matches('input, textarea, [contenteditable]')) {
-      e.preventDefault();
-    }
-  }, true);
-
-  // ── 4. iOS 26 BLACK SCREEN FIX ───────────────────────────────────────
-  function forceRepaint() {
-    document.body.style.display = 'none';
-    void document.body.offsetHeight;
-    document.body.style.display = '';
-  }
-
-  if (document.readyState === 'complete') {
-    forceRepaint();
-  } else {
-    window.addEventListener('load', forceRepaint);
-  }
-
-  var _pushState = history.pushState;
-  var _replaceState = history.replaceState;
-
-  history.pushState = function() {
-    _pushState.apply(history, arguments);
-    setTimeout(forceRepaint, 100);
-  };
-
-  history.replaceState = function() {
-    _replaceState.apply(history, arguments);
-    setTimeout(forceRepaint, 100);
-  };
-
-  window.addEventListener('popstate', function() {
-    setTimeout(forceRepaint, 100);
-  });
-
-  var count = 0;
-  var interval = setInterval(function() {
-    forceRepaint();
-    count++;
-    if (count >= 6) clearInterval(interval);
-  }, 500);
-
-  // ── 5. GURU LEAGUES PROMO OVERLAY ────────────────────────────────────
-  // Shows ONCE per session — only triggered after sign-in → /social
+  // ── GURU LEAGUES PROMO OVERLAY ────────────────────────────────────────
   var PROMO_CONFIG = {
     image: 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/f0d93aec4_ChatGPTImageMay15202603_07_35PM.png',
     enabled: true,
     duration: 6000,
     label: '⚡ Coming Soon'
   };
-
-  var PROMO_SESSION_KEY = 'tp_promo_shown';
-  var PROMO_CAME_FROM_AUTH = 'tp_came_from_auth';
+  var PROMO_KEY = 'tp_promo_shown';
+  var PROMO_AUTH_KEY = 'tp_came_from_auth';
 
   function fetchPromoConfig(callback) {
     try {
@@ -248,93 +185,45 @@
 
   function showPromoOverlay() {
     if (!PROMO_CONFIG.enabled) return;
-    if (sessionStorage.getItem(PROMO_SESSION_KEY)) return;
-    sessionStorage.setItem(PROMO_SESSION_KEY, '1');
+    if (sessionStorage.getItem(PROMO_KEY)) return;
+    sessionStorage.setItem(PROMO_KEY, '1');
 
     var overlay = document.createElement('div');
     overlay.id = 'tp-promo-overlay';
-    overlay.style.cssText = [
-      'position:fixed', 'inset:0', 'z-index:999999',
-      'background:#000',
-      'display:flex', 'flex-direction:column',
-      'align-items:center', 'justify-content:center',
-      'transition:opacity 0.6s ease', 'opacity:1'
-    ].join(';');
+    overlay.style.cssText = 'position:fixed;inset:0;z-index:999999;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:1;transition:opacity 0.6s ease';
 
     var bg = document.createElement('div');
-    bg.style.cssText = [
-      'position:absolute', 'inset:0',
-      'background-image:url(' + PROMO_CONFIG.image + ')',
-      'background-size:cover',
-      'background-position:center top',
-      'background-repeat:no-repeat'
-    ].join(';');
+    bg.style.cssText = 'position:absolute;inset:0;background-image:url(' + PROMO_CONFIG.image + ');background-size:cover;background-position:center top;background-repeat:no-repeat';
     overlay.appendChild(bg);
 
     var gradient = document.createElement('div');
-    gradient.style.cssText = [
-      'position:absolute', 'bottom:0', 'left:0', 'right:0',
-      'height:220px',
-      'background:linear-gradient(to top, rgba(0,0,0,0.97) 0%, rgba(0,0,0,0.5) 60%, transparent 100%)'
-    ].join(';');
+    gradient.style.cssText = 'position:absolute;bottom:0;left:0;right:0;height:220px;background:linear-gradient(to top,rgba(0,0,0,0.97) 0%,rgba(0,0,0,0.5) 60%,transparent 100%)';
     overlay.appendChild(gradient);
 
     var bottom = document.createElement('div');
-    bottom.style.cssText = [
-      'position:absolute', 'bottom:0', 'left:0', 'right:0',
-      'padding:0 32px 60px',
-      'display:flex', 'flex-direction:column',
-      'align-items:center', 'gap:12px'
-    ].join(';');
+    bottom.style.cssText = 'position:absolute;bottom:0;left:0;right:0;padding:0 32px 60px;display:flex;flex-direction:column;align-items:center;gap:16px';
 
-    var lbl = document.createElement('div');
-    lbl.textContent = PROMO_CONFIG.label;
-    lbl.style.cssText = [
-      'color:#F5C842', 'font-size:11px', 'font-weight:700',
-      'letter-spacing:3px', 'text-transform:uppercase',
-      'font-family:-apple-system,BlinkMacSystemFont,sans-serif',
-      'opacity:0.9'
-    ].join(';');
-    bottom.appendChild(lbl);
+    var label = document.createElement('div');
+    label.textContent = PROMO_CONFIG.label;
+    label.style.cssText = 'color:rgba(255,255,255,0.7);font-size:13px;font-family:-apple-system,sans-serif;letter-spacing:0.5px;text-align:center';
+    bottom.appendChild(label);
 
-    var track2 = document.createElement('div');
-    track2.style.cssText = [
-      'width:100%', 'max-width:320px', 'height:4px',
-      'background:rgba(255,255,255,0.15)',
-      'border-radius:100px', 'overflow:hidden'
-    ].join(';');
-
-    var fill2 = document.createElement('div');
-    fill2.style.cssText = [
-      'height:100%', 'width:0%',
-      'background:linear-gradient(90deg,#B8860B,#F5C842,#FFD700)',
-      'border-radius:100px',
-      'box-shadow:0 0 10px rgba(245,200,66,0.5)'
-    ].join(';');
-    track2.appendChild(fill2);
-    bottom.appendChild(track2);
-
-    var countdown = document.createElement('div');
-    countdown.style.cssText = [
-      'color:rgba(255,255,255,0.4)', 'font-size:11px',
-      'font-family:-apple-system,BlinkMacSystemFont,sans-serif',
-      'font-weight:500'
-    ].join(';');
-    countdown.textContent = 'Loading in 6s\u2026';
-    bottom.appendChild(countdown);
-
+    var track = document.createElement('div');
+    track.style.cssText = 'width:100%;height:3px;background:rgba(255,255,255,0.12);border-radius:100px;overflow:hidden';
+    var fill = document.createElement('div');
+    fill.style.cssText = 'height:100%;width:0%;background:linear-gradient(90deg,#B8860B,#F5C842,#FFD700);border-radius:100px;box-shadow:0 0 12px rgba(245,200,66,0.6)';
+    track.appendChild(fill);
+    bottom.appendChild(track);
     overlay.appendChild(bottom);
+
     document.body.appendChild(overlay);
 
-    var startTime = Date.now();
     var dur = PROMO_CONFIG.duration;
-
+    var startTime = Date.now();
     function animate() {
       var elapsed = Date.now() - startTime;
       var pct = Math.min((elapsed / dur) * 100, 100);
-      var remaining = Math.max(Math.ceil((dur - elapsed) / 1000), 0);
-      fill2.style.width = pct + '%';
-      countdown.textContent = remaining > 0 ? ('Loading in ' + remaining + 's\u2026') : 'Loading\u2026';
+      fill.style.width = pct + '%';
       if (elapsed < dur) {
         requestAnimationFrame(animate);
       } else {
@@ -347,37 +236,36 @@
     requestAnimationFrame(animate);
   }
 
-  function checkNavForPromo() {
+  function checkForPromo() {
     var path = window.location.pathname;
-    var isAuthPage = path.indexOf('sign-in') !== -1 || path.indexOf('login') !== -1 ||
-                     path.indexOf('sign-up') !== -1 || path.indexOf('register') !== -1;
-    var isFeed = path === '/social' || path.indexOf('/social') !== -1;
+    var isFeed = path === '/social' || path.indexOf('/social') === 0;
+    if (!isFeed) return;
+    if (!sessionStorage.getItem(PROMO_AUTH_KEY)) return;
+    if (sessionStorage.getItem(PROMO_KEY)) return;
+    fetchPromoConfig(showPromoOverlay);
+  }
 
-    if (isAuthPage) {
-      sessionStorage.setItem(PROMO_CAME_FROM_AUTH, '1');
-    }
-
-    if (isFeed && sessionStorage.getItem(PROMO_CAME_FROM_AUTH)) {
-      sessionStorage.removeItem(PROMO_CAME_FROM_AUTH);
-      fetchPromoConfig(function() {
-        setTimeout(showPromoOverlay, 400);
-      });
+  // Mark that user came through auth (sign-in page)
+  function trackAuthNavigation() {
+    var path = window.location.pathname;
+    if (path.indexOf('sign-in') !== -1 || path.indexOf('login') !== -1 || path.indexOf('auth') !== -1) {
+      sessionStorage.setItem(PROMO_AUTH_KEY, '1');
     }
   }
 
-  var origPush2 = history.pushState;
-  history.pushState = function() {
-    origPush2.apply(history, arguments);
-    checkNavForPromo();
-  };
+  // Watch for SPA route changes (without touching pushState — use polling instead)
+  var lastPath = window.location.pathname;
+  setInterval(function() {
+    var currentPath = window.location.pathname;
+    if (currentPath !== lastPath) {
+      lastPath = currentPath;
+      trackAuthNavigation();
+      checkForPromo();
+    }
+  }, 300);
 
-  var origReplace2 = history.replaceState;
-  history.replaceState = function() {
-    origReplace2.apply(history, arguments);
-    checkNavForPromo();
-  };
-
-  window.addEventListener('popstate', checkNavForPromo);
-  window.addEventListener('load', checkNavForPromo);
+  // Also check on initial load
+  trackAuthNavigation();
+  setTimeout(checkForPromo, 800);
 
 })();
