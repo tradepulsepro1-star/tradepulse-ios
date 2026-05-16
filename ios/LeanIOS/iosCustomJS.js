@@ -192,100 +192,75 @@
     backdrop.style.cssText = 'position:fixed;inset:0;z-index:999998;background:rgba(0,0,0,0.75);opacity:0;transition:opacity 0.3s ease';
     document.body.appendChild(backdrop);
 
-    // Popup card
+    // Full-screen popup
     var popup = document.createElement('div');
     popup.style.cssText = [
       'position:fixed',
-      'left:50%',
-      'top:50%',
-      'transform:translate(-50%,-50%) scale(0.92)',
+      'inset:0',
       'z-index:999999',
-      'width:88vw',
-      'max-width:380px',
-      'border-radius:20px',
-      'overflow:hidden',
       'background:#0A0E1A',
-      'box-shadow:0 24px 80px rgba(0,0,0,0.8)',
       'opacity:0',
-      'transition:opacity 0.35s ease,transform 0.35s ease'
+      'transition:opacity 0.35s ease'
     ].join(';');
 
-    // Image
+    // Full-screen image
     var img = document.createElement('div');
-    img.style.cssText = 'width:100%;aspect-ratio:1/1.1;background-image:url(' + PROMO_CONFIG.image + ');background-size:cover;background-position:center top;background-repeat:no-repeat;position:relative';
-
-    // Gradient over image bottom
-    var grad = document.createElement('div');
-    grad.style.cssText = 'position:absolute;bottom:0;left:0;right:0;height:100px;background:linear-gradient(to top,#0A0E1A 0%,transparent 100%)';
-    img.appendChild(grad);
+    img.style.cssText = [
+      'position:absolute',
+      'inset:0',
+      'background-image:url(' + PROMO_CONFIG.image + ')',
+      'background-size:cover',
+      'background-position:center center',
+      'background-repeat:no-repeat'
+    ].join(';');
     popup.appendChild(img);
 
-    // Bottom section
-    var bottom = document.createElement('div');
-    bottom.style.cssText = 'padding:16px 20px 24px;background:#0A0E1A;display:flex;flex-direction:column;align-items:center;gap:12px';
+    // Bottom gradient
+    var grad = document.createElement('div');
+    grad.style.cssText = 'position:absolute;bottom:0;left:0;right:0;height:180px;background:linear-gradient(to top,rgba(10,14,26,0.95) 0%,rgba(10,14,26,0.4) 60%,transparent 100%)';
+    popup.appendChild(grad);
 
+    // Label at bottom
     var label = document.createElement('div');
     label.textContent = PROMO_CONFIG.label;
-    label.style.cssText = 'color:#F5C842;font-size:14px;font-weight:600;font-family:-apple-system,sans-serif;letter-spacing:0.3px;text-align:center';
-    bottom.appendChild(label);
-
-    // X close button
-    var closeBtn = document.createElement('button');
-    closeBtn.textContent = '✕  Close';
-    closeBtn.style.cssText = [
-      'margin-top:4px',
-      'background:rgba(255,255,255,0.08)',
-      'border:1px solid rgba(255,255,255,0.12)',
-      'color:#fff',
-      'font-size:14px',
-      'font-family:-apple-system,sans-serif',
-      'font-weight:500',
-      'padding:10px 32px',
-      'border-radius:100px',
-      'cursor:pointer',
-      'letter-spacing:0.2px',
-      '-webkit-appearance:none'
-    ].join(';');
+    label.style.cssText = 'position:absolute;bottom:90px;left:0;right:0;text-align:center;color:#F5C842;font-size:15px;font-weight:600;font-family:-apple-system,sans-serif;letter-spacing:0.3px';
+    popup.appendChild(label);
 
     function dismiss() {
       popup.style.opacity = '0';
-      popup.style.transform = 'translate(-50%,-50%) scale(0.92)';
-      backdrop.style.opacity = '0';
       setTimeout(function() {
         if (popup.parentNode) popup.parentNode.removeChild(popup);
         if (backdrop.parentNode) backdrop.parentNode.removeChild(backdrop);
       }, 350);
     }
 
-    closeBtn.addEventListener('click', dismiss);
     backdrop.addEventListener('click', dismiss);
-    bottom.appendChild(closeBtn);
-    popup.appendChild(bottom);
 
-    // X icon top-right
+    // X button — top right
     var xBtn = document.createElement('button');
     xBtn.textContent = '✕';
     xBtn.style.cssText = [
       'position:absolute',
-      'top:12px',
-      'right:12px',
+      'top:52px',
+      'right:20px',
       'z-index:10',
-      'width:30px',
-      'height:30px',
+      'width:36px',
+      'height:36px',
       'border-radius:50%',
-      'background:rgba(0,0,0,0.55)',
-      'border:none',
+      'background:rgba(0,0,0,0.6)',
+      'border:1.5px solid rgba(255,255,255,0.25)',
       'color:#fff',
-      'font-size:13px',
+      'font-size:15px',
+      'cursor:pointer',
+      '-webkit-appearance:none',
       'display:flex',
       'align-items:center',
       'justify-content:center',
-      'cursor:pointer',
-      '-webkit-appearance:none',
-      'line-height:1'
+      'line-height:1',
+      'font-family:-apple-system,sans-serif'
     ].join(';');
     xBtn.addEventListener('click', dismiss);
-    img.appendChild(xBtn);
+    popup.appendChild(xBtn);
 
     document.body.appendChild(popup);
 
@@ -293,7 +268,6 @@
     setTimeout(function() {
       backdrop.style.opacity = '1';
       popup.style.opacity = '1';
-      popup.style.transform = 'translate(-50%,-50%) scale(1)';
     }, 50);
   }
 
