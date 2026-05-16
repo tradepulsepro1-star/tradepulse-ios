@@ -42,7 +42,7 @@
 
   function isLandingPage() {
     var p = window.location.pathname;
-    return p === '/' || p === '' || p === '/home' || p === '/sign-in';
+    return p === '/' || p === '' || p === '/home';
   }
 
   // ── SPLASH SCREEN ─────────────────────────────────────────────────────
@@ -56,7 +56,10 @@
 
     // Already shown this session — just route
     if (sessionStorage.getItem(SPLASH_KEY)) {
-      window.location.replace(hasAuthToken() ? '/social' : '/sign-in');
+      var target = hasAuthToken() ? '/social' : '/sign-in';
+      if (window.location.pathname !== target) {
+        window.location.replace(target);
+      }
       return;
     }
 
