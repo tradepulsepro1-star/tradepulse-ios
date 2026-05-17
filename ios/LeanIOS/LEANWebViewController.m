@@ -340,6 +340,11 @@ static NSInteger _currentWindows = 0;
     WKWebViewConfiguration *config = [[NSClassFromString(@"WKWebViewConfiguration") alloc] init];
     config.processPool = [LEANUtilities wkProcessPool];
     config.allowsInlineMediaPlayback = YES;
+    config.suppressesIncrementalRendering = NO;
+    // Disable data detectors — no phone/address link popups
+    if (@available(iOS 10.0, *)) {
+        config.dataDetectorTypes = WKDataDetectorTypeNone;
+    }
     
     WKWebView *wv = [[NSClassFromString(@"WKWebView") alloc] initWithFrame:self.wkWebview.frame configuration:config];
     [LEANUtilities configureWebView:wv];
@@ -355,6 +360,19 @@ static NSInteger _currentWindows = 0;
                 [wv.configuration.userContentController addUserScript:iosCustomScript];
             }
         }
+    }
+    // NATIVE FEEL: disable zoom, set viewport, force dark bg
+    {
+        NSString *nativeFeelJS = @""
+            "(function(){"
+            "  var m=document.querySelector('meta[name=viewport]');"
+            "  if(!m){m=document.createElement('meta');m.name='viewport';document.head&&document.head.appendChild(m);}"
+            "  m.content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no';"
+            "  document.documentElement.style.backgroundColor='#0A0E1A';"
+            "  if(document.body)document.body.style.backgroundColor='#0A0E1A';"
+            "})();";
+        WKUserScript *nativeFeelScript = [[WKUserScript alloc] initWithSource:nativeFeelJS injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:YES];
+        [wv.configuration.userContentController addUserScript:nativeFeelScript];
     }
 
     [self.keyboardManager setTargetWebview:wv];
@@ -1925,7 +1943,7 @@ static NSInteger _currentWindows = 0;
         [newView addObserver:self forKeyPath:@"canGoBack" options:0 context:nil];
         [newView addObserver:self forKeyPath:@"canGoForward" options:0 context:nil];
         
-        self.wkWebview.allowsBackForwardNavigationGestures = [GoNativeAppConfig sharedAppConfig].swipeGestures;
+        self.wkWebview.allowsBackForwardNavigationGestures = NO; // TradePulse: no browser swipe-back
         self.fileWriterSharer.webView = newView;
         [self addScriptMessageHandlersInWebView:self.wkWebview];
     } else {

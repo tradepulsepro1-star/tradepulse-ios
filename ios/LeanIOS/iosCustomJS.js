@@ -5,14 +5,32 @@
   // ── NATIVE FEEL CSS ───────────────────────────────────────────────────
   var style = document.createElement('style');
   style.textContent = [
+    // No text selection anywhere except inputs
     '* { -webkit-user-select: none !important; user-select: none !important; }',
     'input, textarea, [contenteditable] { -webkit-user-select: text !important; user-select: text !important; }',
+    // No tap flash
     '* { -webkit-tap-highlight-color: transparent !important; }',
+    // No callout menus (copy/share/define)
     '* { -webkit-touch-callout: none !important; }',
+    // Smooth fonts
     '* { -webkit-font-smoothing: antialiased; }',
-    'body { overscroll-behavior-y: none; }'
+    // No bounce/overscroll
+    'body { overscroll-behavior: none !important; overflow-y: scroll; }',
+    'html { overscroll-behavior: none !important; }',
+    // No zoom on input focus (feels webby)
+    'input, textarea, select { font-size: 16px !important; }',
+    // Force dark background everywhere — no white flash between pages
+    'html, body { background-color: #0A0E1A !important; }',
+    // Hide scrollbars
+    '::-webkit-scrollbar { display: none !important; }',
+    // No text resize
+    'body { -webkit-text-size-adjust: none !important; text-size-adjust: none !important; }'
   ].join('\n');
   document.head.appendChild(style);
+
+  // Force dark background on html/body immediately (before CSS loads)
+  document.documentElement.style.backgroundColor = '#0A0E1A';
+  document.body && (document.body.style.backgroundColor = '#0A0E1A');
 
   // ── PREVENT CONTEXT MENU ─────────────────────────────────────────────
   document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; }, true);

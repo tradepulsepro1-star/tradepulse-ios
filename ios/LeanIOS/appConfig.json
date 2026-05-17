@@ -197,7 +197,7 @@
     "redirects": [],
     "ignorePageFinishedRegexes": [],
     "iosSettings": {},
-    "swipeGestures": null,
+    "swipeGestures": false,
     "maxWindows": {
       "enabled": false,
       "numWindows": 5,
@@ -210,7 +210,7 @@
     "transitionInteractiveDelayMax": 0.2,
     "menuAnimationDuration": 0.15,
     "showNavigationBar": false,
-    "iosDarkMode": "auto",
+    "iosDarkMode": "dark",
     "iosTintColor": "#0E0D08",
     "iosTintColorDark": "#ffffff",
     "iosTitleColor": "#0E0D08",
