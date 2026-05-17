@@ -73,16 +73,8 @@
   var SPLASH_DURATION = 8000;
 
   function showSplash() {
-    if (!isLandingPage() && !isSignInPage()) return;
-
-    // Already shown this session — if on landing, route
-    if (sessionStorage.getItem(SPLASH_KEY)) {
-      if (isLandingPage()) {
-        var target = hasAuthToken() ? '/social' : '/sign-in';
-        window.location.replace(target);
-      }
-      return;
-    }
+    // Show on ANY page if not yet shown this session
+    if (sessionStorage.getItem(SPLASH_KEY)) return;
 
     sessionStorage.setItem(SPLASH_KEY, '1');
 
@@ -112,15 +104,17 @@
         overlay.style.opacity = '0';
         setTimeout(function() {
           if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
-          // After splash: if logged in go to social, else show our custom sign-in overlay
+          // After splash: route based on auth state
           if (hasAuthToken()) {
-            window.location.replace('/social');
+            if (window.location.pathname !== '/social') {
+              window.location.replace('/social');
+            }
           } else {
-            // Navigate to /sign-in and our overlay will cover the Base44 page
-            if (!isSignInPage()) {
-              window.location.replace('/sign-in');
-            } else {
+            // Go to sign-in and show our overlay
+            if (isSignInPage()) {
               injectSignInOverlay();
+            } else {
+              window.location.replace('/sign-in');
             }
           }
         }, 720);
@@ -282,16 +276,12 @@
 
   // ── INIT ──────────────────────────────────────────────────────────────
   function init() {
-    if (isLandingPage()) {
+    // Always show splash on cold open (any page)
+    if (!sessionStorage.getItem(SPLASH_KEY)) {
       showSplash();
     } else if (isSignInPage()) {
-      // If splash already shown, show our custom sign-in overlay immediately
-      if (sessionStorage.getItem(SPLASH_KEY)) {
-        injectSignInOverlay();
-      } else {
-        // First open but landed on /sign-in — show splash first
-        showSplash();
-      }
+      // Splash already done, just show our sign-in overlay
+      injectSignInOverlay();
     }
   }
 
@@ -380,8 +370,15 @@
     }
   }, 300);
 
+  // Check promo on load too (in case app opens directly on /social)
   if (window.location.pathname === '/social' || window.location.pathname.indexOf('/social') === 0) {
-    setTimeout(fetchAndShowPromo, 1000);
+    setTimeout(fetchAndShowPromo, 800);
   }
+  // Also check after any SPA navigation settles
+  window.addEventListener('load', function() {
+    if (window.location.pathname === '/social' || window.location.pathname.indexOf('/social') === 0) {
+      setTimeout(fetchAndShowPromo, 800);
+    }
+  });
 
 })();
