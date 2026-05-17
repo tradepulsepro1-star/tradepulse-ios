@@ -70,7 +70,7 @@
     }
 
     // ── SPLASH SCREEN ──────────────────────────────────────────────────
-    var SPLASH_IMAGE    = 'https://base44.app/api/apps/69df5ede5be1d2722b8e2c66/files/mp/public/69df5ede5be1d2722b8e2c66/b2b76b879_d2a391939_image.png';
+    var SPLASH_IMAGE    = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/03aec7f64_image.png';
     var SPLASH_DURATION = 8000;
 
     function showSplash() {
@@ -79,7 +79,7 @@
       overlay.style.cssText = 'position:fixed;inset:0;z-index:9999999;background:#000;opacity:1;transition:opacity 0.7s ease';
 
       var bg = document.createElement('div');
-      bg.style.cssText = 'position:absolute;inset:0;background-image:url(' + SPLASH_IMAGE + ');background-size:contain;background-position:center;background-repeat:no-repeat';
+      bg.style.cssText = 'position:absolute;inset:0;background-image:url(' + SPLASH_IMAGE + ');background-size:cover;background-position:center';
       overlay.appendChild(bg);
 
       var track = document.createElement('div');
