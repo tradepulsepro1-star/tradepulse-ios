@@ -301,7 +301,8 @@
 
     var backdrop = document.createElement('div');
     backdrop.style.cssText = 'position:fixed;inset:0;z-index:999998;background:rgba(0,0,0,0.75);opacity:0;transition:opacity 0.3s ease';
-    document.body.appendChild(backdrop);
+    var mountTarget = document.body || document.documentElement;
+    mountTarget.appendChild(backdrop);
 
     var popup = document.createElement('div');
     popup.style.cssText = 'position:fixed;inset:0;z-index:999999;background:#0A0E1A;opacity:0;transition:opacity 0.35s ease';
@@ -336,7 +337,8 @@
     xBtn.addEventListener('click', dismiss);
     popup.appendChild(xBtn);
 
-    document.body.appendChild(popup);
+    var mountTarget2 = document.body || document.documentElement;
+    mountTarget2.appendChild(popup);
     setTimeout(function() { backdrop.style.opacity = '1'; popup.style.opacity = '1'; }, 50);
   }
 
@@ -344,7 +346,7 @@
     if (sessionStorage.getItem(PROMO_KEY)) return;
     var cfg = { image: PROMO_FALLBACK, enabled: true, label: '⚡ Coming Soon' };
     try {
-      fetch('https://tradepulsepro.net/api/functions/getMobilePromoConfig')
+      fetch('/api/functions/getMobilePromoConfig')
         .then(function(r) { return r.json(); })
         .then(function(d) {
           if (d && d.image) { cfg.image = d.image; cfg.enabled = d.enabled !== false; cfg.label = d.label || cfg.label; }
@@ -354,31 +356,39 @@
     } catch(e) { showPromoPopup(cfg); }
   }
 
+  // ── SPA NAVIGATION WATCHER ─────────────────────────────────────────────
+  // Polls every 250ms — catches all SPA route changes including after splash redirect
   var lastPath = window.location.pathname;
-  setInterval(function() {
+
+  function checkRoute() {
     var cur = window.location.pathname;
     if (cur !== lastPath) {
       lastPath = cur;
-      if (cur === '/social' || cur.indexOf('/social') === 0) {
-        setTimeout(fetchAndShowPromo, 600);
-      }
-      // Remove sign-in overlay if user navigated away
-      if (cur !== '/sign-in') {
+
+      // Remove sign-in overlay when navigating away from /sign-in
+      if (cur !== '/sign-in' && cur !== '/signin') {
         var ol = document.getElementById('tp-signin-overlay');
         if (ol && ol.parentNode) ol.parentNode.removeChild(ol);
       }
-    }
-  }, 300);
 
-  // Check promo on load too (in case app opens directly on /social)
-  if (window.location.pathname === '/social' || window.location.pathname.indexOf('/social') === 0) {
-    setTimeout(fetchAndShowPromo, 800);
-  }
-  // Also check after any SPA navigation settles
-  window.addEventListener('load', function() {
-    if (window.location.pathname === '/social' || window.location.pathname.indexOf('/social') === 0) {
-      setTimeout(fetchAndShowPromo, 800);
+      // Show promo when landing on /social
+      if (cur === '/social' || cur.indexOf('/social') === 0) {
+        setTimeout(fetchAndShowPromo, 800);
+      }
     }
+  }
+
+  setInterval(checkRoute, 250);
+
+  // Also fire immediately if already on /social at script load time
+  // AND re-check 1s + 2s + 3s after load to catch splash redirect timing
+  [0, 1000, 2000, 3000].forEach(function(delay) {
+    setTimeout(function() {
+      var cur = window.location.pathname;
+      if (cur === '/social' || cur.indexOf('/social') === 0) {
+        fetchAndShowPromo();
+      }
+    }, delay);
   });
 
 })();
