@@ -92,7 +92,9 @@
     fill.style.cssText = 'height:100%;width:0%;background:linear-gradient(90deg,#B8860B,#F5C842,#FFD700);border-radius:100px;transition:none';
     track.appendChild(fill);
     overlay.appendChild(track);
-    document.body.appendChild(overlay);
+    // Append to documentElement in case body not ready yet
+    var target = document.body || document.documentElement;
+    target.appendChild(overlay);
 
     var start = Date.now();
     function tick() {
@@ -285,11 +287,9 @@
     }
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  // Run immediately at DocumentStart — don't wait for DOM
+  // This ensures our overlay fires before Base44 white page renders
+  init();
 
   // ── GURU LEAGUES PROMO POPUP ──────────────────────────────────────────
   var PROMO_FALLBACK = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/f0d93aec4_ChatGPTImageMay15202603_07_35PM.png';

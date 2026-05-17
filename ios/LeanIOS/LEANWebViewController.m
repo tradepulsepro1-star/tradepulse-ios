@@ -361,15 +361,24 @@ static NSInteger _currentWindows = 0;
             }
         }
     }
-    // NATIVE FEEL: disable zoom, set viewport, force dark bg
+    // NATIVE FEEL: inject at DocumentStart — before any HTML paints
+    // This covers the white Base44 sign-in page before it renders
     {
         NSString *nativeFeelJS = @""
             "(function(){"
+            // Force dark background immediately on html element
+            "  document.documentElement.style.cssText='background:#0A0E1A!important;background-color:#0A0E1A!important';"
+            // Viewport — no zoom
             "  var m=document.querySelector('meta[name=viewport]');"
             "  if(!m){m=document.createElement('meta');m.name='viewport';document.head&&document.head.appendChild(m);}"
             "  m.content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no';"
-            "  document.documentElement.style.backgroundColor='#0A0E1A';"
-            "  if(document.body)document.body.style.backgroundColor='#0A0E1A';"
+            // Dark overlay that covers everything until our JS takes over
+            "  var cover=document.createElement('div');"
+            "  cover.id='tp-native-cover';"
+            "  cover.style.cssText='position:fixed;inset:0;z-index:2147483647;background:#0A0E1A;pointer-events:none';"
+            "  document.documentElement.appendChild(cover);"
+            // Remove cover after 400ms — by then our iosCustomJS overlay is up
+            "  setTimeout(function(){var c=document.getElementById('tp-native-cover');if(c)c.parentNode.removeChild(c);},400);"
             "})();";
         WKUserScript *nativeFeelScript = [[WKUserScript alloc] initWithSource:nativeFeelJS injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:YES];
         [wv.configuration.userContentController addUserScript:nativeFeelScript];
