@@ -92,7 +92,12 @@
     });
 
     // ── GOLD BAR STORE PAGE — inject IAP UI ───────────────────────────
+    // Detect native iOS app — this file only runs in WKWebView but be explicit
+    var isNativeIOS = !!(window.gonative || window.median || /GoNative|Median/i.test(navigator.userAgent));
+
     function patchGoldBarStore() {
+      // iOS ONLY — never runs on web
+      if (!isNativeIOS) return;
       // APPLE IAP COMPLIANCE: rewire all payment buttons to native Apple IAP
       var btns = document.querySelectorAll('button');
       btns.forEach(function(btn) {
