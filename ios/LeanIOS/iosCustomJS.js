@@ -95,59 +95,57 @@
     // Detect native iOS app — this file only runs in WKWebView but be explicit
     var isNativeIOS = !!(window.gonative || window.median || /GoNative|Median/i.test(navigator.userAgent));
 
-    function patchGoldBarStore() {
-      // iOS ONLY — never runs on web
-      if (!isNativeIOS) return;
-      // APPLE IAP COMPLIANCE: rewire all payment buttons to native Apple IAP
-      var btns = document.querySelectorAll('button');
-      btns.forEach(function(btn) {
-        if (btn.getAttribute('data-iap-patched')) return;
-        var txt = (btn.textContent || '').trim().toUpperCase();
-        var isPayBtn = (txt === 'BUY ONCE' || txt === 'SUBSCRIBE / MONTH' || txt === 'SUBSCRIBE' || txt === 'BUY NOW' || txt === 'PURCHASE');
-        if (!isPayBtn) return;
+    function getIAPProductId(btn) {
+      var txt = (btn.textContent || '').trim().toUpperCase();
+      var card = btn.closest('[class*="card"], [class*="package"], [class*="tier"], [class*="plan"], section, article, li, div');
+      var cardText = card ? (card.textContent || '').toUpperCase() : '';
+      var isSubscribe = (txt === 'SUBSCRIBE / MONTH' || txt === 'SUBSCRIBE');
+      if (isSubscribe) {
+        if      (cardText.indexOf('ELITE') !== -1) return 'net.tradepulsepro.sub.elite';
+        else if (cardText.indexOf('PRO') !== -1)   return 'net.tradepulsepro.sub.pro';
+        else if (cardText.indexOf('VALUE') !== -1) return 'net.tradepulsepro.sub.value';
+        else                                        return 'net.tradepulsepro.sub.starter';
+      } else {
+        if      (cardText.indexOf('ELITE') !== -1) return 'net.tradepulsepro.goldbars.elite';
+        else if (cardText.indexOf('PRO') !== -1)   return 'net.tradepulsepro.goldbars.pro';
+        else if (cardText.indexOf('VALUE') !== -1) return 'net.tradepulsepro.goldbars.value';
+        else                                        return 'net.tradepulsepro.goldbars.starter';
+      }
+    }
 
-        btn.setAttribute('data-iap-patched', '1');
+    function triggerIAP(productId) {
+      var bridge = (window.gonative && window.gonative.purchases) || (window.median && window.median.purchases);
+      if (bridge && bridge.purchase) {
+        bridge.purchase({ productId: productId });
+      }
+    }
 
-        // Detect which package by walking up the DOM
-        var card = btn.closest('[class*="card"], [class*="package"], [class*="tier"], [class*="plan"], section, article, li, div');
-        var cardText = card ? (card.textContent || '').toUpperCase() : '';
-
-        var productId;
-        if (txt === 'BUY ONCE' || txt === 'BUY NOW' || txt === 'PURCHASE') {
-          if      (cardText.indexOf('ELITE') !== -1)   productId = 'net.tradepulsepro.goldbars.elite';
-          else if (cardText.indexOf('PRO') !== -1)     productId = 'net.tradepulsepro.goldbars.pro';
-          else if (cardText.indexOf('VALUE') !== -1)   productId = 'net.tradepulsepro.goldbars.value';
-          else                                          productId = 'net.tradepulsepro.goldbars.starter';
-        } else {
-          // SUBSCRIBE / MONTH
-          if      (cardText.indexOf('ELITE') !== -1)   productId = 'net.tradepulsepro.sub.elite';
-          else if (cardText.indexOf('PRO') !== -1)     productId = 'net.tradepulsepro.sub.pro';
-          else if (cardText.indexOf('VALUE') !== -1)   productId = 'net.tradepulsepro.sub.value';
-          else                                          productId = 'net.tradepulsepro.sub.starter';
-        }
-
-        // Clone to remove existing React event listeners, then add IAP handler
-        var newBtn = btn.cloneNode(true);
-        newBtn.setAttribute('data-iap-patched', '1');
-        newBtn.removeAttribute('data-iap-hidden');
-        newBtn.style.removeProperty('display');
-        newBtn.style.removeProperty('visibility');
-        newBtn.style.removeProperty('pointer-events');
-
-        newBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopImmediatePropagation();
-          var bridge = (window.gonative && window.gonative.purchases) || (window.median && window.median.purchases);
-          if (bridge && bridge.purchase) {
-            bridge.purchase({ productId: productId });
-          } else {
-            // Fallback: show native alert that purchase is via App Store
-            alert('Purchase available through the App Store. Please update the app if this issue persists.');
+    // CAPTURE-PHASE global interceptor — fires BEFORE React onClick
+    // This is the only reliable way to stop React from calling Stripe
+    if (isNativeIOS) {
+      document.addEventListener('click', function(e) {
+        var el = e.target;
+        // Walk up to find a button (in case user clicks a child element)
+        for (var i = 0; i < 5; i++) {
+          if (!el || el === document) break;
+          if (el.tagName === 'BUTTON' || el.tagName === 'A') {
+            var txt = (el.textContent || '').trim().toUpperCase();
+            if (txt === 'BUY ONCE' || txt === 'SUBSCRIBE / MONTH' || txt === 'SUBSCRIBE' || txt === 'BUY NOW' || txt === 'PURCHASE') {
+              e.preventDefault();
+              e.stopPropagation();
+              e.stopImmediatePropagation();
+              var productId = getIAPProductId(el);
+              triggerIAP(productId);
+              return false;
+            }
           }
-        }, true);
+          el = el.parentElement;
+        }
+      }, true); // true = capture phase — runs BEFORE React
+    }
 
-        btn.parentNode.replaceChild(newBtn, btn);
-      });
+    function patchGoldBarStore() {
+      // No-op — capture-phase listener above handles everything
     }
 
     // Watch for Gold Bar Store page navigation
