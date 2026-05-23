@@ -372,5 +372,43 @@
     }
   },
   "hasCustomJS": true,
-  "hasIosCustomJS": true
+  "hasIosCustomJS": true,
+  "inAppPurchases": {
+    "enabled": true,
+    "products": [
+      {
+        "id": "net.tradepulsepro.goldbars.starter",
+        "type": "consumable"
+      },
+      {
+        "id": "net.tradepulsepro.goldbars.value",
+        "type": "consumable"
+      },
+      {
+        "id": "net.tradepulsepro.goldbars.pro",
+        "type": "consumable"
+      },
+      {
+        "id": "net.tradepulsepro.goldbars.elite",
+        "type": "consumable"
+      },
+      {
+        "id": "net.tradepulsepro.sub.starter",
+        "type": "autoRenewableSubscription"
+      },
+      {
+        "id": "net.tradepulsepro.sub.value",
+        "type": "autoRenewableSubscription"
+      },
+      {
+        "id": "net.tradepulsepro.sub.pro",
+        "type": "autoRenewableSubscription"
+      },
+      {
+        "id": "net.tradepulsepro.sub.elite",
+        "type": "autoRenewableSubscription"
+      }
+    ],
+    "verboseLogs": false
+  }
 }
