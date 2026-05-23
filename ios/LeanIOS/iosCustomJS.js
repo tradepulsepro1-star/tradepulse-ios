@@ -93,31 +93,55 @@
 
     // ── GOLD BAR STORE PAGE — inject IAP UI ───────────────────────────
     function patchGoldBarStore() {
-      // APPLE IAP COMPLIANCE: hide all Stripe/web payment buttons in native iOS app
+      // APPLE IAP COMPLIANCE: rewire all payment buttons to native Apple IAP
       var btns = document.querySelectorAll('button');
       btns.forEach(function(btn) {
+        if (btn.getAttribute('data-iap-patched')) return;
         var txt = (btn.textContent || '').trim().toUpperCase();
-        if (txt === 'BUY ONCE' || txt === 'SUBSCRIBE / MONTH' || txt === 'SUBSCRIBE' || txt === 'BUY NOW' || txt === 'PURCHASE') {
-          btn.style.setProperty('display', 'none', 'important');
-          btn.style.setProperty('visibility', 'hidden', 'important');
-          btn.style.setProperty('pointer-events', 'none', 'important');
-          btn.setAttribute('data-iap-hidden', '1');
+        var isPayBtn = (txt === 'BUY ONCE' || txt === 'SUBSCRIBE / MONTH' || txt === 'SUBSCRIBE' || txt === 'BUY NOW' || txt === 'PURCHASE');
+        if (!isPayBtn) return;
+
+        btn.setAttribute('data-iap-patched', '1');
+
+        // Detect which package by walking up the DOM
+        var card = btn.closest('[class*="card"], [class*="package"], [class*="tier"], [class*="plan"], section, article, li, div');
+        var cardText = card ? (card.textContent || '').toUpperCase() : '';
+
+        var productId;
+        if (txt === 'BUY ONCE' || txt === 'BUY NOW' || txt === 'PURCHASE') {
+          if      (cardText.indexOf('ELITE') !== -1)   productId = 'net.tradepulsepro.goldbars.elite';
+          else if (cardText.indexOf('PRO') !== -1)     productId = 'net.tradepulsepro.goldbars.pro';
+          else if (cardText.indexOf('VALUE') !== -1)   productId = 'net.tradepulsepro.goldbars.value';
+          else                                          productId = 'net.tradepulsepro.goldbars.starter';
+        } else {
+          // SUBSCRIBE / MONTH
+          if      (cardText.indexOf('ELITE') !== -1)   productId = 'net.tradepulsepro.sub.elite';
+          else if (cardText.indexOf('PRO') !== -1)     productId = 'net.tradepulsepro.sub.pro';
+          else if (cardText.indexOf('VALUE') !== -1)   productId = 'net.tradepulsepro.sub.value';
+          else                                          productId = 'net.tradepulsepro.sub.starter';
         }
-      });
-      // Also hide any anchor tags that look like payment links
-      var links = document.querySelectorAll('a');
-      links.forEach(function(a) {
-        var txt = (a.textContent || '').trim().toUpperCase();
-        if (txt === 'BUY ONCE' || txt === 'SUBSCRIBE / MONTH' || txt === 'SUBSCRIBE' || txt === 'BUY NOW') {
-          a.style.setProperty('display', 'none', 'important');
-        }
-      });
-      // Hide "Cancel anytime in Settings" text that gives away web payment flow
-      var allEls = document.querySelectorAll('*');
-      allEls.forEach(function(el) {
-        if (el.children.length === 0 && el.textContent && el.textContent.trim() === 'Cancel anytime in Settings') {
-          el.style.setProperty('display', 'none', 'important');
-        }
+
+        // Clone to remove existing React event listeners, then add IAP handler
+        var newBtn = btn.cloneNode(true);
+        newBtn.setAttribute('data-iap-patched', '1');
+        newBtn.removeAttribute('data-iap-hidden');
+        newBtn.style.removeProperty('display');
+        newBtn.style.removeProperty('visibility');
+        newBtn.style.removeProperty('pointer-events');
+
+        newBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          var bridge = (window.gonative && window.gonative.purchases) || (window.median && window.median.purchases);
+          if (bridge && bridge.purchase) {
+            bridge.purchase({ productId: productId });
+          } else {
+            // Fallback: show native alert that purchase is via App Store
+            alert('Purchase available through the App Store. Please update the app if this issue persists.');
+          }
+        }, true);
+
+        btn.parentNode.replaceChild(newBtn, btn);
       });
     }
 
