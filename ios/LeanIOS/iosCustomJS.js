@@ -1,4 +1,4 @@
-// TradePulse iOS — Native feel + Splash + Guru Leagues promo
+// TradePulse iOS — Native feel + Splash + Guru Leagues promo + Apple IAP
 // NO custom sign-in overlay — Base44 auth handles sign-in natively
 
 (function() {
@@ -34,7 +34,11 @@
       'input, textarea, select { font-size: 16px !important; }',
       'html, body { background-color: #0A0E1A !important; }',
       '::-webkit-scrollbar { display: none !important; }',
-      'body { -webkit-text-size-adjust: none !important; text-size-adjust: none !important; }'
+      'body { -webkit-text-size-adjust: none !important; text-size-adjust: none !important; }',
+      // Hide web-only payment buttons in native app
+      '.stripe-payment-btn, .web-payment-only, [data-payment="stripe"] { display: none !important; }',
+      // Show IAP buttons only in native app
+      '.iap-payment-btn { display: block !important; }'
     ].join('\n');
     document.head.appendChild(style);
 
@@ -46,6 +50,91 @@
     document.addEventListener('selectstart', function(e) {
       if (!e.target.matches('input, textarea, [contenteditable]')) e.preventDefault();
     }, true);
+
+    // ── APPLE IAP — Gold Bar Store ────────────────────────────────────
+    // Product IDs must match App Store Connect exactly
+    var IAP_PRODUCTS = {
+      starter:   'net.tradepulsepro.goldbars.starter',
+      value:     'net.tradepulsepro.goldbars.value',
+      pro:       'net.tradepulsepro.goldbars.pro',
+      elite:     'net.tradepulsepro.goldbars.elite',
+      sub_starter: 'net.tradepulsepro.sub.starter',
+      sub_value:   'net.tradepulsepro.sub.value',
+      sub_pro:     'net.tradepulsepro.sub.pro',
+      sub_elite:   'net.tradepulsepro.sub.elite'
+    };
+
+    // Expose IAP trigger globally so React components can call it
+    window.tp_iap_purchase = function(productKey) {
+      var productId = IAP_PRODUCTS[productKey];
+      if (!productId) { console.warn('TradePulse IAP: unknown product', productKey); return; }
+      if (window.gonative && window.gonative.purchases && window.gonative.purchases.purchase) {
+        window.gonative.purchases.purchase({ productId: productId });
+      } else if (window.median && window.median.purchases && window.median.purchases.purchase) {
+        window.median.purchases.purchase({ productId: productId });
+      } else {
+        console.warn('TradePulse IAP: native bridge not available');
+      }
+    };
+
+    // Listen for IAP results from native bridge
+    window.addEventListener('message', function(e) {
+      if (!e.data || e.data.type !== 'gonative.purchases.result') return;
+      var result = e.data;
+      if (result.status === 'success') {
+        // Notify the React app that purchase succeeded
+        window.dispatchEvent(new CustomEvent('tp_iap_success', { detail: result }));
+      } else if (result.status === 'cancelled') {
+        window.dispatchEvent(new CustomEvent('tp_iap_cancelled', { detail: result }));
+      } else {
+        window.dispatchEvent(new CustomEvent('tp_iap_error', { detail: result }));
+      }
+    });
+
+    // ── GOLD BAR STORE PAGE — inject IAP UI ───────────────────────────
+    function patchGoldBarStore() {
+      // Find all "BUY ONCE" and "SUBSCRIBE / MONTH" buttons and rewire them
+      var btns = document.querySelectorAll('button');
+      btns.forEach(function(btn) {
+        var txt = (btn.textContent || '').trim().toUpperCase();
+        if (txt === 'BUY ONCE' || txt === 'SUBSCRIBE / MONTH') {
+          // Already patched
+          if (btn.getAttribute('data-iap-patched')) return;
+          btn.setAttribute('data-iap-patched', '1');
+
+          // Detect which package this button belongs to by walking up the DOM
+          var card = btn.closest('[class*="card"], [class*="package"], [class*="tier"], section, article, div[class]');
+          var cardText = card ? (card.textContent || '').toUpperCase() : '';
+          var productKey = 'starter';
+          if (cardText.indexOf('ELITE') !== -1)        productKey = txt === 'BUY ONCE' ? 'elite'   : 'sub_elite';
+          else if (cardText.indexOf('PRO') !== -1)     productKey = txt === 'BUY ONCE' ? 'pro'     : 'sub_pro';
+          else if (cardText.indexOf('VALUE') !== -1)   productKey = txt === 'BUY ONCE' ? 'value'   : 'sub_value';
+          else                                          productKey = txt === 'BUY ONCE' ? 'starter' : 'sub_starter';
+
+          // Replace click handler with IAP trigger
+          var newBtn = btn.cloneNode(true);
+          newBtn.setAttribute('data-iap-patched', '1');
+          newBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            window.tp_iap_purchase(productKey);
+          });
+          btn.parentNode.replaceChild(newBtn, btn);
+        }
+      });
+    }
+
+    // Watch for Gold Bar Store page navigation
+    function checkAndPatchStore() {
+      var path = window.location.pathname;
+      if (path.indexOf('gold') !== -1 || path.indexOf('store') !== -1 || path.indexOf('purchase') !== -1 || path.indexOf('wallet') !== -1) {
+        setTimeout(patchGoldBarStore, 500);
+        setTimeout(patchGoldBarStore, 1500);
+        setTimeout(patchGoldBarStore, 3000);
+      }
+      // Also patch on any page in case Gold Bar Store is a modal
+      setTimeout(patchGoldBarStore, 1000);
+    }
 
     // ── SPLASH SCREEN ─────────────────────────────────────────────────
     var SPLASH_IMAGE    = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/03aec7f64_image.png';
@@ -85,7 +174,6 @@
       requestAnimationFrame(tick);
     }
 
-    // ── INIT: show splash on cold open ────────────────────────────────
     if (splashNeeded) {
       showSplash();
     }
@@ -145,7 +233,6 @@
       document.body.appendChild(popup);
       setTimeout(function() { backdrop.style.opacity = '1'; popup.style.opacity = '1'; }, 50);
 
-      // Auto-dismiss after duration
       var duration = cfg.duration || 6000;
       var pStart = Date.now();
       function promoTick() {
@@ -186,6 +273,7 @@
       if (cur === '/social' || cur.indexOf('/social') === 0) {
         setTimeout(fetchAndShowPromo, 800);
       }
+      checkAndPatchStore();
     }
 
     history.pushState = function() {
@@ -200,10 +288,11 @@
       setTimeout(onNavigation, 100);
     });
 
-    // Check on load if already on /social
+    // Check on load
     if (window.location.pathname === '/social' || window.location.pathname.indexOf('/social') === 0) {
       setTimeout(fetchAndShowPromo, 1000);
     }
+    checkAndPatchStore();
 
   }); // end onDOMReady
 
