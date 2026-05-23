@@ -93,33 +93,30 @@
 
     // ── GOLD BAR STORE PAGE — inject IAP UI ───────────────────────────
     function patchGoldBarStore() {
-      // Find all "BUY ONCE" and "SUBSCRIBE / MONTH" buttons and rewire them
+      // APPLE IAP COMPLIANCE: hide all Stripe/web payment buttons in native iOS app
       var btns = document.querySelectorAll('button');
       btns.forEach(function(btn) {
         var txt = (btn.textContent || '').trim().toUpperCase();
-        if (txt === 'BUY ONCE' || txt === 'SUBSCRIBE / MONTH') {
-          // Already patched
-          if (btn.getAttribute('data-iap-patched')) return;
-          btn.setAttribute('data-iap-patched', '1');
-
-          // Detect which package this button belongs to by walking up the DOM
-          var card = btn.closest('[class*="card"], [class*="package"], [class*="tier"], section, article, div[class]');
-          var cardText = card ? (card.textContent || '').toUpperCase() : '';
-          var productKey = 'starter';
-          if (cardText.indexOf('ELITE') !== -1)        productKey = txt === 'BUY ONCE' ? 'elite'   : 'sub_elite';
-          else if (cardText.indexOf('PRO') !== -1)     productKey = txt === 'BUY ONCE' ? 'pro'     : 'sub_pro';
-          else if (cardText.indexOf('VALUE') !== -1)   productKey = txt === 'BUY ONCE' ? 'value'   : 'sub_value';
-          else                                          productKey = txt === 'BUY ONCE' ? 'starter' : 'sub_starter';
-
-          // Replace click handler with IAP trigger
-          var newBtn = btn.cloneNode(true);
-          newBtn.setAttribute('data-iap-patched', '1');
-          newBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            window.tp_iap_purchase(productKey);
-          });
-          btn.parentNode.replaceChild(newBtn, btn);
+        if (txt === 'BUY ONCE' || txt === 'SUBSCRIBE / MONTH' || txt === 'SUBSCRIBE' || txt === 'BUY NOW' || txt === 'PURCHASE') {
+          btn.style.setProperty('display', 'none', 'important');
+          btn.style.setProperty('visibility', 'hidden', 'important');
+          btn.style.setProperty('pointer-events', 'none', 'important');
+          btn.setAttribute('data-iap-hidden', '1');
+        }
+      });
+      // Also hide any anchor tags that look like payment links
+      var links = document.querySelectorAll('a');
+      links.forEach(function(a) {
+        var txt = (a.textContent || '').trim().toUpperCase();
+        if (txt === 'BUY ONCE' || txt === 'SUBSCRIBE / MONTH' || txt === 'SUBSCRIBE' || txt === 'BUY NOW') {
+          a.style.setProperty('display', 'none', 'important');
+        }
+      });
+      // Hide "Cancel anytime in Settings" text that gives away web payment flow
+      var allEls = document.querySelectorAll('*');
+      allEls.forEach(function(el) {
+        if (el.children.length === 0 && el.textContent && el.textContent.trim() === 'Cancel anytime in Settings') {
+          el.style.setProperty('display', 'none', 'important');
         }
       });
     }
