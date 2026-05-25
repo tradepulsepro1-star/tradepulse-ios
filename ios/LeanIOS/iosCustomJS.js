@@ -3,6 +3,9 @@
 
 (function() {
 
+  // ── NATIVE FLAG — set before React loads so GoldBarStore never falls through to Apple Pay JS ──
+  window.tp_is_native_ios = true;
+
   var SPLASH_KEY = 'tp_splash_shown';
   var PROMO_KEY  = 'tp_promo_shown';
 
@@ -321,3 +324,4 @@
   }); // end onDOMReady
 
 })();
+
