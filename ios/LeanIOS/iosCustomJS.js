@@ -3,40 +3,12 @@
 
 (function() {
 
-  // ── NATIVE FLAG — set before React loads so GoldBarStore never falls through to Apple Pay JS ──
-  window.tp_is_native_ios = true;
-
   var SPLASH_KEY = 'tp_splash_shown';
   var PROMO_KEY  = 'tp_promo_shown';
 
-  // ── SPLASH GATE — block React routing until splash finishes ──────────
-  // We do NOT set tp_splash_shown yet — React reads it as "splash done"
-  // We block history navigation for 8s so React auth can't redirect during splash
-  var _splashShown = !!sessionStorage.getItem(SPLASH_KEY);
-
-  if (!_splashShown) {
-    // Lock navigation immediately — before DOM, before React loads
-    var _origPush    = history.pushState.bind(history);
-    var _origReplace = history.replaceState.bind(history);
-    var _navLocked   = true;
-
-    history.pushState = function(state, title, url) {
-      if (_navLocked) return;
-      return _origPush(state, title, url);
-    };
-    history.replaceState = function(state, title, url) {
-      if (_navLocked) return;
-      return _origReplace(state, title, url);
-    };
-
-    // Unlock after 8s and signal React that splash is done
-    setTimeout(function() {
-      _navLocked = false;
-      history.pushState    = _origPush;
-      history.replaceState = _origReplace;
-      sessionStorage.setItem(SPLASH_KEY, '1'); // NOW signal React — splash is done
-    }, 8000);
-  }
+  // ── CLAIM SPLASH SLOT IMMEDIATELY (before DOM) ────────────────────────
+  var splashNeeded = !sessionStorage.getItem(SPLASH_KEY);
+  if (splashNeeded) sessionStorage.setItem(SPLASH_KEY, '1');
 
   // ── DOM READY HELPER ──────────────────────────────────────────────────
   function onDOMReady(fn) {
@@ -63,7 +35,9 @@
       'html, body { background-color: #0A0E1A !important; }',
       '::-webkit-scrollbar { display: none !important; }',
       'body { -webkit-text-size-adjust: none !important; text-size-adjust: none !important; }',
+      // Hide web-only payment buttons in native app
       '.stripe-payment-btn, .web-payment-only, [data-payment="stripe"] { display: none !important; }',
+      // Show IAP buttons only in native app
       '.iap-payment-btn { display: block !important; }'
     ].join('\n');
     document.head.appendChild(style);
@@ -78,17 +52,19 @@
     }, true);
 
     // ── APPLE IAP — Gold Bar Store ────────────────────────────────────
+    // Product IDs must match App Store Connect exactly
     var IAP_PRODUCTS = {
-      starter:     'net.tradepulsepro.goldbars.starter',
-      value:       'net.tradepulsepro.goldbars.value',
-      pro:         'net.tradepulsepro.goldbars.pro',
-      elite:       'net.tradepulsepro.goldbars.elite',
+      starter:   'net.tradepulsepro.goldbars.starter',
+      value:     'net.tradepulsepro.goldbars.value',
+      pro:       'net.tradepulsepro.goldbars.pro',
+      elite:     'net.tradepulsepro.goldbars.elite',
       sub_starter: 'net.tradepulsepro.sub.starter',
       sub_value:   'net.tradepulsepro.sub.value',
       sub_pro:     'net.tradepulsepro.sub.pro',
       sub_elite:   'net.tradepulsepro.sub.elite'
     };
 
+    // Expose IAP trigger globally so React components can call it
     window.tp_iap_purchase = function(productKey) {
       var productId = IAP_PRODUCTS[productKey];
       if (!productId) { console.warn('TradePulse IAP: unknown product', productKey); return; }
@@ -101,10 +77,12 @@
       }
     };
 
+    // Listen for IAP results from native bridge
     window.addEventListener('message', function(e) {
       if (!e.data || e.data.type !== 'gonative.purchases.result') return;
       var result = e.data;
       if (result.status === 'success') {
+        // Notify the React app that purchase succeeded
         window.dispatchEvent(new CustomEvent('tp_iap_success', { detail: result }));
       } else if (result.status === 'cancelled') {
         window.dispatchEvent(new CustomEvent('tp_iap_cancelled', { detail: result }));
@@ -113,6 +91,8 @@
       }
     });
 
+    // ── GOLD BAR STORE PAGE — inject IAP UI ───────────────────────────
+    // Detect native iOS app — this file only runs in WKWebView but be explicit
     var isNativeIOS = !!(window.gonative || window.median || /GoNative|Median/i.test(navigator.userAgent));
 
     function getIAPProductId(btn) {
@@ -140,9 +120,12 @@
       }
     }
 
+    // CAPTURE-PHASE global interceptor — fires BEFORE React onClick
+    // This is the only reliable way to stop React from calling Stripe
     if (isNativeIOS) {
       document.addEventListener('click', function(e) {
         var el = e.target;
+        // Walk up to find a button (in case user clicks a child element)
         for (var i = 0; i < 5; i++) {
           if (!el || el === document) break;
           if (el.tagName === 'BUTTON' || el.tagName === 'A') {
@@ -158,7 +141,23 @@
           }
           el = el.parentElement;
         }
-      }, true);
+      }, true); // true = capture phase — runs BEFORE React
+    }
+
+    function patchGoldBarStore() {
+      // No-op — capture-phase listener above handles everything
+    }
+
+    // Watch for Gold Bar Store page navigation
+    function checkAndPatchStore() {
+      var path = window.location.pathname;
+      if (path.indexOf('gold') !== -1 || path.indexOf('store') !== -1 || path.indexOf('purchase') !== -1 || path.indexOf('wallet') !== -1) {
+        setTimeout(patchGoldBarStore, 500);
+        setTimeout(patchGoldBarStore, 1500);
+        setTimeout(patchGoldBarStore, 3000);
+      }
+      // Also patch on any page in case Gold Bar Store is a modal
+      setTimeout(patchGoldBarStore, 1000);
     }
 
     // ── SPLASH SCREEN ─────────────────────────────────────────────────
@@ -168,13 +167,11 @@
     function showSplash() {
       var overlay = document.createElement('div');
       overlay.id = 'tp-splash';
-      overlay.style.cssText = 'position:fixed;inset:0;z-index:9999999;background:#0A0E1A;opacity:1;transition:opacity 0.7s ease';
+      overlay.style.cssText = 'position:fixed;inset:0;z-index:9999999;background:#000;opacity:1;transition:opacity 0.7s ease';
 
-      // Use <img> not background-image — more reliable on iOS 26 WKWebView
-      var img = document.createElement('img');
-      img.src = SPLASH_IMAGE;
-      img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block';
-      overlay.appendChild(img);
+      var bg = document.createElement('div');
+      bg.style.cssText = 'position:absolute;inset:0;background-image:url(' + SPLASH_IMAGE + ');background-size:cover;background-position:center';
+      overlay.appendChild(bg);
 
       var track = document.createElement('div');
       track.style.cssText = 'position:absolute;bottom:48px;left:32px;right:32px;height:3px;background:rgba(255,255,255,0.12);border-radius:100px;overflow:hidden';
@@ -201,23 +198,9 @@
       requestAnimationFrame(tick);
     }
 
-    if (!_splashShown) {
+    if (splashNeeded) {
       showSplash();
     }
-
-    // ── iOS 26 WKWEBVIEW REPAINT FIX ──────────────────────────────────
-    function forceRepaint() {
-      if (!document.body) return;
-      document.body.style.display = 'none';
-      void document.body.offsetHeight;
-      document.body.style.display = '';
-    }
-    forceRepaint();
-    var _rp = 0;
-    var _rpTimer = setInterval(function() {
-      forceRepaint(); _rp++;
-      if (_rp >= 6) clearInterval(_rpTimer);
-    }, 500);
 
     // ── GURU LEAGUES PROMO POPUP ──────────────────────────────────────
     var PROMO_FALLBACK = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/f0d93aec4_ChatGPTImageMay15202603_07_35PM.png';
@@ -243,8 +226,8 @@
       popup.appendChild(grad);
 
       var lbl = document.createElement('div');
-      lbl.textContent = cfg.label || '\u26a1 Coming Soon';
-      lbl.style.cssText = 'position:absolute;bottom:80px;left:0;right:0;text-align:center;color:#F5C842;font-size:15px;font-weight:600;font-family:sans-serif;letter-spacing:0.3px';
+      lbl.textContent = cfg.label || '⚡ Coming Soon';
+      lbl.style.cssText = 'position:absolute;bottom:80px;left:0;right:0;text-align:center;color:#F5C842;font-size:15px;font-weight:600;font-family:-apple-system,sans-serif;letter-spacing:0.3px';
       popup.appendChild(lbl);
 
       var promoTrack = document.createElement('div');
@@ -267,7 +250,7 @@
 
       var xBtn = document.createElement('button');
       xBtn.textContent = '\u2715';
-      xBtn.style.cssText = 'position:absolute;top:52px;right:20px;z-index:10;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.6);border:1.5px solid rgba(255,255,255,0.25);color:#fff;font-size:15px;cursor:pointer;line-height:36px;text-align:center;font-family:sans-serif';
+      xBtn.style.cssText = 'position:absolute;top:52px;right:20px;z-index:10;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.6);border:1.5px solid rgba(255,255,255,0.25);color:#fff;font-size:15px;cursor:pointer;-webkit-appearance:none;line-height:36px;text-align:center;font-family:-apple-system,sans-serif';
       xBtn.addEventListener('click', dismiss);
       popup.appendChild(xBtn);
 
@@ -290,7 +273,7 @@
 
     function fetchAndShowPromo() {
       if (sessionStorage.getItem(PROMO_KEY)) return;
-      var cfg = { image: PROMO_FALLBACK, enabled: true, label: '\u26a1 Guru Leagues \u2014 Coming Soon', duration: 6000 };
+      var cfg = { image: PROMO_FALLBACK, enabled: true, label: '\u26a1 Guru Leagues — Coming Soon', duration: 6000 };
       try {
         fetch('/api/functions/getMobilePromoConfig')
           .then(function(r) { return r.json(); })
@@ -306,31 +289,34 @@
     }
 
     // ── SPA NAVIGATION WATCHER ────────────────────────────────────────
-    var _origPushSPA    = history.pushState.bind(history);
-    var _origReplaceSPA = history.replaceState.bind(history);
+    var _origPush    = history.pushState.bind(history);
+    var _origReplace = history.replaceState.bind(history);
 
     function onNavigation() {
       var cur = window.location.pathname;
       if (cur === '/social' || cur.indexOf('/social') === 0) {
         setTimeout(fetchAndShowPromo, 800);
       }
+      checkAndPatchStore();
     }
 
     history.pushState = function() {
-      _origPushSPA.apply(history, arguments);
+      _origPush.apply(history, arguments);
       setTimeout(onNavigation, 100);
     };
     history.replaceState = function() {
-      _origReplaceSPA.apply(history, arguments);
+      _origReplace.apply(history, arguments);
       setTimeout(onNavigation, 100);
     };
     window.addEventListener('popstate', function() {
       setTimeout(onNavigation, 100);
     });
 
+    // Check on load
     if (window.location.pathname === '/social' || window.location.pathname.indexOf('/social') === 0) {
       setTimeout(fetchAndShowPromo, 1000);
     }
+    checkAndPatchStore();
 
   }); // end onDOMReady
 
