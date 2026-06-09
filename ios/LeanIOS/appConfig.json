@@ -29,13 +29,11 @@
     "forceSessionCookieExpiry": 0,
     "iosCustomHeaders": {},
     "androidCustomHeaders": {},
-    "version": 13,
-    "hasCustomJS": true,
-    "hasIosCustomJS": true
+    "version": 13
   },
   "navigation": {
     "androidPullToRefresh": false,
-    "iosPullToRefresh": false,
+    "iosPullToRefresh": true,
     "androidShowOfflinePage": true,
     "iosShowOfflinePage": true,
     "iosConnectionOfflineTime": 10,
@@ -127,54 +125,6 @@
           "regex": "^(?!https?://).*",
           "mode": "external",
           "label": "Non-web links",
-          "pagesToTrigger": "custom",
-          "iosInternalNavigationType": "webview",
-          "android": "internal"
-        },
-        {
-          "regex": "https?://([-\\w]+\\.)*tradepulsepro\\.net.*",
-          "mode": "internal",
-          "label": "TradePulse App Domain",
-          "pagesToTrigger": "custom",
-          "iosInternalNavigationType": "webview",
-          "android": "internal"
-        },
-        {
-          "regex": "https?://([-\\w]+\\.)*tradepulse\\.net.*",
-          "mode": "internal",
-          "label": "TradePulse Marketing Domain",
-          "pagesToTrigger": "custom",
-          "iosInternalNavigationType": "webview",
-          "android": "internal"
-        },
-        {
-          "regex": "https?://([-\\w]+\\.)*base44\\.com.*",
-          "mode": "internal",
-          "label": "Base44 All",
-          "pagesToTrigger": "custom",
-          "iosInternalNavigationType": "webview",
-          "android": "internal"
-        },
-        {
-          "regex": "https?://accounts\\.google\\.com.*",
-          "mode": "internal",
-          "label": "Google OAuth",
-          "pagesToTrigger": "custom",
-          "iosInternalNavigationType": "webview",
-          "android": "internal"
-        },
-        {
-          "regex": "https?://([-\\w]+\\.)*googleapis\\.com.*",
-          "mode": "internal",
-          "label": "Google APIs",
-          "pagesToTrigger": "custom",
-          "iosInternalNavigationType": "webview",
-          "android": "internal"
-        },
-        {
-          "regex": "https?://login\\.microsoftonline\\.com.*",
-          "mode": "internal",
-          "label": "Microsoft Login",
           "pagesToTrigger": "custom"
         },
         {
@@ -202,18 +152,38 @@
           "pagesToTrigger": "custom"
         },
         {
+          "regex": "https?://([-\\w]+\\.)*google\\.com/maps/search/.*",
+          "mode": "appbrowser",
+          "label": "Google Maps Search",
+          "pagesToTrigger": "custom"
+        },
+        {
           "regex": "https?://([-\\w]+\\.)*linkedin\\.com/.*",
           "mode": "appbrowser",
           "label": "LinkedIn",
           "pagesToTrigger": "custom"
         },
         {
+          "regex": "https?://login\\.microsoftonline\\.com.*",
+          "mode": "internal",
+          "label": "Microsoft Login",
+          "pagesToTrigger": "custom"
+        },
+        {
+          "regex": "https?:\\/\\/([-\\w]+\\.)*tradepulsepro.net(\\/.*)?$",
+          "mode": "internal",
+          "label": "All pages on my domain",
+          "pagesToTrigger": "domain"
+        },
+        {
+          "regex": "https?://([-\\w]+\\.)*tradepulse\\.net(/.*)?$",
+          "mode": "internal"
+        },
+        {
           "regex": ".*",
-          "mode": "appbrowser",
+          "mode": "internal",
           "label": "All Other Links",
-          "pagesToTrigger": "custom",
-          "iosInternalNavigationType": "external",
-          "android": "external"
+          "pagesToTrigger": "all"
         }
       ],
       "active": true
@@ -229,12 +199,14 @@
     "redirects": [],
     "ignorePageFinishedRegexes": [],
     "iosSettings": {},
-    "swipeGestures": false,
+    "swipeGestures": null,
     "maxWindows": {
-      "enabled": true,
-      "numWindows": 2,
-      "autoClose": true
-    }
+      "enabled": false,
+      "numWindows": 5,
+      "autoClose": false
+    },
+    "toolbarEnabled": false,
+    "showToolbar": false
   },
   "styling": {
     "icon": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_ios.png",
@@ -242,13 +214,13 @@
     "transitionInteractiveDelayMax": 0.2,
     "menuAnimationDuration": 0.15,
     "showNavigationBar": false,
-    "iosDarkMode": "dark",
+    "iosDarkMode": "auto",
     "iosTintColor": "#0E0D08",
     "iosTintColorDark": "#ffffff",
     "iosTitleColor": "#0E0D08",
     "iosTitleColorDark": "#ffffff",
-    "iosStatusBarBackgroundColor": "#0A0E1A",
-    "iosStatusBarBackgroundColorDark": "#0A0E1A",
+    "iosStatusBarBackgroundColor": "#ffffffff",
+    "iosStatusBarBackgroundColorDark": "#000000",
     "iosEnableBlurInStatusBar": false,
     "iosSidebarFont": "Default",
     "iosSidebarTextColor": "#0E0D08",
@@ -351,14 +323,14 @@
       }
     },
     "iosGlassDesign": false,
-    "iosTransparentNavBar": false,
+    "iosTransparentNavBar": true,
     "iosHideNavBarOnScroll": false,
     "iosHideTabBarOnScroll": false,
     "androidHideNavBarOnScroll": false,
     "androidHideTabBarOnScroll": false,
     "customIcons": {},
-    "iosStatusBarStyle": "dark",
-    "iosEnableOverlayInStatusBar": true,
+    "iosStatusBarStyle": "auto",
+    "iosEnableOverlayInStatusBar": false,
     "androidStatusBarStyle": "auto",
     "androidEnableOverlayInStatusBar": false,
     "iosActivityIndicatorColor": "#808080",
@@ -374,7 +346,8 @@
     "androidHeaderImage": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_android.png",
     "androidHeaderImageDark": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_android.png",
     "iosHeaderImageDark": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_ios.png",
-    "iosShowNavigationBar": false
+    "iosFullScreenWebview": false,
+    "showShareButton": false
   },
   "permissions": {
     "usesGeolocation": false,
@@ -404,45 +377,5 @@
       "allowInsecure": null
     }
   },
-  "hasCustomJS": true,
-  "hasIosCustomJS": true,
-  "inAppPurchases": {
-    "enabled": true,
-    "products": [
-      {
-        "id": "net.tradepulsepro.goldbars.starter",
-        "type": "consumable"
-      },
-      {
-        "id": "net.tradepulsepro.goldbars.value",
-        "type": "consumable"
-      },
-      {
-        "id": "net.tradepulsepro.goldbars.pro",
-        "type": "consumable"
-      },
-      {
-        "id": "net.tradepulsepro.goldbars.elite",
-        "type": "consumable"
-      },
-      {
-        "id": "net.tradepulsepro.sub.starter",
-        "type": "autoRenewableSubscription"
-      },
-      {
-        "id": "net.tradepulsepro.sub.value",
-        "type": "autoRenewableSubscription"
-      },
-      {
-        "id": "net.tradepulsepro.sub.pro",
-        "type": "autoRenewableSubscription"
-      },
-      {
-        "id": "net.tradepulsepro.sub.elite",
-        "type": "autoRenewableSubscription"
-      }
-    ],
-    "verboseLogs": false
-  },
-  "enableWindowOpen": true
+  "customJS": {}
 }
