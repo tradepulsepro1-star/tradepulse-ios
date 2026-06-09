@@ -24,21 +24,6 @@
 
   onDOMReady(function() {
 
-    // ── iOS 26 WKWEBVIEW REPAINT FIX ─────────────────────────────────
-    function forceRepaint() {
-      if (!document.body) return;
-      document.body.style.display = 'none';
-      void document.body.offsetHeight;
-      document.body.style.display = '';
-    }
-    forceRepaint();
-    var _rp = 0;
-    var _rpTimer = setInterval(function() {
-      forceRepaint(); _rp++;
-      if (_rp >= 6) clearInterval(_rpTimer);
-    }, 500);
-
-
     // ── NATIVE FEEL CSS ───────────────────────────────────────────────
     var style = document.createElement('style');
     style.textContent = [
@@ -179,7 +164,7 @@
     }
 
     // ── SPLASH SCREEN ─────────────────────────────────────────────────
-    var SPLASH_IMAGE    = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/1419f5b3c_image.png';
+    var SPLASH_IMAGE    = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/03aec7f64_image.png';
     var SPLASH_DURATION = 8000;
 
     function showSplash() {
@@ -187,12 +172,8 @@
       overlay.id = 'tp-splash';
       overlay.style.cssText = 'position:fixed;inset:0;z-index:9999999;background:#000;opacity:1;transition:opacity 0.7s ease';
 
-      var bg = document.createElement('img');
-      bg.src = SPLASH_IMAGE;
-      bg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block';
-      bg.onerror = function() {
-        overlay.style.background = '#0A0E1A';
-      };
+      var bg = document.createElement('div');
+      bg.style.cssText = 'position:absolute;inset:0;background-image:url(' + SPLASH_IMAGE + ');background-size:cover;background-position:center';
       overlay.appendChild(bg);
 
       var track = document.createElement('div');
@@ -220,33 +201,7 @@
       requestAnimationFrame(tick);
     }
 
-    // Re-check sessionStorage fresh here — React may have run between IIFE top and DOMReady
-    splashNeeded = !sessionStorage.getItem(SPLASH_KEY) ? true : splashNeeded;
-
     if (splashNeeded) {
-      // ── BLOCK REACT ROUTER NAVIGATION DURING SPLASH ──────────────────
-      // React auth runs in parallel and tries to navigate to /sign-in
-      // We intercept pushState/replaceState for 8 seconds to prevent it
-      var _splashActive = true;
-      var _origPush    = history.pushState.bind(history);
-      var _origReplace = history.replaceState.bind(history);
-
-      history.pushState = function(state, title, url) {
-        if (_splashActive) return; // blocked during splash
-        return _origPush(state, title, url);
-      };
-      history.replaceState = function(state, title, url) {
-        if (_splashActive) return; // blocked during splash
-        return _origReplace(state, title, url);
-      };
-
-      setTimeout(function() {
-        _splashActive = false;
-        // Restore original methods
-        history.pushState    = _origPush;
-        history.replaceState = _origReplace;
-      }, 8000);
-
       showSplash();
     }
 
