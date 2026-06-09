@@ -384,6 +384,9 @@ static NSInteger _currentWindows = 0;
         [wv.configuration.userContentController addUserScript:nativeFeelScript];
     }
 
+    // Spoof user agent as Safari so Google OAuth doesn't block WKWebView (disallowed_useragent)
+    wv.customUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1";
+
     [self.keyboardManager setTargetWebview:wv];
     [self.keyboardManager showKeyboardAccessoryView:appConfig.showKeyboardAccessoryView];
     
@@ -1278,39 +1281,7 @@ static NSInteger _currentWindows = 0;
 
 #pragma mark - WebView Delegate
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction preferences:(nonnull WKWebpagePreferences *)preferences decisionHandler:(nonnull void (^)(WKNavigationActionPolicy, WKWebpagePreferences * _Nonnull))decisionHandler  API_AVAILABLE(ios(13.0)) {
-    // INTERCEPT Google OAuth — open via ASWebAuthenticationSession to avoid disallowed_useragent
-    NSString *reqHost = navigationAction.request.URL.host ?: @"";
-    NSString *reqPath = navigationAction.request.URL.path ?: @"";
-    BOOL isGoogleOAuth = ([reqHost isEqualToString:@"accounts.google.com"] || [reqHost hasSuffix:@".google.com"]);
-    BOOL isBase44OAuth = ([reqHost isEqualToString:@"app.base44.com"] && 
-                          ([reqPath hasPrefix:@"/api/auth"] || [reqPath hasPrefix:@"/auth"] || 
-                           [reqPath hasPrefix:@"/login"] || [reqPath hasPrefix:@"/oauth"]));
-    if ((isGoogleOAuth || isBase44OAuth) &&
-        navigationAction.targetFrame.isMainFrame) {
-        decisionHandler(WKNavigationActionPolicyCancel, preferences);
-        NSURL *authURL = navigationAction.request.URL;
-        NSString *callbackScheme = @"net.tradepulsepro";
-        __weak typeof(self) weakSelf = self;
-        ASWebAuthenticationSession *session = [[ASWebAuthenticationSession alloc]
-            initWithURL:authURL
-            callbackURLScheme:callbackScheme
-            completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {
-                if (callbackURL && !error) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [weakSelf.wkWebview loadRequest:[NSURLRequest requestWithURL:callbackURL]];
-                    });
-                }
-            }];
-        session.prefersEphemeralWebBrowserSession = NO;
-        if (@available(iOS 13.0, *)) {
-            session.presentationContextProvider = (id<ASWebAuthenticationPresentationContextProviding>)self;
-        }
-        // Retain session
-        static ASWebAuthenticationSession *retainedSession;
-        retainedSession = session;
-        [session start];
-        return;
-    }
+    // Google OAuth runs natively in WKWebView — Base44 uses GSI postMessage flow
     BOOL shouldModifyRequest = [self.customHeadersManager shouldModifyRequest:navigationAction.request webview:webView];
     
     // is target="_blank" and we are allowing window open? Always accept, skipping logic. This makes
