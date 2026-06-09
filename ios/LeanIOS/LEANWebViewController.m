@@ -1280,44 +1280,6 @@ static NSInteger _currentWindows = 0;
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction preferences:(nonnull WKWebpagePreferences *)preferences decisionHandler:(nonnull void (^)(WKNavigationActionPolicy, WKWebpagePreferences * _Nonnull))decisionHandler  API_AVAILABLE(ios(13.0)) {
     BOOL shouldModifyRequest = [self.customHeadersManager shouldModifyRequest:navigationAction.request webview:webView];
 
-    // ── GOOGLE OAUTH INTERCEPT ─────────────────────────────────────────────
-    // Catch ANY navigation to accounts.google.com (main frame OR popup)
-    // and route it through ASWebAuthenticationSession to avoid Error 403: disallowed_useragent
-    {
-        NSString *navHost = navigationAction.request.URL.host ?: @"";
-        BOOL isGoogleAuth = ([navHost isEqualToString:@"accounts.google.com"] ||
-                             [navHost hasSuffix:@".google.com"]);
-        if (isGoogleAuth) {
-            decisionHandler(WKNavigationActionPolicyCancel, preferences);
-            NSURL *authURL = navigationAction.request.URL;
-            __weak typeof(self) weakSelf = self;
-            ASWebAuthenticationSession *googleSession = [[ASWebAuthenticationSession alloc]
-                initWithURL:authURL
-                callbackURLScheme:@"https"
-                completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {
-                    if (callbackURL) {
-                        // Load the callback URL directly in WKWebView so Base44 processes the auth token
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [weakSelf.wkWebview loadRequest:[NSURLRequest requestWithURL:callbackURL]];
-                        });
-                    } else {
-                        // User cancelled or error — just reload sign-in
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [weakSelf.wkWebview reload];
-                        });
-                    }
-                }];
-            googleSession.prefersEphemeralWebBrowserSession = NO;
-            if (@available(iOS 13.0, *)) {
-                googleSession.presentationContextProvider = (id<ASWebAuthenticationPresentationContextProviding>)self;
-            }
-            static ASWebAuthenticationSession *retainedGoogleSession;
-            retainedGoogleSession = googleSession;
-            [googleSession start];
-            return;
-        }
-    }
-
     // is target="_blank" and we are allowing window open? Always accept, skipping logic. This makes
     // target="_blank" behave like window.open
     if (navigationAction.targetFrame == nil && [GoNativeAppConfig sharedAppConfig].enableWindowOpen) {
@@ -2360,6 +2322,35 @@ static NSInteger _currentWindows = 0;
 }
 
 - (WKWebView*)webView:(WKWebView *)webView createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration forNavigationAction:(WKNavigationAction *)navigationAction windowFeatures:(WKWindowFeatures *)windowFeatures {
+    // Intercept Google OAuth popup — launch in ASWebAuthenticationSession (trusted browser)
+    NSString *popupHost = navigationAction.request.URL.host ?: @"";
+    if ([popupHost isEqualToString:@"accounts.google.com"] || [popupHost hasSuffix:@".google.com"]) {
+        NSURL *authURL = navigationAction.request.URL;
+        __weak typeof(self) weakSelf = self;
+        ASWebAuthenticationSession *googleSession = [[ASWebAuthenticationSession alloc]
+            initWithURL:authURL
+            callbackURLScheme:nil
+            completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {
+                if (callbackURL) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf.wkWebview loadRequest:[NSURLRequest requestWithURL:callbackURL]];
+                    });
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf.wkWebview reload];
+                    });
+                }
+            }];
+        googleSession.prefersEphemeralWebBrowserSession = NO;
+        if (@available(iOS 13.0, *)) {
+            googleSession.presentationContextProvider = (id<ASWebAuthenticationPresentationContextProviding>)self;
+        }
+        static ASWebAuthenticationSession *retainedGoogleSession;
+        retainedGoogleSession = googleSession;
+        [googleSession start];
+        return nil;
+    }
+
     WKWebView *newWebview = [[NSClassFromString(@"WKWebView") alloc] initWithFrame:self.wkWebview.frame configuration:configuration];
     BOOL handled = [self handleNewWindowRequest:navigationAction.request initialWebview:newWebview];
     if (handled) {
