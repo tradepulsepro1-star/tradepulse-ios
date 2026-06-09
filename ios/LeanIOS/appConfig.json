@@ -217,9 +217,9 @@
     "iosSettings": {},
     "swipeGestures": false,
     "maxWindows": {
-      "enabled": false,
-      "numWindows": 5,
-      "autoClose": false
+      "enabled": true,
+      "numWindows": 2,
+      "autoClose": true
     }
   },
   "styling": {
@@ -428,5 +428,6 @@
       }
     ],
     "verboseLogs": false
-  }
+  },
+  "enableWindowOpen": true
 }
