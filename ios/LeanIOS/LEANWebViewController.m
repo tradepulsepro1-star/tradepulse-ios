@@ -47,6 +47,7 @@ NSString *kLEANWebViewControllerClearPools = @"co.median.ios.WebViewController.c
 #import "GNConfigPreferences.h"
 #import "GNBackgroundAudio.h"
 #import "GonativeIO-Stubs.h"
+#import <SafariServices/SafariServices.h>
 #import <AppTrackingTransparency/ATTrackingManager.h>
 #import "GNJSBridgeInterface.h"
 #import "GNLogManager.h"
@@ -1278,35 +1279,6 @@ static NSInteger _currentWindows = 0;
 
 #pragma mark - WebView Delegate
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction preferences:(nonnull WKWebpagePreferences *)preferences decisionHandler:(nonnull void (^)(WKNavigationActionPolicy, WKWebpagePreferences * _Nonnull))decisionHandler  API_AVAILABLE(ios(13.0)) {
-    // INTERCEPT Google OAuth — open via ASWebAuthenticationSession to avoid disallowed_useragent
-    // Base44 uses GSI popup (window.open) — targetFrame is nil for popup, isMainFrame for redirect
-    NSString *reqHost = navigationAction.request.URL.host ?: @"";
-    BOOL isGoogleAuthURL = [reqHost isEqualToString:@"accounts.google.com"] ||
-                           [reqHost hasSuffix:@".google.com"];
-    if (isGoogleAuthURL) {
-        decisionHandler(WKNavigationActionPolicyCancel, preferences);
-        NSURL *authURL = navigationAction.request.URL;
-        __weak typeof(self) weakSelf = self;
-        // callbackURLScheme:nil — Base44 redirects to https://app.base44.com (not a custom scheme)
-        // Session completes when user dismisses or auth finishes
-        ASWebAuthenticationSession *session = [[ASWebAuthenticationSession alloc]
-            initWithURL:authURL
-            callbackURLScheme:nil
-            completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    // Always reload — Base44 sets session cookie during the auth flow
-                    [weakSelf.wkWebview reload];
-                });
-            }];
-        session.prefersEphemeralWebBrowserSession = NO;
-        if (@available(iOS 13.0, *)) {
-            session.presentationContextProvider = (id<ASWebAuthenticationPresentationContextProviding>)self;
-        }
-        static ASWebAuthenticationSession *retainedSession;
-        retainedSession = session;
-        [session start];
-        return;
-    }
     BOOL shouldModifyRequest = [self.customHeadersManager shouldModifyRequest:navigationAction.request webview:webView];
     
     // is target="_blank" and we are allowing window open? Always accept, skipping logic. This makes
@@ -2351,6 +2323,18 @@ static NSInteger _currentWindows = 0;
 }
 
 - (WKWebView*)webView:(WKWebView *)webView createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration forNavigationAction:(WKNavigationAction *)navigationAction windowFeatures:(WKWindowFeatures *)windowFeatures {
+    // Google Sign-In via Base44 GSI fires window.open() to accounts.google.com
+    // Must use SFSafariViewController — it shares Safari cookies so Base44 session persists after login
+    NSString *popupHost = navigationAction.request.URL.host ?: @"";
+    if ([popupHost isEqualToString:@"accounts.google.com"] || [popupHost hasSuffix:@".google.com"]) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            SFSafariViewController *safariVC = [[SFSafariViewController alloc] initWithURL:navigationAction.request.URL];
+            safariVC.modalPresentationStyle = UIModalPresentationPageSheet;
+            [[self getTopPresentedViewController] presentViewController:safariVC animated:YES completion:nil];
+        });
+        return nil;
+    }
+
     WKWebView *newWebview = [[NSClassFromString(@"WKWebView") alloc] initWithFrame:self.wkWebview.frame configuration:configuration];
     BOOL handled = [self handleNewWindowRequest:navigationAction.request initialWebview:newWebview];
     if (handled) {
