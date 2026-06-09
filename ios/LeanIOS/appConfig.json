@@ -172,10 +172,22 @@
           "pagesToTrigger": "custom"
         },
         {
-          "regex": "https?:\\/\\/([-\\w]+\\.)*tradepulsepro.net(\\/.*)?$",
+          "regex": "https?://([-\\w]+\\.)*tradepulsepro\\.net.*",
           "mode": "internal",
-          "label": "All pages on my domain",
+          "label": "TradePulse App Domain",
           "pagesToTrigger": "domain"
+        },
+        {
+          "regex": "https?://([-\\w]+\\.)*tradepulse\\.net.*",
+          "mode": "internal",
+          "label": "TradePulse Marketing Domain",
+          "pagesToTrigger": "custom"
+        },
+        {
+          "regex": "https?://([-\\w]+\\.)*base44\\.com.*",
+          "mode": "internal",
+          "label": "Base44 API/CDN",
+          "pagesToTrigger": "custom"
         },
         {
           "regex": ".*",
