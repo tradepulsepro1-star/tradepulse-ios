@@ -50,6 +50,17 @@
     NSString *urlString = [url absoluteString];
     NSString* hostname = [url host];
     
+    // ALWAYS handle OAuth/auth domains internally — never open in SFSafariViewController
+    // This ensures ASWebAuthenticationSession intercept in LEANWebViewController can handle them
+    if (hostname) {
+        if ([hostname isEqualToString:@"accounts.google.com"] ||
+            [hostname hasSuffix:@".google.com"] ||
+            [hostname isEqualToString:@"app.base44.com"] ||
+            [hostname hasSuffix:@".base44.com"]) {
+            return YES;
+        }
+    }
+    
     NSDictionary *matchResult = [[GoNativeAppConfig sharedAppConfig] getRegexRuleForURL:urlString rules:self.regexRules];
     
     BOOL matchedRegex = [matchResult[@"matches"] boolValue];
