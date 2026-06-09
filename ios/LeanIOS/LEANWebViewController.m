@@ -1280,7 +1280,12 @@ static NSInteger _currentWindows = 0;
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction preferences:(nonnull WKWebpagePreferences *)preferences decisionHandler:(nonnull void (^)(WKNavigationActionPolicy, WKWebpagePreferences * _Nonnull))decisionHandler  API_AVAILABLE(ios(13.0)) {
     // INTERCEPT Google OAuth — open via ASWebAuthenticationSession to avoid disallowed_useragent
     NSString *reqHost = navigationAction.request.URL.host ?: @"";
-    if (([reqHost isEqualToString:@"accounts.google.com"] || [reqHost hasSuffix:@".google.com"]) &&
+    NSString *reqPath = navigationAction.request.URL.path ?: @"";
+    BOOL isGoogleOAuth = ([reqHost isEqualToString:@"accounts.google.com"] || [reqHost hasSuffix:@".google.com"]);
+    BOOL isBase44OAuth = ([reqHost isEqualToString:@"app.base44.com"] && 
+                          ([reqPath hasPrefix:@"/api/auth"] || [reqPath hasPrefix:@"/auth"] || 
+                           [reqPath hasPrefix:@"/login"] || [reqPath hasPrefix:@"/oauth"]));
+    if ((isGoogleOAuth || isBase44OAuth) &&
         navigationAction.targetFrame.isMainFrame) {
         decisionHandler(WKNavigationActionPolicyCancel, preferences);
         NSURL *authURL = navigationAction.request.URL;
