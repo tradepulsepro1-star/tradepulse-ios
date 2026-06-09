@@ -127,37 +127,49 @@
           "regex": "^(?!https?://).*",
           "mode": "external",
           "label": "Non-web links",
-          "pagesToTrigger": "custom"
+          "pagesToTrigger": "custom",
+          "iosInternalNavigationType": "webview",
+          "android": "internal"
         },
         {
           "regex": "https?://([-\\w]+\\.)*tradepulsepro\\.net.*",
           "mode": "internal",
           "label": "TradePulse App Domain",
-          "pagesToTrigger": "custom"
+          "pagesToTrigger": "custom",
+          "iosInternalNavigationType": "webview",
+          "android": "internal"
         },
         {
           "regex": "https?://([-\\w]+\\.)*tradepulse\\.net.*",
           "mode": "internal",
           "label": "TradePulse Marketing Domain",
-          "pagesToTrigger": "custom"
+          "pagesToTrigger": "custom",
+          "iosInternalNavigationType": "webview",
+          "android": "internal"
         },
         {
           "regex": "https?://([-\\w]+\\.)*base44\\.com.*",
           "mode": "internal",
           "label": "Base44 All",
-          "pagesToTrigger": "custom"
+          "pagesToTrigger": "custom",
+          "iosInternalNavigationType": "webview",
+          "android": "internal"
         },
         {
           "regex": "https?://accounts\\.google\\.com.*",
           "mode": "internal",
           "label": "Google OAuth",
-          "pagesToTrigger": "custom"
+          "pagesToTrigger": "custom",
+          "iosInternalNavigationType": "webview",
+          "android": "internal"
         },
         {
           "regex": "https?://([-\\w]+\\.)*googleapis\\.com.*",
           "mode": "internal",
           "label": "Google APIs",
-          "pagesToTrigger": "custom"
+          "pagesToTrigger": "custom",
+          "iosInternalNavigationType": "webview",
+          "android": "internal"
         },
         {
           "regex": "https?://login\\.microsoftonline\\.com.*",
@@ -199,7 +211,9 @@
           "regex": ".*",
           "mode": "appbrowser",
           "label": "All Other Links",
-          "pagesToTrigger": "custom"
+          "pagesToTrigger": "custom",
+          "iosInternalNavigationType": "external",
+          "android": "external"
         }
       ],
       "active": true
