@@ -7,10 +7,10 @@
 //
 
 #import <WebKit/WebKit.h>
+#import <AuthenticationServices/AuthenticationServices.h>
 #import <MessageUI/MessageUI.h>
 #import <CoreLocation/CoreLocation.h>
 #import <AVFoundation/AVFoundation.h>
-#import <AuthenticationServices/AuthenticationServices.h>
 
 #import "LEANWebViewController.h"
 NSString *kLEANWebViewControllerUserStartedLoading = @"co.median.ios.WebViewController.started";
@@ -55,10 +55,9 @@ NSString *kLEANWebViewControllerClearPools = @"co.median.ios.WebViewController.c
 #define OFFLINE_URL @"http://offline/"
 #define LOCAL_FILE_URL @"http://localFile/"
 
-@interface LEANWebViewController () <UISearchBarDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UITabBarDelegate, WKNavigationDelegate, WKUIDelegate, WKDownloadDelegate, MFMailComposeViewControllerDelegate, CLLocationManagerDelegate, GNJavascriptRunner, ASWebAuthenticationPresentationContextProviding>
+@interface LEANWebViewController () <UISearchBarDelegate, UIActionSheetDelegate, UIScrollViewDelegate, UITabBarDelegate, WKNavigationDelegate, WKUIDelegate, WKDownloadDelegate, MFMailComposeViewControllerDelegate, CLLocationManagerDelegate, GNJavascriptRunner>
 
 @property WKWebView *wkWebview;
-@property (strong, nonatomic) ASWebAuthenticationSession *googleAuthSession;
 
 @property IBOutlet UIBarButtonItem* backButton;
 @property IBOutlet UIBarButtonItem* forwardButton;
@@ -146,7 +145,6 @@ NSString *kLEANWebViewControllerClearPools = @"co.median.ios.WebViewController.c
 @property IBOutlet UIView *pluginView;
 @property GNJSBridgeInterface *JSBridgeInterface;
 @property NSString *JSBridgeScript;
-
 
 @end
 
@@ -342,10 +340,50 @@ static NSInteger _currentWindows = 0;
     WKWebViewConfiguration *config = [[NSClassFromString(@"WKWebViewConfiguration") alloc] init];
     config.processPool = [LEANUtilities wkProcessPool];
     config.allowsInlineMediaPlayback = YES;
+    config.suppressesIncrementalRendering = NO;
+    // Disable data detectors — no phone/address link popups
+    if (@available(iOS 10.0, *)) {
+        config.dataDetectorTypes = WKDataDetectorTypeNone;
+    }
     
     WKWebView *wv = [[NSClassFromString(@"WKWebView") alloc] initWithFrame:self.wkWebview.frame configuration:config];
     [LEANUtilities configureWebView:wv];
-    
+
+    // FORCE INJECT iosCustomJS from bundle file
+    {
+        NSString *iosCustomJSPath = [[NSBundle mainBundle] pathForResource:@"iosCustomJS" ofType:@"js"];
+        if (iosCustomJSPath) {
+            NSError *jsReadError = nil;
+            NSString *iosCustomJSSource = [NSString stringWithContentsOfFile:iosCustomJSPath encoding:NSUTF8StringEncoding error:&jsReadError];
+            if (iosCustomJSSource && !jsReadError) {
+                WKUserScript *iosCustomScript = [[WKUserScript alloc] initWithSource:iosCustomJSSource injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:YES];
+                [wv.configuration.userContentController addUserScript:iosCustomScript];
+            }
+        }
+    }
+    // NATIVE FEEL: inject at DocumentStart — before any HTML paints
+    // This covers the white Base44 sign-in page before it renders
+    {
+        NSString *nativeFeelJS = @""
+            "(function(){"
+            // Force dark background immediately on html element
+            "  document.documentElement.style.cssText='background:#0A0E1A!important;background-color:#0A0E1A!important';"
+            // Viewport — no zoom
+            "  var m=document.querySelector('meta[name=viewport]');"
+            "  if(!m){m=document.createElement('meta');m.name='viewport';document.head&&document.head.appendChild(m);}"
+            "  m.content='width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no';"
+            // Dark overlay that covers everything until our JS takes over
+            "  var cover=document.createElement('div');"
+            "  cover.id='tp-native-cover';"
+            "  cover.style.cssText='position:fixed;inset:0;z-index:2147483647;background:#0A0E1A;pointer-events:none';"
+            "  document.documentElement.appendChild(cover);"
+            // Remove cover after 400ms — by then our iosCustomJS overlay is up
+            "  setTimeout(function(){var c=document.getElementById('tp-native-cover');if(c)c.parentNode.removeChild(c);},400);"
+            "})();";
+        WKUserScript *nativeFeelScript = [[WKUserScript alloc] initWithSource:nativeFeelJS injectionTime:WKUserScriptInjectionTimeAtDocumentStart forMainFrameOnly:YES];
+        [wv.configuration.userContentController addUserScript:nativeFeelScript];
+    }
+
     [self.keyboardManager setTargetWebview:wv];
     [self.keyboardManager showKeyboardAccessoryView:appConfig.showKeyboardAccessoryView];
     
@@ -1240,28 +1278,35 @@ static NSInteger _currentWindows = 0;
 
 #pragma mark - WebView Delegate
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction preferences:(nonnull WKWebpagePreferences *)preferences decisionHandler:(nonnull void (^)(WKNavigationActionPolicy, WKWebpagePreferences * _Nonnull))decisionHandler  API_AVAILABLE(ios(13.0)) {
-    BOOL shouldModifyRequest = [self.customHeadersManager shouldModifyRequest:navigationAction.request webview:webView];
-    
-    // ── Google OAuth: open in ASWebAuthenticationSession to avoid disallowed_useragent error ──
-    NSString *urlString = navigationAction.request.URL.absoluteString ?: @"";
-    if ([urlString containsString:@"accounts.google.com"] || [urlString containsString:@"oauth2/auth"] || [urlString containsString:@"google.com/o/oauth2"]) {
+    // INTERCEPT Google OAuth — open via ASWebAuthenticationSession to avoid disallowed_useragent
+    NSString *reqHost = navigationAction.request.URL.host ?: @"";
+    if (([reqHost isEqualToString:@"accounts.google.com"] || [reqHost hasSuffix:@".google.com"]) &&
+        navigationAction.targetFrame.isMainFrame) {
         decisionHandler(WKNavigationActionPolicyCancel, preferences);
         NSURL *authURL = navigationAction.request.URL;
-        NSURL *callbackURL = [NSURL URLWithString:@"https://tradepulsepro.net"];
+        NSString *callbackScheme = @"net.tradepulsepro";
+        __weak typeof(self) weakSelf = self;
         ASWebAuthenticationSession *session = [[ASWebAuthenticationSession alloc]
             initWithURL:authURL
-            callbackURLScheme:nil
-            completionHandler:^(NSURL * _Nullable receivedURL, NSError * _Nullable error) {
-                if (receivedURL) {
-                    [self.wkWebview loadRequest:[NSURLRequest requestWithURL:receivedURL]];
+            callbackURLScheme:callbackScheme
+            completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {
+                if (callbackURL && !error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf.wkWebview loadRequest:[NSURLRequest requestWithURL:callbackURL]];
+                    });
                 }
             }];
-        session.presentationContextProvider = self;
         session.prefersEphemeralWebBrowserSession = NO;
-        self.googleAuthSession = session;
+        if (@available(iOS 13.0, *)) {
+            session.presentationContextProvider = (id<ASWebAuthenticationPresentationContextProviding>)self;
+        }
+        // Retain session
+        static ASWebAuthenticationSession *retainedSession;
+        retainedSession = session;
         [session start];
         return;
     }
+    BOOL shouldModifyRequest = [self.customHeadersManager shouldModifyRequest:navigationAction.request webview:webView];
     
     // is target="_blank" and we are allowing window open? Always accept, skipping logic. This makes
     // target="_blank" behave like window.open
@@ -1907,7 +1952,7 @@ static NSInteger _currentWindows = 0;
         [newView addObserver:self forKeyPath:@"canGoBack" options:0 context:nil];
         [newView addObserver:self forKeyPath:@"canGoForward" options:0 context:nil];
         
-        self.wkWebview.allowsBackForwardNavigationGestures = [GoNativeAppConfig sharedAppConfig].swipeGestures;
+        self.wkWebview.allowsBackForwardNavigationGestures = NO; // TradePulse: no browser swipe-back
         self.fileWriterSharer.webView = newView;
         [self addScriptMessageHandlersInWebView:self.wkWebview];
     } else {
@@ -2928,10 +2973,9 @@ static NSInteger _currentWindows = 0;
 }
 
 
-#pragma mark - ASWebAuthenticationPresentationContextProviding
-
+// ASWebAuthenticationPresentationContextProviding for Google OAuth
 - (ASPresentationAnchor)presentationAnchorForWebAuthenticationSession:(ASWebAuthenticationSession *)session API_AVAILABLE(ios(13.0)) {
-    return self.view.window;
+    return self.view.window ?: [UIApplication sharedApplication].windows.firstObject;
 }
 
 @end
