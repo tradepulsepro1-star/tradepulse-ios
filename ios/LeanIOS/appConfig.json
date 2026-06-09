@@ -29,11 +29,13 @@
     "forceSessionCookieExpiry": 0,
     "iosCustomHeaders": {},
     "androidCustomHeaders": {},
-    "version": 13
+    "version": 13,
+    "hasCustomJS": true,
+    "hasIosCustomJS": true
   },
   "navigation": {
     "androidPullToRefresh": false,
-    "iosPullToRefresh": true,
+    "iosPullToRefresh": false,
     "androidShowOfflinePage": true,
     "iosShowOfflinePage": true,
     "iosConnectionOfflineTime": 10,
@@ -176,12 +178,8 @@
           "pagesToTrigger": "domain"
         },
         {
-          "regex": "https?://([-\\w]+\\.)*tradepulse\\.net(/.*)?$",
-          "mode": "internal"
-        },
-        {
           "regex": ".*",
-          "mode": "internal",
+          "mode": "appbrowser",
           "label": "All Other Links",
           "pagesToTrigger": "all"
         }
@@ -199,14 +197,12 @@
     "redirects": [],
     "ignorePageFinishedRegexes": [],
     "iosSettings": {},
-    "swipeGestures": null,
+    "swipeGestures": false,
     "maxWindows": {
       "enabled": false,
       "numWindows": 5,
       "autoClose": false
-    },
-    "toolbarEnabled": false,
-    "showToolbar": false
+    }
   },
   "styling": {
     "icon": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_ios.png",
@@ -214,13 +210,13 @@
     "transitionInteractiveDelayMax": 0.2,
     "menuAnimationDuration": 0.15,
     "showNavigationBar": false,
-    "iosDarkMode": "auto",
+    "iosDarkMode": "dark",
     "iosTintColor": "#0E0D08",
     "iosTintColorDark": "#ffffff",
     "iosTitleColor": "#0E0D08",
     "iosTitleColorDark": "#ffffff",
-    "iosStatusBarBackgroundColor": "#ffffffff",
-    "iosStatusBarBackgroundColorDark": "#000000",
+    "iosStatusBarBackgroundColor": "#0A0E1A",
+    "iosStatusBarBackgroundColorDark": "#0A0E1A",
     "iosEnableBlurInStatusBar": false,
     "iosSidebarFont": "Default",
     "iosSidebarTextColor": "#0E0D08",
@@ -323,14 +319,14 @@
       }
     },
     "iosGlassDesign": false,
-    "iosTransparentNavBar": true,
+    "iosTransparentNavBar": false,
     "iosHideNavBarOnScroll": false,
     "iosHideTabBarOnScroll": false,
     "androidHideNavBarOnScroll": false,
     "androidHideTabBarOnScroll": false,
     "customIcons": {},
-    "iosStatusBarStyle": "auto",
-    "iosEnableOverlayInStatusBar": false,
+    "iosStatusBarStyle": "dark",
+    "iosEnableOverlayInStatusBar": true,
     "androidStatusBarStyle": "auto",
     "androidEnableOverlayInStatusBar": false,
     "iosActivityIndicatorColor": "#808080",
@@ -345,9 +341,7 @@
     "navigationTitleImageLocationDark": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_ios.png",
     "androidHeaderImage": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_android.png",
     "androidHeaderImageDark": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_android.png",
-    "iosHeaderImageDark": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_ios.png",
-    "iosFullScreenWebview": false,
-    "showShareButton": false
+    "iosHeaderImageDark": "https://s3.amazonaws.com/gonativeio/app_files/rdjakwd/app_icon_ios.png"
   },
   "permissions": {
     "usesGeolocation": false,
@@ -377,5 +371,6 @@
       "allowInsecure": null
     }
   },
-  "customJS": {}
+  "hasCustomJS": true,
+  "hasIosCustomJS": true
 }
