@@ -172,6 +172,10 @@
           "pagesToTrigger": "custom"
         },
         {
+          "regex": "https?://([-\\w]+\\.)*base44\\.com.*",
+          "mode": "internal"
+        },
+        {
           "regex": "https?:\\/\\/([-\\w]+\\.)*tradepulsepro.net(\\/.*)?$",
           "mode": "internal",
           "label": "All pages on my domain",
@@ -179,7 +183,7 @@
         },
         {
           "regex": ".*",
-          "mode": "appbrowser",
+          "mode": "internal",
           "label": "All Other Links",
           "pagesToTrigger": "all"
         }
