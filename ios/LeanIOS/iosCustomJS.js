@@ -217,6 +217,29 @@
     }
 
     if (splashNeeded) {
+      // ── BLOCK REACT ROUTER NAVIGATION DURING SPLASH ──────────────────
+      // React auth runs in parallel and tries to navigate to /sign-in
+      // We intercept pushState/replaceState for 8 seconds to prevent it
+      var _splashActive = true;
+      var _origPush    = history.pushState.bind(history);
+      var _origReplace = history.replaceState.bind(history);
+
+      history.pushState = function(state, title, url) {
+        if (_splashActive) return; // blocked during splash
+        return _origPush(state, title, url);
+      };
+      history.replaceState = function(state, title, url) {
+        if (_splashActive) return; // blocked during splash
+        return _origReplace(state, title, url);
+      };
+
+      setTimeout(function() {
+        _splashActive = false;
+        // Restore original methods
+        history.pushState    = _origPush;
+        history.replaceState = _origReplace;
+      }, 8000);
+
       showSplash();
     }
 
