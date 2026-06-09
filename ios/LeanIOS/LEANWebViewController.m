@@ -1278,27 +1278,27 @@ static NSInteger _currentWindows = 0;
 
 #pragma mark - WebView Delegate
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction preferences:(nonnull WKWebpagePreferences *)preferences decisionHandler:(nonnull void (^)(WKNavigationActionPolicy, WKWebpagePreferences * _Nonnull))decisionHandler  API_AVAILABLE(ios(13.0)) {
-    // Google OAuth runs natively in WKWebView — Base44 uses GSI postMessage flow
     BOOL shouldModifyRequest = [self.customHeadersManager shouldModifyRequest:navigationAction.request webview:webView];
-    
-    // is target="_blank" and we are allowing window open? Always accept, skipping logic. This makes
-    // target="_blank" behave like window.open
-    if (navigationAction.targetFrame == nil && [GoNativeAppConfig sharedAppConfig].enableWindowOpen) {
-        // Intercept Google OAuth popup — open in ASWebAuthenticationSession
-        NSString *popupHost = navigationAction.request.URL.host ?: @"";
-        if ([popupHost isEqualToString:@"accounts.google.com"] || [popupHost hasSuffix:@".google.com"]) {
+
+    // ── GOOGLE OAUTH INTERCEPT ─────────────────────────────────────────────
+    // Catch ANY navigation to accounts.google.com (main frame OR popup)
+    // and route it through ASWebAuthenticationSession to avoid Error 403: disallowed_useragent
+    {
+        NSString *navHost = navigationAction.request.URL.host ?: @"";
+        BOOL isGoogleAuth = ([navHost isEqualToString:@"accounts.google.com"] ||
+                             [navHost hasSuffix:@".google.com"]);
+        if (isGoogleAuth) {
             decisionHandler(WKNavigationActionPolicyCancel, preferences);
             NSURL *authURL = navigationAction.request.URL;
             __weak typeof(self) weakSelf = self;
             ASWebAuthenticationSession *googleSession = [[ASWebAuthenticationSession alloc]
                 initWithURL:authURL
-                callbackURLScheme:@"https"
+                callbackURLScheme:nil
                 completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {
-                    if (callbackURL && !error) {
-                        dispatch_async(dispatch_get_main_queue(), ^{
-                            [weakSelf.wkWebview loadRequest:[NSURLRequest requestWithURL:callbackURL]];
-                        });
-                    }
+                    // Reload after auth so Base44 picks up the session cookie
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [weakSelf.wkWebview reload];
+                    });
                 }];
             googleSession.prefersEphemeralWebBrowserSession = NO;
             if (@available(iOS 13.0, *)) {
@@ -1309,6 +1309,11 @@ static NSInteger _currentWindows = 0;
             [googleSession start];
             return;
         }
+    }
+
+    // is target="_blank" and we are allowing window open? Always accept, skipping logic. This makes
+    // target="_blank" behave like window.open
+    if (navigationAction.targetFrame == nil && [GoNativeAppConfig sharedAppConfig].enableWindowOpen) {
         decisionHandler(WKNavigationActionPolicyAllow, preferences);
         return;
     }
