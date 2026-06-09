@@ -24,6 +24,21 @@
 
   onDOMReady(function() {
 
+    // ── iOS 26 WKWEBVIEW REPAINT FIX ─────────────────────────────────
+    function forceRepaint() {
+      if (!document.body) return;
+      document.body.style.display = 'none';
+      void document.body.offsetHeight;
+      document.body.style.display = '';
+    }
+    forceRepaint();
+    var _rp = 0;
+    var _rpTimer = setInterval(function() {
+      forceRepaint(); _rp++;
+      if (_rp >= 6) clearInterval(_rpTimer);
+    }, 500);
+
+
     // ── NATIVE FEEL CSS ───────────────────────────────────────────────
     var style = document.createElement('style');
     style.textContent = [
@@ -164,7 +179,7 @@
     }
 
     // ── SPLASH SCREEN ─────────────────────────────────────────────────
-    var SPLASH_IMAGE    = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/03aec7f64_image.png';
+    var SPLASH_IMAGE    = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/1419f5b3c_image.png';
     var SPLASH_DURATION = 8000;
 
     function showSplash() {
