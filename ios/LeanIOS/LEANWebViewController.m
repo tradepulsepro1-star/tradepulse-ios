@@ -1279,28 +1279,29 @@ static NSInteger _currentWindows = 0;
 #pragma mark - WebView Delegate
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction preferences:(nonnull WKWebpagePreferences *)preferences decisionHandler:(nonnull void (^)(WKNavigationActionPolicy, WKWebpagePreferences * _Nonnull))decisionHandler  API_AVAILABLE(ios(13.0)) {
     // INTERCEPT Google OAuth — open via ASWebAuthenticationSession to avoid disallowed_useragent
+    // Base44 uses GSI popup (window.open) — targetFrame is nil for popup, isMainFrame for redirect
     NSString *reqHost = navigationAction.request.URL.host ?: @"";
-    if (([reqHost isEqualToString:@"accounts.google.com"] || [reqHost hasSuffix:@".google.com"]) &&
-        navigationAction.targetFrame.isMainFrame) {
+    BOOL isGoogleAuthURL = [reqHost isEqualToString:@"accounts.google.com"] ||
+                           [reqHost hasSuffix:@".google.com"];
+    if (isGoogleAuthURL) {
         decisionHandler(WKNavigationActionPolicyCancel, preferences);
         NSURL *authURL = navigationAction.request.URL;
-        NSString *callbackScheme = @"net.tradepulsepro";
         __weak typeof(self) weakSelf = self;
+        // callbackURLScheme:nil — Base44 redirects to https://app.base44.com (not a custom scheme)
+        // Session completes when user dismisses or auth finishes
         ASWebAuthenticationSession *session = [[ASWebAuthenticationSession alloc]
             initWithURL:authURL
-            callbackURLScheme:callbackScheme
+            callbackURLScheme:nil
             completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {
-                if (callbackURL && !error) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [weakSelf.wkWebview loadRequest:[NSURLRequest requestWithURL:callbackURL]];
-                    });
-                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    // Always reload — Base44 sets session cookie during the auth flow
+                    [weakSelf.wkWebview reload];
+                });
             }];
         session.prefersEphemeralWebBrowserSession = NO;
         if (@available(iOS 13.0, *)) {
             session.presentationContextProvider = (id<ASWebAuthenticationPresentationContextProviding>)self;
         }
-        // Retain session
         static ASWebAuthenticationSession *retainedSession;
         retainedSession = session;
         [session start];
