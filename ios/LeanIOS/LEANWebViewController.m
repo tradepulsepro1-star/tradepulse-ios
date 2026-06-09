@@ -1293,12 +1293,19 @@ static NSInteger _currentWindows = 0;
             __weak typeof(self) weakSelf = self;
             ASWebAuthenticationSession *googleSession = [[ASWebAuthenticationSession alloc]
                 initWithURL:authURL
-                callbackURLScheme:nil
+                callbackURLScheme:@"https"
                 completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {
-                    // Reload after auth so Base44 picks up the session cookie
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [weakSelf.wkWebview reload];
-                    });
+                    if (callbackURL) {
+                        // Load the callback URL directly in WKWebView so Base44 processes the auth token
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [weakSelf.wkWebview loadRequest:[NSURLRequest requestWithURL:callbackURL]];
+                        });
+                    } else {
+                        // User cancelled or error — just reload sign-in
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [weakSelf.wkWebview reload];
+                        });
+                    }
                 }];
             googleSession.prefersEphemeralWebBrowserSession = NO;
             if (@available(iOS 13.0, *)) {
