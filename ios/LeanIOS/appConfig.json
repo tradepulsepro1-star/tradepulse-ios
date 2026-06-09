@@ -186,7 +186,25 @@
         {
           "regex": "https?://([-\\w]+\\.)*base44\\.com.*",
           "mode": "internal",
-          "label": "Base44 API/CDN",
+          "label": "Base44 Auth/API",
+          "pagesToTrigger": "custom"
+        },
+        {
+          "regex": "https?://app\\.base44\\.com.*",
+          "mode": "internal",
+          "label": "Base44 App (Google OAuth)",
+          "pagesToTrigger": "custom"
+        },
+        {
+          "regex": "https?://([-\\w]+\\.)*accounts\\.google\\.com.*",
+          "mode": "internal",
+          "label": "Google OAuth",
+          "pagesToTrigger": "custom"
+        },
+        {
+          "regex": "https?://([-\\w]+\\.)*googleapis\\.com.*",
+          "mode": "internal",
+          "label": "Google APIs",
           "pagesToTrigger": "custom"
         },
         {
