@@ -384,9 +384,6 @@ static NSInteger _currentWindows = 0;
         [wv.configuration.userContentController addUserScript:nativeFeelScript];
     }
 
-    // Spoof user agent as Safari so Google OAuth doesn't block WKWebView (disallowed_useragent)
-    wv.customUserAgent = @"Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1";
-
     [self.keyboardManager setTargetWebview:wv];
     [self.keyboardManager showKeyboardAccessoryView:appConfig.showKeyboardAccessoryView];
     
@@ -1287,6 +1284,31 @@ static NSInteger _currentWindows = 0;
     // is target="_blank" and we are allowing window open? Always accept, skipping logic. This makes
     // target="_blank" behave like window.open
     if (navigationAction.targetFrame == nil && [GoNativeAppConfig sharedAppConfig].enableWindowOpen) {
+        // Intercept Google OAuth popup — open in ASWebAuthenticationSession
+        NSString *popupHost = navigationAction.request.URL.host ?: @"";
+        if ([popupHost isEqualToString:@"accounts.google.com"] || [popupHost hasSuffix:@".google.com"]) {
+            decisionHandler(WKNavigationActionPolicyCancel, preferences);
+            NSURL *authURL = navigationAction.request.URL;
+            __weak typeof(self) weakSelf = self;
+            ASWebAuthenticationSession *googleSession = [[ASWebAuthenticationSession alloc]
+                initWithURL:authURL
+                callbackURLScheme:@"https"
+                completionHandler:^(NSURL * _Nullable callbackURL, NSError * _Nullable error) {
+                    if (callbackURL && !error) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [weakSelf.wkWebview loadRequest:[NSURLRequest requestWithURL:callbackURL]];
+                        });
+                    }
+                }];
+            googleSession.prefersEphemeralWebBrowserSession = NO;
+            if (@available(iOS 13.0, *)) {
+                googleSession.presentationContextProvider = (id<ASWebAuthenticationPresentationContextProviding>)self;
+            }
+            static ASWebAuthenticationSession *retainedGoogleSession;
+            retainedGoogleSession = googleSession;
+            [googleSession start];
+            return;
+        }
         decisionHandler(WKNavigationActionPolicyAllow, preferences);
         return;
     }
