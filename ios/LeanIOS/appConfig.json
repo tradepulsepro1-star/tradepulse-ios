@@ -130,6 +130,42 @@
           "pagesToTrigger": "custom"
         },
         {
+          "regex": "https?://([-\\w]+\\.)*tradepulsepro\\.net.*",
+          "mode": "internal",
+          "label": "TradePulse App Domain",
+          "pagesToTrigger": "custom"
+        },
+        {
+          "regex": "https?://([-\\w]+\\.)*tradepulse\\.net.*",
+          "mode": "internal",
+          "label": "TradePulse Marketing Domain",
+          "pagesToTrigger": "custom"
+        },
+        {
+          "regex": "https?://([-\\w]+\\.)*base44\\.com.*",
+          "mode": "internal",
+          "label": "Base44 All",
+          "pagesToTrigger": "custom"
+        },
+        {
+          "regex": "https?://accounts\\.google\\.com.*",
+          "mode": "internal",
+          "label": "Google OAuth",
+          "pagesToTrigger": "custom"
+        },
+        {
+          "regex": "https?://([-\\w]+\\.)*googleapis\\.com.*",
+          "mode": "internal",
+          "label": "Google APIs",
+          "pagesToTrigger": "custom"
+        },
+        {
+          "regex": "https?://login\\.microsoftonline\\.com.*",
+          "mode": "internal",
+          "label": "Microsoft Login",
+          "pagesToTrigger": "custom"
+        },
+        {
           "regex": "https?://([-\\w]+\\.)*facebook\\.com.*",
           "mode": "appbrowser",
           "label": "Facebook",
@@ -154,64 +190,16 @@
           "pagesToTrigger": "custom"
         },
         {
-          "regex": "https?://([-\\w]+\\.)*google\\.com/maps/search/.*",
-          "mode": "appbrowser",
-          "label": "Google Maps Search",
-          "pagesToTrigger": "custom"
-        },
-        {
           "regex": "https?://([-\\w]+\\.)*linkedin\\.com/.*",
           "mode": "appbrowser",
           "label": "LinkedIn",
           "pagesToTrigger": "custom"
         },
         {
-          "regex": "https?://login\\.microsoftonline\\.com.*",
-          "mode": "internal",
-          "label": "Microsoft Login",
-          "pagesToTrigger": "custom"
-        },
-        {
-          "regex": "https?://([-\\w]+\\.)*tradepulsepro\\.net.*",
-          "mode": "internal",
-          "label": "TradePulse App Domain",
-          "pagesToTrigger": "domain"
-        },
-        {
-          "regex": "https?://([-\\w]+\\.)*tradepulse\\.net.*",
-          "mode": "internal",
-          "label": "TradePulse Marketing Domain",
-          "pagesToTrigger": "custom"
-        },
-        {
-          "regex": "https?://([-\\w]+\\.)*base44\\.com.*",
-          "mode": "internal",
-          "label": "Base44 Auth/API",
-          "pagesToTrigger": "custom"
-        },
-        {
-          "regex": "https?://app\\.base44\\.com.*",
-          "mode": "internal",
-          "label": "Base44 App (Google OAuth)",
-          "pagesToTrigger": "custom"
-        },
-        {
-          "regex": "https?://([-\\w]+\\.)*accounts\\.google\\.com.*",
-          "mode": "internal",
-          "label": "Google OAuth",
-          "pagesToTrigger": "custom"
-        },
-        {
-          "regex": "https?://([-\\w]+\\.)*googleapis\\.com.*",
-          "mode": "internal",
-          "label": "Google APIs",
-          "pagesToTrigger": "custom"
-        },
-        {
           "regex": ".*",
           "mode": "appbrowser",
           "label": "All Other Links",
-          "pagesToTrigger": "all"
+          "pagesToTrigger": "custom"
         }
       ],
       "active": true
