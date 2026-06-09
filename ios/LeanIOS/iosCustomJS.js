@@ -187,8 +187,12 @@
       overlay.id = 'tp-splash';
       overlay.style.cssText = 'position:fixed;inset:0;z-index:9999999;background:#000;opacity:1;transition:opacity 0.7s ease';
 
-      var bg = document.createElement('div');
-      bg.style.cssText = 'position:absolute;inset:0;background-image:url(' + SPLASH_IMAGE + ');background-size:cover;background-position:center';
+      var bg = document.createElement('img');
+      bg.src = SPLASH_IMAGE;
+      bg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block';
+      bg.onerror = function() {
+        overlay.style.background = '#0A0E1A';
+      };
       overlay.appendChild(bg);
 
       var track = document.createElement('div');
@@ -215,6 +219,9 @@
       }
       requestAnimationFrame(tick);
     }
+
+    // Re-check sessionStorage fresh here — React may have run between IIFE top and DOMReady
+    splashNeeded = !sessionStorage.getItem(SPLASH_KEY) ? true : splashNeeded;
 
     if (splashNeeded) {
       // ── BLOCK REACT ROUTER NAVIGATION DURING SPLASH ──────────────────
