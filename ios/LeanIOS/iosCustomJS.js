@@ -1,16 +1,109 @@
 // TradePulse iOS — Native feel + Splash + Guru Leagues promo + Apple IAP
-// NO custom sign-in overlay — Base44 auth handles sign-in natively
+// Build 148 — splash fires immediately (pre-DOM), localStorage-based to survive auth reloads
 
 (function() {
 
-  var SPLASH_KEY = 'tp_splash_shown';
-  var PROMO_KEY  = 'tp_promo_shown';
+  var SPLASH_KEY    = 'tp_splash_ts';
+  var PROMO_KEY     = 'tp_promo_shown';
+  var COLD_THRESHOLD = 30000; // 30s — new cold open
 
-  // ── CLAIM SPLASH SLOT IMMEDIATELY (before DOM) ────────────────────────
-  var splashNeeded = !sessionStorage.getItem(SPLASH_KEY);
-  if (splashNeeded) sessionStorage.setItem(SPLASH_KEY, '1');
+  // ── COLD OPEN DETECTION (localStorage — survives auth page reloads) ─
+  var now    = Date.now();
+  var lastTs = 0;
+  try { lastTs = parseInt(localStorage.getItem(SPLASH_KEY) || '0'); } catch(e) {}
+  var splashNeeded = (now - lastTs) > COLD_THRESHOLD;
+  if (splashNeeded) {
+    try { localStorage.setItem(SPLASH_KEY, String(now)); } catch(e) {}
+    try { localStorage.removeItem(PROMO_KEY); } catch(e) {}
+  }
 
-  // ── DOM READY HELPER ──────────────────────────────────────────────────
+  // ── SPLASH — inject IMMEDIATELY before DOM parses (blocks the flash) ─
+  var SPLASH_IMAGE    = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/03aec7f64_image.png';
+  var SPLASH_DURATION = 8000;
+  var splashEl        = null;
+  var splashStarted   = false;
+
+  function injectSplash() {
+    if (splashEl || !document.documentElement) return false;
+
+    // Create overlay immediately on <html> before <body> exists
+    splashEl = document.createElement('div');
+    splashEl.id = 'tp-splash';
+    splashEl.style.cssText = [
+      'position:fixed',
+      'inset:0',
+      'z-index:2147483647',
+      'background:#0A0E1A',
+      'opacity:1',
+      '-webkit-transition:opacity 0.7s ease',
+      'transition:opacity 0.7s ease'
+    ].join(';');
+
+    var bg = document.createElement('div');
+    bg.style.cssText = 'position:absolute;inset:0;background-image:url(' + SPLASH_IMAGE + ');background-size:cover;background-position:center;background-repeat:no-repeat';
+    splashEl.appendChild(bg);
+
+    var track = document.createElement('div');
+    track.style.cssText = 'position:absolute;bottom:48px;left:32px;right:32px;height:3px;background:rgba(255,255,255,0.12);border-radius:100px;overflow:hidden';
+    var fill = document.createElement('div');
+    fill.id = 'tp-splash-fill';
+    fill.style.cssText = 'height:100%;width:0%;background:linear-gradient(90deg,#B8860B,#F5C842,#FFD700);border-radius:100px;-webkit-transition:none;transition:none';
+    track.appendChild(fill);
+    splashEl.appendChild(track);
+
+    // Attach to documentElement if body not ready yet
+    var parent = document.body || document.documentElement;
+    parent.insertBefore(splashEl, parent.firstChild);
+    return true;
+  }
+
+  function startSplashTimer() {
+    if (splashStarted) return;
+    splashStarted = true;
+    var fill = document.getElementById('tp-splash-fill');
+    var overlay = document.getElementById('tp-splash');
+    if (!fill || !overlay) return;
+
+    var start = Date.now();
+    function tick() {
+      var pct = Math.min(((Date.now() - start) / SPLASH_DURATION) * 100, 100);
+      fill.style.width = pct + '%';
+      if (pct < 100) {
+        requestAnimationFrame(tick);
+      } else {
+        overlay.style.opacity = '0';
+        setTimeout(function() {
+          if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
+        }, 720);
+      }
+    }
+    requestAnimationFrame(tick);
+  }
+
+  if (splashNeeded) {
+    // Try immediately — document.documentElement is available synchronously
+    if (!injectSplash()) {
+      var retryInterval = setInterval(function() {
+        if (injectSplash()) clearInterval(retryInterval);
+      }, 10);
+    }
+    // Start timer once body exists
+    if (document.body) {
+      startSplashTimer();
+    } else {
+      document.addEventListener('DOMContentLoaded', startSplashTimer);
+    }
+  }
+
+  // ── iOS 26 REPAINT FIX ────────────────────────────────────────────
+  function forceRepaint() {
+    if (!document.body) return;
+    document.body.style.display = 'none';
+    void document.body.offsetHeight;
+    document.body.style.display = '';
+  }
+
+  // ── DOM READY ─────────────────────────────────────────────────────
   function onDOMReady(fn) {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', fn);
@@ -21,7 +114,15 @@
 
   onDOMReady(function() {
 
-    // ── NATIVE FEEL CSS ───────────────────────────────────────────────
+    // Repaint fix (iOS 26 WKWebView)
+    forceRepaint();
+    var repaintCount = 0;
+    var repaintTimer = setInterval(function() {
+      forceRepaint(); repaintCount++;
+      if (repaintCount >= 6) clearInterval(repaintTimer);
+    }, 500);
+
+    // ── NATIVE FEEL CSS ───────────────────────────────────────────
     var style = document.createElement('style');
     style.textContent = [
       '* { -webkit-user-select: none !important; user-select: none !important; }',
@@ -35,9 +136,7 @@
       'html, body { background-color: #0A0E1A !important; }',
       '::-webkit-scrollbar { display: none !important; }',
       'body { -webkit-text-size-adjust: none !important; text-size-adjust: none !important; }',
-      // Hide web-only payment buttons in native app
       '.stripe-payment-btn, .web-payment-only, [data-payment="stripe"] { display: none !important; }',
-      // Show IAP buttons only in native app
       '.iap-payment-btn { display: block !important; }'
     ].join('\n');
     document.head.appendChild(style);
@@ -45,44 +144,38 @@
     document.documentElement.style.backgroundColor = '#0A0E1A';
     if (document.body) document.body.style.backgroundColor = '#0A0E1A';
 
-    // ── PREVENT CONTEXT MENU ──────────────────────────────────────────
     document.addEventListener('contextmenu', function(e) { e.preventDefault(); return false; }, true);
     document.addEventListener('selectstart', function(e) {
       if (!e.target.matches('input, textarea, [contenteditable]')) e.preventDefault();
     }, true);
 
-    // ── APPLE IAP — Gold Bar Store ────────────────────────────────────
-    // Product IDs must match App Store Connect exactly
+    // ── APPLE IAP ─────────────────────────────────────────────────
     var IAP_PRODUCTS = {
-      starter:   'net.tradepulsepro.goldbars.starter',
-      value:     'net.tradepulsepro.goldbars.value',
-      pro:       'net.tradepulsepro.goldbars.pro',
-      elite:     'net.tradepulsepro.goldbars.elite',
+      starter:     'net.tradepulsepro.goldbars.starter',
+      value:       'net.tradepulsepro.goldbars.value',
+      pro:         'net.tradepulsepro.goldbars.pro',
+      elite:       'net.tradepulsepro.goldbars.elite',
       sub_starter: 'net.tradepulsepro.sub.starter',
       sub_value:   'net.tradepulsepro.sub.value',
       sub_pro:     'net.tradepulsepro.sub.pro',
       sub_elite:   'net.tradepulsepro.sub.elite'
     };
 
-    // Expose IAP trigger globally so React components can call it
     window.tp_iap_purchase = function(productKey) {
       var productId = IAP_PRODUCTS[productKey];
       if (!productId) { console.warn('TradePulse IAP: unknown product', productKey); return; }
-      if (window.gonative && window.gonative.purchases && window.gonative.purchases.purchase) {
-        window.gonative.purchases.purchase({ productId: productId });
-      } else if (window.median && window.median.purchases && window.median.purchases.purchase) {
-        window.median.purchases.purchase({ productId: productId });
+      var bridge = (window.gonative && window.gonative.purchases) || (window.median && window.median.purchases);
+      if (bridge && bridge.purchase) {
+        bridge.purchase({ productId: productId });
       } else {
         console.warn('TradePulse IAP: native bridge not available');
       }
     };
 
-    // Listen for IAP results from native bridge
     window.addEventListener('message', function(e) {
       if (!e.data || e.data.type !== 'gonative.purchases.result') return;
       var result = e.data;
       if (result.status === 'success') {
-        // Notify the React app that purchase succeeded
         window.dispatchEvent(new CustomEvent('tp_iap_success', { detail: result }));
       } else if (result.status === 'cancelled') {
         window.dispatchEvent(new CustomEvent('tp_iap_cancelled', { detail: result }));
@@ -91,8 +184,6 @@
       }
     });
 
-    // ── GOLD BAR STORE PAGE — inject IAP UI ───────────────────────────
-    // Detect native iOS app — this file only runs in WKWebView but be explicit
     var isNativeIOS = !!(window.gonative || window.median || /GoNative|Median/i.test(navigator.userAgent));
 
     function getIAPProductId(btn) {
@@ -115,17 +206,12 @@
 
     function triggerIAP(productId) {
       var bridge = (window.gonative && window.gonative.purchases) || (window.median && window.median.purchases);
-      if (bridge && bridge.purchase) {
-        bridge.purchase({ productId: productId });
-      }
+      if (bridge && bridge.purchase) bridge.purchase({ productId: productId });
     }
 
-    // CAPTURE-PHASE global interceptor — fires BEFORE React onClick
-    // This is the only reliable way to stop React from calling Stripe
     if (isNativeIOS) {
       document.addEventListener('click', function(e) {
         var el = e.target;
-        // Walk up to find a button (in case user clicks a child element)
         for (var i = 0; i < 5; i++) {
           if (!el || el === document) break;
           if (el.tagName === 'BUTTON' || el.tagName === 'A') {
@@ -134,88 +220,29 @@
               e.preventDefault();
               e.stopPropagation();
               e.stopImmediatePropagation();
-              var productId = getIAPProductId(el);
-              triggerIAP(productId);
+              triggerIAP(getIAPProductId(el));
               return false;
             }
           }
           el = el.parentElement;
         }
-      }, true); // true = capture phase — runs BEFORE React
+      }, true);
     }
 
-    function patchGoldBarStore() {
-      // No-op — capture-phase listener above handles everything
-    }
-
-    // Watch for Gold Bar Store page navigation
-    function checkAndPatchStore() {
-      var path = window.location.pathname;
-      if (path.indexOf('gold') !== -1 || path.indexOf('store') !== -1 || path.indexOf('purchase') !== -1 || path.indexOf('wallet') !== -1) {
-        setTimeout(patchGoldBarStore, 500);
-        setTimeout(patchGoldBarStore, 1500);
-        setTimeout(patchGoldBarStore, 3000);
-      }
-      // Also patch on any page in case Gold Bar Store is a modal
-      setTimeout(patchGoldBarStore, 1000);
-    }
-
-    // ── SPLASH SCREEN ─────────────────────────────────────────────────
-    var SPLASH_IMAGE    = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/03aec7f64_image.png';
-    var SPLASH_DURATION = 8000;
-
-    function showSplash() {
-      var overlay = document.createElement('div');
-      overlay.id = 'tp-splash';
-      overlay.style.cssText = 'position:fixed;inset:0;z-index:9999999;background:#000;opacity:1;transition:opacity 0.7s ease';
-
-      var bg = document.createElement('div');
-      bg.style.cssText = 'position:absolute;inset:0;background-image:url(' + SPLASH_IMAGE + ');background-size:cover;background-position:center';
-      overlay.appendChild(bg);
-
-      var track = document.createElement('div');
-      track.style.cssText = 'position:absolute;bottom:48px;left:32px;right:32px;height:3px;background:rgba(255,255,255,0.12);border-radius:100px;overflow:hidden';
-      var fill = document.createElement('div');
-      fill.style.cssText = 'height:100%;width:0%;background:linear-gradient(90deg,#B8860B,#F5C842,#FFD700);border-radius:100px';
-      track.appendChild(fill);
-      overlay.appendChild(track);
-
-      document.body.appendChild(overlay);
-
-      var start = Date.now();
-      function tick() {
-        var pct = Math.min(((Date.now() - start) / SPLASH_DURATION) * 100, 100);
-        fill.style.width = pct + '%';
-        if (pct < 100) {
-          requestAnimationFrame(tick);
-        } else {
-          overlay.style.opacity = '0';
-          setTimeout(function() {
-            if (overlay.parentNode) overlay.parentNode.removeChild(overlay);
-          }, 720);
-        }
-      }
-      requestAnimationFrame(tick);
-    }
-
-    if (splashNeeded) {
-      showSplash();
-    }
-
-    // ── GURU LEAGUES PROMO POPUP ──────────────────────────────────────
+    // ── GURU LEAGUES PROMO POPUP ──────────────────────────────────
     var PROMO_FALLBACK = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/f0d93aec4_ChatGPTImageMay15202603_07_35PM.png';
 
     function showPromoPopup(cfg) {
       if (!cfg.enabled) return;
-      if (sessionStorage.getItem(PROMO_KEY)) return;
-      sessionStorage.setItem(PROMO_KEY, '1');
+      try { if (localStorage.getItem(PROMO_KEY)) return; } catch(e) {}
+      try { localStorage.setItem(PROMO_KEY, '1'); } catch(e) {}
 
       var backdrop = document.createElement('div');
-      backdrop.style.cssText = 'position:fixed;inset:0;z-index:999998;background:rgba(0,0,0,0.75);opacity:0;transition:opacity 0.3s ease';
+      backdrop.style.cssText = 'position:fixed;inset:0;z-index:999998;background:rgba(0,0,0,0.75);opacity:0;-webkit-transition:opacity 0.3s ease;transition:opacity 0.3s ease';
       document.body.appendChild(backdrop);
 
       var popup = document.createElement('div');
-      popup.style.cssText = 'position:fixed;inset:0;z-index:999999;background:#0A0E1A;opacity:0;transition:opacity 0.35s ease';
+      popup.style.cssText = 'position:fixed;inset:0;z-index:999999;background:#0A0E1A;opacity:0;-webkit-transition:opacity 0.35s ease;transition:opacity 0.35s ease';
 
       var img = document.createElement('div');
       img.style.cssText = 'position:absolute;inset:0;background-image:url(' + cfg.image + ');background-size:cover;background-position:center;background-repeat:no-repeat';
@@ -226,7 +253,7 @@
       popup.appendChild(grad);
 
       var lbl = document.createElement('div');
-      lbl.textContent = cfg.label || '⚡ Coming Soon';
+      lbl.textContent = cfg.label || '\u26a1 Coming Soon';
       lbl.style.cssText = 'position:absolute;bottom:80px;left:0;right:0;text-align:center;color:#F5C842;font-size:15px;font-weight:600;font-family:-apple-system,sans-serif;letter-spacing:0.3px';
       popup.appendChild(lbl);
 
@@ -237,6 +264,10 @@
       promoTrack.appendChild(promoFill);
       popup.appendChild(promoTrack);
 
+      var xBtn = document.createElement('button');
+      xBtn.textContent = '\u2715';
+      xBtn.style.cssText = 'position:absolute;top:52px;right:20px;z-index:10;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.6);border:1.5px solid rgba(255,255,255,0.25);color:#fff;font-size:15px;cursor:pointer;-webkit-appearance:none;line-height:36px;text-align:center;font-family:-apple-system,sans-serif';
+
       function dismiss() {
         popup.style.opacity = '0';
         backdrop.style.opacity = '0';
@@ -246,14 +277,9 @@
         }, 350);
       }
 
-      backdrop.addEventListener('click', dismiss);
-
-      var xBtn = document.createElement('button');
-      xBtn.textContent = '\u2715';
-      xBtn.style.cssText = 'position:absolute;top:52px;right:20px;z-index:10;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.6);border:1.5px solid rgba(255,255,255,0.25);color:#fff;font-size:15px;cursor:pointer;-webkit-appearance:none;line-height:36px;text-align:center;font-family:-apple-system,sans-serif';
       xBtn.addEventListener('click', dismiss);
+      backdrop.addEventListener('click', dismiss);
       popup.appendChild(xBtn);
-
       document.body.appendChild(popup);
       setTimeout(function() { backdrop.style.opacity = '1'; popup.style.opacity = '1'; }, 50);
 
@@ -262,18 +288,14 @@
       function promoTick() {
         var pct = Math.min(((Date.now() - pStart) / duration) * 100, 100);
         promoFill.style.width = pct + '%';
-        if (pct < 100) {
-          requestAnimationFrame(promoTick);
-        } else {
-          dismiss();
-        }
+        if (pct < 100) { requestAnimationFrame(promoTick); } else { dismiss(); }
       }
       requestAnimationFrame(promoTick);
     }
 
     function fetchAndShowPromo() {
-      if (sessionStorage.getItem(PROMO_KEY)) return;
-      var cfg = { image: PROMO_FALLBACK, enabled: true, label: '\u26a1 Guru Leagues — Coming Soon', duration: 6000 };
+      try { if (localStorage.getItem(PROMO_KEY)) return; } catch(e) {}
+      var cfg = { image: PROMO_FALLBACK, enabled: true, label: '\u26a1 Guru Leagues \u2014 Coming Soon', duration: 6000 };
       try {
         fetch('/api/functions/getMobilePromoConfig')
           .then(function(r) { return r.json(); })
@@ -288,7 +310,7 @@
       } catch(e) { showPromoPopup(cfg); }
     }
 
-    // ── SPA NAVIGATION WATCHER ────────────────────────────────────────
+    // ── SPA NAVIGATION WATCHER ────────────────────────────────────
     var _origPush    = history.pushState.bind(history);
     var _origReplace = history.replaceState.bind(history);
 
@@ -297,7 +319,6 @@
       if (cur === '/social' || cur.indexOf('/social') === 0) {
         setTimeout(fetchAndShowPromo, 800);
       }
-      checkAndPatchStore();
     }
 
     history.pushState = function() {
@@ -312,11 +333,9 @@
       setTimeout(onNavigation, 100);
     });
 
-    // Check on load
     if (window.location.pathname === '/social' || window.location.pathname.indexOf('/social') === 0) {
       setTimeout(fetchAndShowPromo, 1000);
     }
-    checkAndPatchStore();
 
   }); // end onDOMReady
 

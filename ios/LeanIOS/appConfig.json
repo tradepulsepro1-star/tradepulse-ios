@@ -182,6 +182,12 @@
           "pagesToTrigger": "domain"
         },
         {
+          "regex": "https?://([-\\w]+\\.)*google\\.com/(accounts|signin|oauth|gsi).*|https?://accounts\\.google\\.com.*",
+          "mode": "appbrowser",
+          "label": "Google Auth",
+          "pagesToTrigger": "custom"
+        },
+        {
           "regex": ".*",
           "mode": "internal",
           "label": "All Other Links",
