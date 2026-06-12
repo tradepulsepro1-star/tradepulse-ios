@@ -1,13 +1,21 @@
 // TradePulse iOS — Native feel + Splash + Guru Leagues promo + Apple IAP
-// Build 148 — splash fires immediately (pre-DOM), localStorage-based to survive auth reloads
+// Build 149 — hideWebviewAlpha=0 fix: reveal WebView instantly, splash sits on top
 
 (function() {
 
-  var SPLASH_KEY    = 'tp_splash_ts';
-  var PROMO_KEY     = 'tp_promo_shown';
+  var SPLASH_KEY     = 'tp_splash_ts';
+  var PROMO_KEY      = 'tp_promo_shown';
   var COLD_THRESHOLD = 30000; // 30s — new cold open
 
-  // ── COLD OPEN DETECTION (localStorage — survives auth page reloads) ─
+  // ── STEP 1: REVEAL WEBVIEW IMMEDIATELY (hideWebviewAlpha=0 keeps it hidden) ──
+  // We must call this ASAP so the screen isn't black. Splash overlay goes on top.
+  if (window.gonative && window.gonative.webview && window.gonative.webview.setAlpha) {
+    window.gonative.webview.setAlpha({ alpha: 1.0 });
+  } else if (window.median && window.median.webview && window.median.webview.setAlpha) {
+    window.median.webview.setAlpha({ alpha: 1.0 });
+  }
+
+  // ── COLD OPEN DETECTION (localStorage — survives auth page reloads) ─────────
   var now    = Date.now();
   var lastTs = 0;
   try { lastTs = parseInt(localStorage.getItem(SPLASH_KEY) || '0'); } catch(e) {}
@@ -17,16 +25,17 @@
     try { localStorage.removeItem(PROMO_KEY); } catch(e) {}
   }
 
-  // ── SPLASH — inject IMMEDIATELY before DOM parses (blocks the flash) ─
+  // ── SPLASH — inject on documentElement BEFORE body exists ────────────────────
   var SPLASH_IMAGE    = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/03aec7f64_image.png';
   var SPLASH_DURATION = 8000;
   var splashEl        = null;
   var splashStarted   = false;
 
   function injectSplash() {
-    if (splashEl || !document.documentElement) return false;
+    if (splashEl) return true;
+    var parent = document.body || document.documentElement;
+    if (!parent) return false;
 
-    // Create overlay immediately on <html> before <body> exists
     splashEl = document.createElement('div');
     splashEl.id = 'tp-splash';
     splashEl.style.cssText = [
@@ -47,12 +56,10 @@
     track.style.cssText = 'position:absolute;bottom:48px;left:32px;right:32px;height:3px;background:rgba(255,255,255,0.12);border-radius:100px;overflow:hidden';
     var fill = document.createElement('div');
     fill.id = 'tp-splash-fill';
-    fill.style.cssText = 'height:100%;width:0%;background:linear-gradient(90deg,#B8860B,#F5C842,#FFD700);border-radius:100px;-webkit-transition:none;transition:none';
+    fill.style.cssText = 'height:100%;width:0%;background:linear-gradient(90deg,#B8860B,#F5C842,#FFD700);border-radius:100px';
     track.appendChild(fill);
     splashEl.appendChild(track);
 
-    // Attach to documentElement if body not ready yet
-    var parent = document.body || document.documentElement;
     parent.insertBefore(splashEl, parent.firstChild);
     return true;
   }
@@ -60,7 +67,7 @@
   function startSplashTimer() {
     if (splashStarted) return;
     splashStarted = true;
-    var fill = document.getElementById('tp-splash-fill');
+    var fill    = document.getElementById('tp-splash-fill');
     var overlay = document.getElementById('tp-splash');
     if (!fill || !overlay) return;
 
@@ -81,21 +88,23 @@
   }
 
   if (splashNeeded) {
-    // Try immediately — document.documentElement is available synchronously
     if (!injectSplash()) {
       var retryInterval = setInterval(function() {
-        if (injectSplash()) clearInterval(retryInterval);
+        if (injectSplash()) {
+          clearInterval(retryInterval);
+          startSplashTimer();
+        }
       }, 10);
-    }
-    // Start timer once body exists
-    if (document.body) {
-      startSplashTimer();
     } else {
-      document.addEventListener('DOMContentLoaded', startSplashTimer);
+      if (document.body) {
+        startSplashTimer();
+      } else {
+        document.addEventListener('DOMContentLoaded', startSplashTimer);
+      }
     }
   }
 
-  // ── iOS 26 REPAINT FIX ────────────────────────────────────────────
+  // ── iOS 26 REPAINT FIX ────────────────────────────────────────────────────
   function forceRepaint() {
     if (!document.body) return;
     document.body.style.display = 'none';
@@ -103,7 +112,7 @@
     document.body.style.display = '';
   }
 
-  // ── DOM READY ─────────────────────────────────────────────────────
+  // ── DOM READY ─────────────────────────────────────────────────────────────
   function onDOMReady(fn) {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', fn);
@@ -114,7 +123,7 @@
 
   onDOMReady(function() {
 
-    // Repaint fix (iOS 26 WKWebView)
+    // Repaint fix
     forceRepaint();
     var repaintCount = 0;
     var repaintTimer = setInterval(function() {
@@ -122,7 +131,7 @@
       if (repaintCount >= 6) clearInterval(repaintTimer);
     }, 500);
 
-    // ── NATIVE FEEL CSS ───────────────────────────────────────────
+    // ── NATIVE FEEL CSS ───────────────────────────────────────────────────
     var style = document.createElement('style');
     style.textContent = [
       '* { -webkit-user-select: none !important; user-select: none !important; }',
@@ -149,7 +158,7 @@
       if (!e.target.matches('input, textarea, [contenteditable]')) e.preventDefault();
     }, true);
 
-    // ── APPLE IAP ─────────────────────────────────────────────────
+    // ── APPLE IAP ────────────────────────────────────────────────────────
     var IAP_PRODUCTS = {
       starter:     'net.tradepulsepro.goldbars.starter',
       value:       'net.tradepulsepro.goldbars.value',
@@ -165,48 +174,36 @@
       var productId = IAP_PRODUCTS[productKey];
       if (!productId) { console.warn('TradePulse IAP: unknown product', productKey); return; }
       var bridge = (window.gonative && window.gonative.purchases) || (window.median && window.median.purchases);
-      if (bridge && bridge.purchase) {
-        bridge.purchase({ productId: productId });
-      } else {
-        console.warn('TradePulse IAP: native bridge not available');
-      }
+      if (bridge && bridge.purchase) bridge.purchase({ productId: productId });
+      else console.warn('TradePulse IAP: native bridge not available');
     };
 
     window.addEventListener('message', function(e) {
       if (!e.data || e.data.type !== 'gonative.purchases.result') return;
       var result = e.data;
-      if (result.status === 'success') {
-        window.dispatchEvent(new CustomEvent('tp_iap_success', { detail: result }));
-      } else if (result.status === 'cancelled') {
-        window.dispatchEvent(new CustomEvent('tp_iap_cancelled', { detail: result }));
-      } else {
-        window.dispatchEvent(new CustomEvent('tp_iap_error', { detail: result }));
-      }
+      if (result.status === 'success')        window.dispatchEvent(new CustomEvent('tp_iap_success',   { detail: result }));
+      else if (result.status === 'cancelled') window.dispatchEvent(new CustomEvent('tp_iap_cancelled', { detail: result }));
+      else                                    window.dispatchEvent(new CustomEvent('tp_iap_error',     { detail: result }));
     });
 
     var isNativeIOS = !!(window.gonative || window.median || /GoNative|Median/i.test(navigator.userAgent));
 
     function getIAPProductId(btn) {
-      var txt = (btn.textContent || '').trim().toUpperCase();
-      var card = btn.closest('[class*="card"], [class*="package"], [class*="tier"], [class*="plan"], section, article, li, div');
+      var txt      = (btn.textContent || '').trim().toUpperCase();
+      var card     = btn.closest('[class*="card"],[class*="package"],[class*="tier"],[class*="plan"],section,article,li,div');
       var cardText = card ? (card.textContent || '').toUpperCase() : '';
-      var isSubscribe = (txt === 'SUBSCRIBE / MONTH' || txt === 'SUBSCRIBE');
-      if (isSubscribe) {
+      var isSub    = (txt === 'SUBSCRIBE / MONTH' || txt === 'SUBSCRIBE');
+      if (isSub) {
         if      (cardText.indexOf('ELITE') !== -1) return 'net.tradepulsepro.sub.elite';
-        else if (cardText.indexOf('PRO') !== -1)   return 'net.tradepulsepro.sub.pro';
+        else if (cardText.indexOf('PRO')   !== -1) return 'net.tradepulsepro.sub.pro';
         else if (cardText.indexOf('VALUE') !== -1) return 'net.tradepulsepro.sub.value';
         else                                        return 'net.tradepulsepro.sub.starter';
       } else {
         if      (cardText.indexOf('ELITE') !== -1) return 'net.tradepulsepro.goldbars.elite';
-        else if (cardText.indexOf('PRO') !== -1)   return 'net.tradepulsepro.goldbars.pro';
+        else if (cardText.indexOf('PRO')   !== -1) return 'net.tradepulsepro.goldbars.pro';
         else if (cardText.indexOf('VALUE') !== -1) return 'net.tradepulsepro.goldbars.value';
         else                                        return 'net.tradepulsepro.goldbars.starter';
       }
-    }
-
-    function triggerIAP(productId) {
-      var bridge = (window.gonative && window.gonative.purchases) || (window.median && window.median.purchases);
-      if (bridge && bridge.purchase) bridge.purchase({ productId: productId });
     }
 
     if (isNativeIOS) {
@@ -217,10 +214,9 @@
           if (el.tagName === 'BUTTON' || el.tagName === 'A') {
             var txt = (el.textContent || '').trim().toUpperCase();
             if (txt === 'BUY ONCE' || txt === 'SUBSCRIBE / MONTH' || txt === 'SUBSCRIBE' || txt === 'BUY NOW' || txt === 'PURCHASE') {
-              e.preventDefault();
-              e.stopPropagation();
-              e.stopImmediatePropagation();
-              triggerIAP(getIAPProductId(el));
+              e.preventDefault(); e.stopPropagation(); e.stopImmediatePropagation();
+              var bridge = (window.gonative && window.gonative.purchases) || (window.median && window.median.purchases);
+              if (bridge && bridge.purchase) bridge.purchase({ productId: getIAPProductId(el) });
               return false;
             }
           }
@@ -229,7 +225,7 @@
       }, true);
     }
 
-    // ── GURU LEAGUES PROMO POPUP ──────────────────────────────────
+    // ── GURU LEAGUES PROMO POPUP ──────────────────────────────────────────
     var PROMO_FALLBACK = 'https://media.base44.com/images/public/69df5ede5be1d2722b8e2c66/f0d93aec4_ChatGPTImageMay15202603_07_35PM.png';
 
     function showPromoPopup(cfg) {
@@ -269,8 +265,7 @@
       xBtn.style.cssText = 'position:absolute;top:52px;right:20px;z-index:10;width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,0.6);border:1.5px solid rgba(255,255,255,0.25);color:#fff;font-size:15px;cursor:pointer;-webkit-appearance:none;line-height:36px;text-align:center;font-family:-apple-system,sans-serif';
 
       function dismiss() {
-        popup.style.opacity = '0';
-        backdrop.style.opacity = '0';
+        popup.style.opacity = '0'; backdrop.style.opacity = '0';
         setTimeout(function() {
           if (popup.parentNode) popup.parentNode.removeChild(popup);
           if (backdrop.parentNode) backdrop.parentNode.removeChild(backdrop);
@@ -300,38 +295,29 @@
         fetch('/api/functions/getMobilePromoConfig')
           .then(function(r) { return r.json(); })
           .then(function(data) {
-            if (data && data.image) cfg.image = data.image;
-            if (data && typeof data.enabled !== 'undefined') cfg.enabled = data.enabled;
-            if (data && data.label) cfg.label = data.label;
-            if (data && data.duration) cfg.duration = parseInt(data.duration) || 6000;
+            if (data && data.image)                      cfg.image    = data.image;
+            if (data && typeof data.enabled !== 'undefined') cfg.enabled  = data.enabled;
+            if (data && data.label)                      cfg.label    = data.label;
+            if (data && data.duration)                   cfg.duration = parseInt(data.duration) || 6000;
             showPromoPopup(cfg);
           })
           .catch(function() { showPromoPopup(cfg); });
       } catch(e) { showPromoPopup(cfg); }
     }
 
-    // ── SPA NAVIGATION WATCHER ────────────────────────────────────
+    // ── SPA NAVIGATION WATCHER ────────────────────────────────────────────
     var _origPush    = history.pushState.bind(history);
     var _origReplace = history.replaceState.bind(history);
 
     function onNavigation() {
-      var cur = window.location.pathname;
-      if (cur === '/social' || cur.indexOf('/social') === 0) {
+      if (window.location.pathname === '/social' || window.location.pathname.indexOf('/social') === 0) {
         setTimeout(fetchAndShowPromo, 800);
       }
     }
 
-    history.pushState = function() {
-      _origPush.apply(history, arguments);
-      setTimeout(onNavigation, 100);
-    };
-    history.replaceState = function() {
-      _origReplace.apply(history, arguments);
-      setTimeout(onNavigation, 100);
-    };
-    window.addEventListener('popstate', function() {
-      setTimeout(onNavigation, 100);
-    });
+    history.pushState = function() { _origPush.apply(history, arguments); setTimeout(onNavigation, 100); };
+    history.replaceState = function() { _origReplace.apply(history, arguments); setTimeout(onNavigation, 100); };
+    window.addEventListener('popstate', function() { setTimeout(onNavigation, 100); });
 
     if (window.location.pathname === '/social' || window.location.pathname.indexOf('/social') === 0) {
       setTimeout(fetchAndShowPromo, 1000);
