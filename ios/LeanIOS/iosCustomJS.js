@@ -19,14 +19,14 @@
   var now    = Date.now();
   var lastTs = 0;
   try { lastTs = parseInt(localStorage.getItem(SPLASH_KEY) || '0'); } catch(e) {}
-  var splashNeeded = false; // SPLASH DISABLED per Tony 2026-07-04 — was (now - lastTs) > COLD_THRESHOLD;
+  var splashNeeded = (now - lastTs) > COLD_THRESHOLD;
   if (splashNeeded) {
     try { localStorage.setItem(SPLASH_KEY, String(now)); } catch(e) {}
     try { localStorage.removeItem(PROMO_KEY); } catch(e) {}
   }
 
   // ── SPLASH — inject on documentElement BEFORE body exists ────────────────────
-  var SPLASH_IMAGE    = 'https://base44.app/api/apps/69df5ede5be1d2722b8e2c66/files/mp/public/69df5ede5be1d2722b8e2c66/b4e338276_new_splash.png';
+  var SPLASH_IMAGE    = 'https://base44.app/api/apps/69df5ede5be1d2722b8e2c66/files/mp/public/69df5ede5be1d2722b8e2c66/9fd7389d2_trustpulse_splash_new.png';
   var SPLASH_DURATION = 8000;
   var splashEl        = null;
   var splashStarted   = false;
