@@ -19,7 +19,7 @@
   var now    = Date.now();
   var lastTs = 0;
   try { lastTs = parseInt(localStorage.getItem(SPLASH_KEY) || '0'); } catch(e) {}
-  var splashNeeded = (now - lastTs) > COLD_THRESHOLD;
+  var splashNeeded = false; // SPLASH DISABLED per Tony 2026-07-04 — was (now - lastTs) > COLD_THRESHOLD;
   if (splashNeeded) {
     try { localStorage.setItem(SPLASH_KEY, String(now)); } catch(e) {}
     try { localStorage.removeItem(PROMO_KEY); } catch(e) {}
