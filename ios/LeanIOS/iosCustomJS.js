@@ -26,7 +26,7 @@
   }
 
   // ── SPLASH — inject on documentElement BEFORE body exists ────────────────────
-  var SPLASH_IMAGE    = 'https://base44.app/api/apps/69df5ede5be1d2722b8e2c66/files/mp/public/69df5ede5be1d2722b8e2c66/ccd06a5ab_splash_portrait_master.png';
+  var SPLASH_IMAGE    = 'https://base44.app/api/apps/69df5ede5be1d2722b8e2c66/files/mp/public/69df5ede5be1d2722b8e2c66/9fd7389d2_trustpulse_splash_new.png';
   var SPLASH_DURATION = 8000;
   var splashEl        = null;
   var splashStarted   = false;
