@@ -37,18 +37,15 @@
     self.isShown = YES;
     
     // GNBridge splashScreen controller removed — using native UIImageView fallback
+    // NOTE: no separate centered "LaunchCenter" box — full-bleed background image only.
+    // The JS-injected splash (with its own gold progress bar) takes over from here.
     
     self.launchScreen = [[UIImageView alloc] init];
     self.launchScreen.image = [UIImage imageNamed:@"LaunchBackground"];
+    self.launchScreen.contentMode = UIViewContentModeScaleAspectFill;
     self.launchScreen.clipsToBounds = YES;
     self.launchScreen.translatesAutoresizingMaskIntoConstraints = NO;
     
-    UIImageView *centerImageView = [[UIImageView alloc] init];
-    centerImageView.image = [UIImage imageNamed:@"LaunchCenter"];
-    centerImageView.contentMode = UIViewContentModeScaleAspectFit;
-    centerImageView.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    [self.launchScreen addSubview:centerImageView];
     UIWindow *currentWindow = GNKeyWindow();
     if (!currentWindow) {
         // No window available yet — skip launch screen overlay
@@ -62,13 +59,6 @@
         [self.launchScreen.bottomAnchor constraintEqualToAnchor:currentWindow.bottomAnchor],
         [self.launchScreen.leadingAnchor constraintEqualToAnchor:currentWindow.leadingAnchor],
         [self.launchScreen.trailingAnchor constraintEqualToAnchor:currentWindow.trailingAnchor]
-    ]];
-    
-    [NSLayoutConstraint activateConstraints:@[
-        [centerImageView.widthAnchor constraintEqualToConstant:200],
-        [centerImageView.heightAnchor constraintEqualToConstant:400],
-        [centerImageView.centerXAnchor constraintEqualToAnchor:self.launchScreen.centerXAnchor],
-        [centerImageView.centerYAnchor constraintEqualToAnchor:self.launchScreen.centerYAnchor]
     ]];
 }
 
